@@ -1,4 +1,4 @@
-package frc.robot.Subsytems;
+package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
@@ -12,28 +12,27 @@ public class ManipulatorSubsystem extends SubsystemBase {
 
     private final CANSparkFlex intakeMotor;
     private final CANSparkFlex shootMotor;
-    private Boolean intakeMode; 
-    private Boolean shootMode; 
+    private Boolean intakeMode;
+    private Boolean shootMode;
 
-    public ManipulatorSubsystem(RobotContainer container){
+    public ManipulatorSubsystem(RobotContainer container) {
         intakeMotor = new CANSparkFlex(0, MotorType.kBrushless);
         shootMotor = new CANSparkFlex(1, MotorType.kBrushless);
-        intakeMode = false; 
-        shootMode = false; 
+        intakeMode = false;
+        shootMode = false;
     }
 
-   
-       //can object name it global, create it, method running stoping 
-    /* 
-    private void activate() {
-        active = true;
-    }*/
-
+    // can object name it global, create it, method running stoping
+    /*
+     * private void activate() {
+     * active = true;
+     * }
+     */
 
     public void intake() {
-        if(intakeMode = true){
+        if (intakeMode = true) {
             intakeMotor.set(0.3);
-        
+
         }
 
     }
@@ -42,14 +41,12 @@ public class ManipulatorSubsystem extends SubsystemBase {
      * Starts outtaking
      */
     public void shoot() {
-        if(intakeMode  = true){
+        if (intakeMode = true) {
             shootMode = true;
             shootMotor.set(0.3);
-            //activate();
+            // activate();
         }
     }
-       
-    
 
     /**
      * Stops taking
@@ -57,9 +54,6 @@ public class ManipulatorSubsystem extends SubsystemBase {
     public void stoptake() {
         intakeMotor.stopMotor();
         shootMotor.stopMotor();
-        
+
     }
 }
-
-
-
