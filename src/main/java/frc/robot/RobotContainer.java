@@ -2,9 +2,6 @@ package frc.robot;
 
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.Utils;
-import com.ctre.phoenix6.configs.GyroTrimConfigs;
-import com.ctre.phoenix6.configs.MountPoseConfigs;
-import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
 import edu.wpi.first.cameraserver.CameraServer;
@@ -17,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
-import frc.robot.subsystems.DrivetrainSubsystem.Telemetry;
 import frc.robot.subsystems.DrivetrainSubsystem.TunerConstants;
 import frc.robot.util.AutonomousChooser;
 
@@ -35,7 +31,6 @@ public class RobotContainer {
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
                                                                      // driving in open loop
     private final AutonomousChooser autonomousChooser = new AutonomousChooser();
-    private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController m_driveController = new CommandXboxController(
             Constants.CONTROLLER_USB_PORT_DRIVER);
@@ -81,7 +76,6 @@ public class RobotContainer {
         if (Utils.isSimulation()) {
             m_DrivetrainSubsystem.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
         }
-        m_DrivetrainSubsystem.registerTelemetry(logger::telemeterize);
     }
 
     /**
