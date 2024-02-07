@@ -13,5 +13,10 @@ public class Constants {
 
     // CHASSIS Subsystem
     public static final String TEST_ROBORIO_SERIAL_NUMBER = "0316b2d6"; // serial number of Swervee roborio
+    public static final int LEFT_ARM_MOTOR_ID = 0;
+
+    // ARM Subsystem
+    public static final int RIGHT_ARM_MOTOR_ID = 0;
+    public static final int ARM_ENCODER_ID = 0;
 
 }
