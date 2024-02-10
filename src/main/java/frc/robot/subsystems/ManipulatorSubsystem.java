@@ -4,34 +4,38 @@ import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer;
+import frc.robot.Constants;
 
 public class ManipulatorSubsystem extends SubsystemBase {
 
+    private final CANSparkFlex shooterMotorA;
+    private final CANSparkFlex shooterMotorB;
     private final CANSparkFlex intakeMotor;
-    private final CANSparkFlex shootMotor;
 
-    public ManipulatorSubsystem(RobotContainer container) {
-        intakeMotor = new CANSparkFlex(0, MotorType.kBrushless);
-        shootMotor = new CANSparkFlex(1, MotorType.kBrushless);
+    private double shootSpeed = 0.6;
+    private double intakeSpeed = 0.2;
+
+    public ManipulatorSubsystem() {
+        shooterMotorA = new CANSparkFlex(Constants.SHOOTER_MOTOR_A_ID, MotorType.kBrushless);
+        shooterMotorB = new CANSparkFlex(Constants.SHOOTER_MOTOR_B_ID, MotorType.kBrushless);
+        intakeMotor = new CANSparkFlex(Constants.INTAKE_MOTOR_ID, MotorType.kBrushless);
     }
 
-    public void intake() {
-
+    public void startShooter() {
+        shooterMotorA.set(shootSpeed);
+        shooterMotorB.set(shootSpeed);
     }
 
-    /**
-     * Starts outtaking
-     */
-    public void shoot() {
-
+    public void stopShooter() {
+        shooterMotorA.stopMotor();
+        shooterMotorB.stopMotor();
     }
 
-    /**
-     * Stops taking
-     */
-    public void stoptake() {
-        intakeMotor.stopMotor();
-        shootMotor.stopMotor();
+    public void startIntake() {
+        intakeMotor.set(intakeSpeed);
+    }
+
+    public void stopIntake() {
+        intakeMotor.set(intakeSpeed);
     }
 }

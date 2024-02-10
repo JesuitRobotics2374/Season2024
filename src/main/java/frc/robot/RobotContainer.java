@@ -26,6 +26,7 @@ public class RobotContainer {
     private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
     private final ChassisSubsystem m_ChassisSubsystem;
     private final CommandSwerveDrivetrain m_DrivetrainSubsystem = TunerConstants.DriveTrain;
+    private final ManipulatorSubsystem m_ManipulatorSubsystem;
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.07) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
@@ -43,6 +44,7 @@ public class RobotContainer {
      */
     public RobotContainer() {
         m_ChassisSubsystem = new ChassisSubsystem();
+        m_ManipulatorSubsystem = new ManipulatorSubsystem();
 
         System.out.println("container created");
         configureShuffleBoard();
@@ -125,6 +127,13 @@ public class RobotContainer {
         // .onTrue(new InstantCommand(() ->
         // System.out.println(m_DrivetrainSubsystem.getState().Pose)));
         m_driveController.start().onTrue(m_DrivetrainSubsystem.runOnce(() -> m_DrivetrainSubsystem.alignToVision()));
+
+        // Manipulator
+        m_driveController.y().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.startShooter()));
+        m_driveController.y().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopShooter()));
+        m_driveController.b().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.startIntake()));
+        m_driveController.b().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopIntake()));
+
     }
 
     /**

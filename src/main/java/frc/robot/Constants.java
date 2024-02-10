@@ -19,4 +19,9 @@ public class Constants {
     public static final int RIGHT_ARM_MOTOR_ID = 0;
     public static final int ARM_ENCODER_ID = 0;
 
+    // MANIPULATOR Subsystem
+    public static final int SHOOTER_MOTOR_A_ID = 0;
+    public static final int SHOOTER_MOTOR_B_ID = 0;
+    public static final int INTAKE_MOTOR_ID = 0;
+
 }
