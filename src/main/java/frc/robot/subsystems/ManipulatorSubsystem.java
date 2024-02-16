@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.playingwithfusion.TimeOfFlight;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -12,9 +13,9 @@ public class ManipulatorSubsystem extends SubsystemBase {
     private final CANSparkFlex shooterMotorA;
     private final CANSparkFlex shooterMotorB;
     private final CANSparkFlex intakeMotor;
-    private final DigitalInput noteSensor;
+    private final TimeOfFlight noteSensor;
 
-    private boolean previousNoteSensorRead;
+    boolean intaking = false;
 
     private final double shooterSpeed = 0.8;
     private final double intakeSpeed = 0.3;
@@ -23,8 +24,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
         shooterMotorA = new CANSparkFlex(Constants.SHOOTER_MOTOR_A_ID, MotorType.kBrushless);
         shooterMotorB = new CANSparkFlex(Constants.SHOOTER_MOTOR_B_ID, MotorType.kBrushless);
         intakeMotor = new CANSparkFlex(Constants.INTAKE_MOTOR_ID, MotorType.kBrushless);
-        noteSensor = new DigitalInput(Constants.SENSOR_PORT);
-        previousNoteSensorRead = noteSensor.get();
+        noteSensor = new TimeOfFlight(Constants.SENSOR_PORT);
     }
 
     public void startShooter() {
@@ -45,11 +45,10 @@ public class ManipulatorSubsystem extends SubsystemBase {
         intakeMotor.stopMotor();
     }
 
-    public void checkNote() {
-        if (previousNoteSensorRead != noteSensor.get()) {
+    @Override
+    public void periodic() {
+        if (intaking && noteSensor.getRange() < 10) {
             stopIntake();
         }
-
-        previousNoteSensorRead = noteSensor.get();
     }
 }

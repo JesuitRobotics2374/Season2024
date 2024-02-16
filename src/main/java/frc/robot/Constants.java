@@ -23,5 +23,5 @@ public class Constants {
     public static final int SHOOTER_MOTOR_A_ID = 31;
     public static final int SHOOTER_MOTOR_B_ID = 32;
     public static final int INTAKE_MOTOR_ID = 33;
-    public static final int SENSOR_PORT = 0;
+    public static final int SENSOR_PORT = 18;
 }
