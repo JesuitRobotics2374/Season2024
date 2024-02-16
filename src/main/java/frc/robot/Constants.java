@@ -24,4 +24,8 @@ public class Constants {
     public static final int SHOOTER_MOTOR_B_ID = 32;
     public static final int INTAKE_MOTOR_ID = 33;
     public static final int SENSOR_PORT = 18;
+
+    // ANGLE Calculator
+    public static final double deltaHeight = 0.0; // TODO
+    public static final double launchVelocity = 0.0; // TODO
 }

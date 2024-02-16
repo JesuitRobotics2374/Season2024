@@ -39,14 +39,18 @@ public class ArmSubsystem extends SubsystemBase {
         tab.addDouble("Point", () -> encoder.getAbsolutePosition().getValueAsDouble());
     }
 
-    public void setGoal(double degrees) {
-        armController.setGoal(degrees / 360);
-    }
-
     @Override
     public void periodic() {
         // leftMotor.set(
         // armController.calculate(encoder.getAbsolutePosition().getValueAsDouble()));
+    }
+
+    public void setGoal(double degrees) {
+        armController.setGoal(degrees / 360);
+    }
+
+    public boolean atGoal() {
+        return armController.atGoal();
     }
 
     public void raise() {
@@ -55,5 +59,27 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void lower() {
         leftMotor.set(armController.getGoal().position - .01);
+    }
+
+    public double angleCalculator(double distance) {
+        double top = Math.PI / 2;
+        double bottom = 0.0;
+
+        for (int cycle = 0; cycle < 100; cycle++) {
+            double angle = (top + bottom) / 2;
+
+            double t = distance / Constants.launchVelocity * Math.cos(angle);
+            double y = distance * Constants.launchVelocity * Math.sin(angle) - 4.903325 * t * t;
+
+            if (y > Constants.deltaHeight) {
+                top = angle;
+            } else if (y < Constants.deltaHeight) {
+                bottom = angle;
+            } else {
+                break;
+            }
+        }
+
+        return (top + bottom) / 2;
     }
 }
