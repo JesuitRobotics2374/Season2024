@@ -6,7 +6,6 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -15,6 +14,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AlignToSpeakerCommand;
 import frc.robot.commands.BasicCommand;
@@ -33,6 +33,7 @@ public class RobotContainer {
     private final ChassisSubsystem m_ChassisSubsystem;
     private final CommandSwerveDrivetrain m_DrivetrainSubsystem = TunerConstants.DriveTrain;
     private final ManipulatorSubsystem m_ManipulatorSubsystem;
+    private final ArmSubsystem m_ArmSubsystem;
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.07) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
@@ -52,6 +53,7 @@ public class RobotContainer {
     public RobotContainer() {
         m_ChassisSubsystem = new ChassisSubsystem();
         m_ManipulatorSubsystem = new ManipulatorSubsystem();
+        m_ArmSubsystem = new ArmSubsystem();
 
         System.out.println("container created");
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -118,9 +120,10 @@ public class RobotContainer {
         // m_ArmSubsystem.setpointFORWARD()));
         // tab.add("setPointDown", new InstantCommand(() ->
         // m_ArmSubsystem.setpointDOWN()));
-        if (!m_ChassisSubsystem.isTestRobot()) {
-            tab.add(CameraServer.startAutomaticCapture("Camera", 0)).withSize(3, 3).withPosition(6, 0);
-        }
+        // if (!m_ChassisSubsystem.isTestRobot()) {
+        // tab.add(CameraServer.startAutomaticCapture("Camera", 0)).withSize(3,
+        // 3).withPosition(6, 0);
+        // }
         // tab.add("Autonomous Mode",
         // getAutonomousChooser().getModeChooser()).withSize(2, 1).withPosition(1, 0);
         // tab.add(m_drivetrainSubsystem.getField()).withSize(3, 2).withPosition(0, 1);
@@ -152,6 +155,8 @@ public class RobotContainer {
         m_driveController.y().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopShooter()));
         m_driveController.b().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.startIntake()));
         m_driveController.b().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopIntake()));
+        m_driveController.povUp().whileTrue(new RunCommand(() -> m_ArmSubsystem.raise()));
+        m_driveController.povDown().whileTrue(new RunCommand(() -> m_ArmSubsystem.lower()));
 
     }
 
