@@ -31,10 +31,14 @@ public class ManipulatorSubsystem extends SubsystemBase {
         intakeMotor = new CANSparkMax(Constants.INTAKE_MOTOR_ID, MotorType.kBrushless);
         noteSensor = new TimeOfFlight(Constants.SENSOR_PORT);
         tab.addDouble("Shooter Speed", () -> getShooterSpeed());
+        tab.addDouble("TOF range", () -> noteSensor.getRange());
     }
 
-    public void inkate() {
-        intake = true;
+    public void intake() {
+        if (noteSensor.getRange() > 100) {
+            intake = true;
+        }
+        startIntake();
     }
 
     public void startShooter() {
@@ -57,8 +61,9 @@ public class ManipulatorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (intake && (noteSensor.getRange() <= 10.0)) {
+        if (intake && (noteSensor.getRange() <= 100)) {
             stopIntake();
+            intake = false;
         }
     }
 

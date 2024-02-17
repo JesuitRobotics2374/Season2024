@@ -27,7 +27,7 @@ public class Constants {
 
     // ANGLE Calculator
     public static final double armLength = 0.62;
-    public static final double armAngleOffset = -2 / 3 * Math.PI; // TODO
+    public static final double armAngleOffset = Math.toRadians(103); // TODO
     public static final double deltaHeight = 2 - 0.28;
-    public static final double launchVelocity = 11.7; // TODO
+    public static final double launchVelocity = 11.8; // TODO
 }

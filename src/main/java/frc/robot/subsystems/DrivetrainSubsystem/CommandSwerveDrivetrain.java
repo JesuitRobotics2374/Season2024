@@ -18,6 +18,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -132,20 +133,25 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         boolean flag = isTargetValid(array);
         // System.out.println(array.length);
         if (array.length > 0) {
+            Pose2d visionPose2d = new Pose2d(array[0] + 8.23, array[1] + 4.1, new Rotation2d(Math.toRadians(array[5])));
             field.getObject("Vision").setPose(
-                    new Pose2d(array[0] + 9, array[1] + 4.2, new Rotation2d(Math.toRadians(array[5]))));
-            if (field.getObject("Vision").getPose().getX() != 0 || field.getObject("Vision").getPose().getX() != 0) {
+                    new Pose2d(visionPose2d.getX() + .77, visionPose2d.getY() + .1, visionPose2d.getRotation()));// 9,
+            // 4.2
+            // new Pose2d(array[0] + 8.23, array[1] + 4.1, new
+            // Rotation2d(Math.toRadians(array[5]))));
+            if (visionPose2d.getX() != 0 || visionPose2d.getY() != 0) {
                 double offset = Math
-                        .sqrt(Math.pow(field.getObject("Vision").getPose().relativeTo(getState().Pose).getX(), 2)
-                                + Math.pow(field.getObject("Vision").getPose().relativeTo(getState().Pose).getY(), 2));
-                if (flag && offset < 1 && Math.abs(field.getObject("Vision").getPose().getRotation().getDegrees()
+                        .sqrt(Math.pow(visionPose2d.relativeTo(getState().Pose).getX(), 2)
+                                + Math.pow(visionPose2d.relativeTo(getState().Pose).getY(), 2));
+                if (flag && offset < 1 && Math.abs(visionPose2d.getRotation().getDegrees()
                         - getState().Pose.getRotation().getDegrees()) < 30) {
-                    addVisionMeasurement(field.getObject("Vision").getPose(),
+                    addVisionMeasurement(visionPose2d,
                             Timer.getFPGATimestamp() - (array[6] / 1000.0));
                 } // Timer.getFPGATimestamp() - (botpose[6]/1000.0)
             }
         }
-        field.setRobotPose(getState().Pose);
+        field.setRobotPose(
+                new Pose2d(getState().Pose.getX() + .77, getState().Pose.getY() + .1, getState().Pose.getRotation()));
     }
 
     public boolean isTargetValid(double[] array) {
@@ -189,9 +195,12 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public void alignToVision() {
         System.out.println(field.getObject("Vision").getPose());
         // getState().Pose = field.getObject("Vision").getPose();
-        seedFieldRelative(new Pose2d(field.getObject("Vision").getPose().getTranslation(), new Rotation2d()));
+        seedFieldRelative(new Pose2d(field.getObject("Vision").getPose().getTranslation().getX() - 0.77,
+                field.getObject("Vision").getPose().getTranslation().getY() - 0.1, new Rotation2d()));
         seedFieldRelative();
-        seedFieldRelative(field.getObject("Vision").getPose());
+        seedFieldRelative(new Pose2d(field.getObject("Vision").getPose().getTranslation().getX() - 0.77,
+                field.getObject("Vision").getPose().getTranslation().getY() - 0.1,
+                field.getObject("Vision").getPose().getRotation()));
     }
 
     public SwerveDriveKinematics getKinematics() {
@@ -220,8 +229,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         if (alliance.isPresent()) {
             flag = alliance.get() == Alliance.Red;
         }
-        Translation2d offset = (flag ? new Translation2d(16.3, 5.55) : new Translation2d(0.3, 5.55))
-                .minus(getState().Pose.getTranslation());
-        return offset.getDistance(new Translation2d());
+        double offset = (flag ? new Translation2d(16.3, 5.55) : new Translation2d(0.3, 5.55))
+                .getDistance(getState().Pose.getTranslation());
+        return offset;
     }
 }

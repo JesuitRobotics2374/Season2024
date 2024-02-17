@@ -25,8 +25,8 @@ public class ShootCommand extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                         new AlignToSpeakerCommand(swerveDrivetrain).alongWith(new FunctionalCommand(
                                 () -> armSubsystem.shoot(), null, null, () -> armSubsystem.atGoal())),
-                        new WaitCommand(1.5)),
-                new InstantCommand(() -> subsystem.startIntake()), new WaitCommand(.5),
+                        new WaitCommand(1)),
+                new InstantCommand(() -> subsystem.intake()), new WaitCommand(.5),
                 new InstantCommand(() -> subsystem.stopIntake())
                         .alongWith(new InstantCommand(() -> subsystem.stopShooter())));
     }

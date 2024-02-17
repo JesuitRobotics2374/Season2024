@@ -43,6 +43,8 @@ public class RobotContainer {
 
     private final CommandXboxController m_driveController = new CommandXboxController(
             Constants.CONTROLLER_USB_PORT_DRIVER);
+    private final CommandXboxController m_operatorController = new CommandXboxController(
+            Constants.CONTROLLER_USB_PORT_OPERATOR);
 
     private boolean slow = false;
     private boolean roll = false;
@@ -151,14 +153,15 @@ public class RobotContainer {
         m_driveController.start().onTrue(m_DrivetrainSubsystem.runOnce(() -> m_DrivetrainSubsystem.alignToVision()));
 
         // Manipulator
-        m_driveController.y().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.startShooter()));
-        m_driveController.y().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopShooter()));
-        m_driveController.b().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.startIntake()));
-        m_driveController.b().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopIntake()));
-        m_driveController.povUp().onTrue(new InstantCommand(() -> m_ArmSubsystem.raise()));
-        m_driveController.povDown().onTrue(new InstantCommand(() -> m_ArmSubsystem.lower()));
-        m_driveController.a().onTrue(new InstantCommand(() -> m_ArmSubsystem.setGoal(0)));
-        m_driveController.x().onTrue(new InstantCommand(() -> m_ArmSubsystem.setGoal(-0.232 * 360)));
+        m_operatorController.y().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.startShooter()));
+        m_operatorController.y().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopShooter()));
+        m_operatorController.b().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.intake()));
+        m_operatorController.b().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopIntake()));
+        m_operatorController.povUp().onTrue(new InstantCommand(() -> m_ArmSubsystem.raise()));
+        m_operatorController.povDown().onTrue(new InstantCommand(() -> m_ArmSubsystem.lower()));
+        m_operatorController.a().onTrue(new InstantCommand(() -> m_ArmSubsystem.setGoal(0.03)));
+        m_operatorController.x().onTrue(new InstantCommand(() -> m_ArmSubsystem.setGoal(-0.232 * 360)));
+        m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_ArmSubsystem.shoot()));
 
     }
 
