@@ -18,6 +18,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -26,6 +27,8 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
@@ -209,5 +212,16 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     public static CommandSwerveDrivetrain getInstance() {
         return instance;
+    }
+
+    public double getDistanceToSpeaker() {
+        boolean flag = false;
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) {
+            flag = alliance.get() == Alliance.Red;
+        }
+        Translation2d offset = (flag ? new Translation2d(16.3, 5.55) : new Translation2d(0.3, 5.55))
+                .minus(getState().Pose.getTranslation());
+        return offset.getDistance(new Translation2d());
     }
 }

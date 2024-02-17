@@ -11,38 +11,53 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
 
 public class ArmSubsystem extends SubsystemBase {
-    ProfiledPIDController armController = new ProfiledPIDController(.25, 0, 0.05, new Constraints(.8, 1));
+    ProfiledPIDController armController = new ProfiledPIDController(1.5, 0.2, 1.5, new Constraints(.8, 1));
     ArmFeedforward armFeedforward = new ArmFeedforward(0, 0, 0, 0);
     TalonFX leftMotor = new TalonFX(Constants.LEFT_ARM_MOTOR_ID);
     TalonFX rightMotor = new TalonFX(Constants.RIGHT_ARM_MOTOR_ID);
     CANcoder encoder = new CANcoder(Constants.ARM_ENCODER_ID, Constants.CAN_BUS_NAME_CANIVORE);
     ShuffleboardTab tab = Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME);
+    double goal;
+    double speed;
+
+    static ArmSubsystem instance;
 
     public ArmSubsystem() {
-        leftMotor.getConfigurator().apply(new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake));
-        rightMotor.getConfigurator().apply(new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake));
+        instance = this;
+        leftMotor.setNeutralMode(NeutralModeValue.Brake);
+        rightMotor.setNeutralMode(NeutralModeValue.Brake);
+        leftMotor.setInverted(true);
         rightMotor.setControl(new Follower(Constants.LEFT_ARM_MOTOR_ID, true));
         encoder.getConfigurator()
-                .apply(new MagnetSensorConfigs().withAbsoluteSensorRange(AbsoluteSensorRangeValue.Unsigned_0To1)
-                        .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive));
-        armController.enableContinuousInput(0, 1);
+                .apply(new MagnetSensorConfigs().withAbsoluteSensorRange(AbsoluteSensorRangeValue.Signed_PlusMinusHalf)
+                        .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive).withMagnetOffset(.454));
+        armController.enableContinuousInput(-.5, .5);
         armController.setTolerance(0.01, 0.01);
-        armController.setGoal(encoder.getAbsolutePosition().getValueAsDouble());
+        goal = encoder.getAbsolutePosition().getValueAsDouble();
+        armController.setGoal(goal);
         tab.addDouble("Setpoint", () -> armController.getSetpoint().position);
         tab.addDouble("Point", () -> encoder.getAbsolutePosition().getValueAsDouble());
+        tab.addDouble("Motor Power", () -> speed);
     }
 
     @Override
     public void periodic() {
-        // leftMotor.set(
-        // armController.calculate(encoder.getAbsolutePosition().getValueAsDouble()));
+        speed = Math.min(Math.max(
+                armController.calculate(encoder.getAbsolutePosition().getValueAsDouble()), -.50), .50);
+        leftMotor.set(speed);
     }
 
     public void setGoal(double degrees) {
@@ -54,11 +69,19 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void raise() {
-        armController.setGoal(armController.getGoal().position + .01);
+        goal += 0.01;
+        armController.setGoal(goal);
     }
 
     public void lower() {
-        leftMotor.set(armController.getGoal().position - .01);
+        goal -= .01;
+        armController.setGoal(goal);
+    }
+
+    public void resetGoal() {
+        goal = encoder.getAbsolutePosition().getValueAsDouble();
+        armController.reset(goal);
+        armController.setGoal(goal);
     }
 
     public double angleCalculator(double distance) {
@@ -83,5 +106,14 @@ public class ArmSubsystem extends SubsystemBase {
         }
 
         return (top + bottom) / 2 + Constants.armAngleOffset;
+    }
+
+    public void shoot() {
+        double angle = angleCalculator(CommandSwerveDrivetrain.getInstance().getDistanceToSpeaker());
+        setGoal(angle);
+    }
+
+    public static ArmSubsystem getInstance() {
+        return instance;
     }
 }

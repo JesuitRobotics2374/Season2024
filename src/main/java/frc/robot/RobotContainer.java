@@ -155,8 +155,9 @@ public class RobotContainer {
         m_driveController.y().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopShooter()));
         m_driveController.b().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.startIntake()));
         m_driveController.b().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopIntake()));
-        m_driveController.povUp().whileTrue(new RunCommand(() -> m_ArmSubsystem.raise()));
-        m_driveController.povDown().whileTrue(new RunCommand(() -> m_ArmSubsystem.lower()));
+        m_driveController.povUp().onTrue(new InstantCommand(() -> m_ArmSubsystem.raise()));
+        m_driveController.povDown().onTrue(new InstantCommand(() -> m_ArmSubsystem.lower()));
+        m_driveController.a().onTrue(new InstantCommand(() -> m_ArmSubsystem.setGoal(0)));
 
     }
 
@@ -246,5 +247,9 @@ public class RobotContainer {
      */
     public CommandSwerveDrivetrain getDrivetrain() {
         return m_DrivetrainSubsystem;
+    }
+
+    public ArmSubsystem getArmSubsystem() {
+        return m_ArmSubsystem;
     }
 }

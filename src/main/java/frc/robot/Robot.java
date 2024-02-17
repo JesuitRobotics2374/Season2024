@@ -39,6 +39,7 @@ public class Robot extends TimedRobot {
     public void disabledExit() {
         if (!m_robotContainer.getChassisSubsystem().isTestRobot()) {
         }
+        m_robotContainer.getArmSubsystem().resetGoal();
     }
 
     @Override
