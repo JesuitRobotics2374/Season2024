@@ -19,7 +19,7 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         // drivetrain
         SmartDashboard.putNumber("Apriltag Number", 1);
-
+        enableLiveWindowInTest(true);
     }
 
     @Override

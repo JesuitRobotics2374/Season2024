@@ -24,7 +24,7 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
 
 public class ArmSubsystem extends SubsystemBase {
-    ProfiledPIDController armController = new ProfiledPIDController(1.5, 0.2, 1.5, new Constraints(.8, 1));
+    ProfiledPIDController armController = new ProfiledPIDController(2, 0.3, 0.1, new Constraints(1, 1.3));
     ArmFeedforward armFeedforward = new ArmFeedforward(0, 0, 0, 0);
     TalonFX leftMotor = new TalonFX(Constants.LEFT_ARM_MOTOR_ID);
     TalonFX rightMotor = new TalonFX(Constants.RIGHT_ARM_MOTOR_ID);
@@ -37,13 +37,14 @@ public class ArmSubsystem extends SubsystemBase {
 
     public ArmSubsystem() {
         instance = this;
+        tab.add("PID Controller", armController);
         leftMotor.setNeutralMode(NeutralModeValue.Brake);
         rightMotor.setNeutralMode(NeutralModeValue.Brake);
-        leftMotor.setInverted(true);
+        leftMotor.setInverted(false);
         rightMotor.setControl(new Follower(Constants.LEFT_ARM_MOTOR_ID, true));
         encoder.getConfigurator()
                 .apply(new MagnetSensorConfigs().withAbsoluteSensorRange(AbsoluteSensorRangeValue.Signed_PlusMinusHalf)
-                        .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive).withMagnetOffset(.454));
+                        .withSensorDirection(SensorDirectionValue.Clockwise_Positive).withMagnetOffset(-.454));
         armController.enableContinuousInput(-.5, .5);
         armController.setTolerance(0.01, 0.01);
         goal = encoder.getAbsolutePosition().getValueAsDouble();
@@ -56,7 +57,7 @@ public class ArmSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         speed = Math.min(Math.max(
-                armController.calculate(encoder.getAbsolutePosition().getValueAsDouble()), -.50), .50);
+                armController.calculate(encoder.getAbsolutePosition().getValueAsDouble()), -.30), .30);
         leftMotor.set(speed);
     }
 

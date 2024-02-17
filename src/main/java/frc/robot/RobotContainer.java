@@ -158,6 +158,7 @@ public class RobotContainer {
         m_driveController.povUp().onTrue(new InstantCommand(() -> m_ArmSubsystem.raise()));
         m_driveController.povDown().onTrue(new InstantCommand(() -> m_ArmSubsystem.lower()));
         m_driveController.a().onTrue(new InstantCommand(() -> m_ArmSubsystem.setGoal(0)));
+        m_driveController.x().onTrue(new InstantCommand(() -> m_ArmSubsystem.setGoal(-0.232 * 360)));
 
     }
 
