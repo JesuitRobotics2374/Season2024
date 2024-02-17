@@ -26,6 +26,8 @@ public class Constants {
     public static final int SENSOR_PORT = 18;
 
     // ANGLE Calculator
-    public static final double deltaHeight = 0.0; // TODO
+    public static final double armLength = 0.62;
+    public static final double armAngleOffset = 0.0; // TODO
+    public static final double deltaHeight = /* Speaker Height */ -0.28; // TODO
     public static final double launchVelocity = 0.0; // TODO
 }

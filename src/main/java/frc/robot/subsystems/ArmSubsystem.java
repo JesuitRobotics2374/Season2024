@@ -67,19 +67,21 @@ public class ArmSubsystem extends SubsystemBase {
 
         for (int cycle = 0; cycle < 100; cycle++) {
             double angle = (top + bottom) / 2;
+            double deltaDistance = distance - Constants.armLength * Math.cos(angle);
+            double deltaHeight = Constants.deltaHeight - Constants.armLength * Math.sin(angle);
 
-            double t = distance / Constants.launchVelocity * Math.cos(angle);
-            double y = distance * Constants.launchVelocity * Math.sin(angle) - 4.903325 * t * t;
+            double t = deltaDistance / Constants.launchVelocity * Math.cos(angle);
+            double y = deltaDistance * Constants.launchVelocity * Math.sin(angle) - 4.903325 * t * t;
 
-            if (y > Constants.deltaHeight) {
+            if (y > deltaHeight) {
                 top = angle;
-            } else if (y < Constants.deltaHeight) {
+            } else if (y < deltaHeight) {
                 bottom = angle;
             } else {
                 break;
             }
         }
 
-        return (top + bottom) / 2;
+        return (top + bottom) / 2 + Constants.armAngleOffset;
     }
 }
