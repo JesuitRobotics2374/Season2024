@@ -76,7 +76,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         if (Utils.isSimulation()) {
             startSimThread();
         }
-        tab.add(field);
+        tab.add(field).withPosition(0, 3).withSize(5, 3);
         tab.addDouble("Offset", () -> this.m_fieldRelativeOffset.getDegrees());
         Matrix<N3, N1> matrix = new Matrix<>(Nat.N3(), Nat.N1());
         matrix.set(0, 0, 4);
