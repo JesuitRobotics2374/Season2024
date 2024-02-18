@@ -3,6 +3,7 @@ package frc.robot.commands;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -37,7 +38,7 @@ public class AlignToSpeakerCommand extends Command {
         }
         Translation2d offset = (flag ? new Translation2d(16.3, 5.55) : new Translation2d(0.3, 5.55))
                 .minus(subsystem.getState().Pose.getTranslation());
-        controller.setGoal(offset.getAngle().getRadians());
+        controller.setGoal(offset.getAngle().plus(new Rotation2d(Math.PI)).getRadians());
         System.out.println(Math.toDegrees(controller.getGoal().position));
     }
 

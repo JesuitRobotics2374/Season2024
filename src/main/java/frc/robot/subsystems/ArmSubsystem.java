@@ -46,7 +46,7 @@ public class ArmSubsystem extends SubsystemBase {
                 .apply(new MagnetSensorConfigs().withAbsoluteSensorRange(AbsoluteSensorRangeValue.Signed_PlusMinusHalf)
                         .withSensorDirection(SensorDirectionValue.Clockwise_Positive).withMagnetOffset(-.405));
         armController.enableContinuousInput(-.5, .5);
-        armController.setTolerance(0.01, 0.01);
+        armController.setTolerance(0.005, 0.01);
         goal = encoder.getAbsolutePosition().getValueAsDouble();
         armController.setGoal(goal);
         tab.addDouble("Setpoint", () -> armController.getSetpoint().position);
@@ -58,6 +58,13 @@ public class ArmSubsystem extends SubsystemBase {
     public void periodic() {
         speed = Math.min(Math.max(
                 armController.calculate(encoder.getAbsolutePosition().getValueAsDouble()), -.30), .30);
+        if (!armController.atGoal()) {
+            if (speed < 0) {
+                speed = Math.min(speed, -.02);
+            } else if (speed > 0) {
+                speed = Math.max(speed, 0.02);
+            }
+        }
         leftMotor.set(speed);
     }
 
@@ -142,7 +149,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void shoot() {
         System.out.println(CommandSwerveDrivetrain.getInstance().getDistanceToSpeaker());
         double angle = myAngleCalculator(CommandSwerveDrivetrain.getInstance().getDistanceToSpeaker());
-        // setGoal(angle);
+        setGoal(angle);
         System.out.println(angle / 360);
     }
 

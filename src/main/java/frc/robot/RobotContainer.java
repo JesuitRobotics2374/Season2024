@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AlignToSpeakerCommand;
 import frc.robot.commands.BasicCommand;
+import frc.robot.commands.ShootCommand;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
 import frc.robot.subsystems.DrivetrainSubsystem.TunerConstants;
@@ -56,13 +57,13 @@ public class RobotContainer {
         m_ChassisSubsystem = new ChassisSubsystem();
         m_ManipulatorSubsystem = new ManipulatorSubsystem();
         m_ArmSubsystem = new ArmSubsystem();
-
+        registerAutoCommands();
         System.out.println("container created");
         autoChooser = AutoBuilder.buildAutoChooser();
         configureShuffleBoard();
         resetDrive();
         configureButtonBindings();
-        registerAutoCommands();
+
         // m_DrivetrainSubsystem.getState().Pose = new
         // Pose2d(m_DrivetrainSubsystem.getState().Pose.getTranslation(),
         // new Rotation2d());
@@ -108,6 +109,11 @@ public class RobotContainer {
     public void registerAutoCommands() {
         NamedCommands.registerCommand("Basic Command", new BasicCommand());
         NamedCommands.registerCommand("Align to speaker", new AlignToSpeakerCommand(m_DrivetrainSubsystem));
+        NamedCommands.registerCommand("Shoot",
+                new ShootCommand(m_ManipulatorSubsystem, m_DrivetrainSubsystem,
+                        m_ArmSubsystem));
+        NamedCommands.registerCommand("Intake", new InstantCommand(() -> m_ManipulatorSubsystem.intake()));
+        NamedCommands.registerCommand("Reset Pose", new InstantCommand(() -> m_DrivetrainSubsystem.alignToVision()));
     }
 
     /**
@@ -162,6 +168,9 @@ public class RobotContainer {
         m_operatorController.a().onTrue(new InstantCommand(() -> m_ArmSubsystem.setGoal(0.03)));
         m_operatorController.x().onTrue(new InstantCommand(() -> m_ArmSubsystem.setGoal(-0.232 * 360)));
         m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_ArmSubsystem.shoot()));
+        m_operatorController.rightBumper()
+                .onTrue(new ShootCommand(m_ManipulatorSubsystem, m_DrivetrainSubsystem,
+                        m_ArmSubsystem));
 
     }
 

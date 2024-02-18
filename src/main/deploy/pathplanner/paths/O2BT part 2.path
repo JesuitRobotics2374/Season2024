@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 14.4,
+        "x": 2.2,
         "y": 7.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 14.5,
+        "x": 2.3000000000000007,
         "y": 7.0
       },
       "isLocked": false,
@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 11.0,
+        "x": 7.6,
         "y": 7.4
       },
       "prevControl": {
-        "x": 10.9,
+        "x": 7.5,
         "y": 7.4
       },
       "nextControl": null,
@@ -41,7 +41,7 @@
             {
               "type": "named",
               "data": {
-                "name": "BasicCommand"
+                "name": "Intake"
               }
             }
           ]
@@ -50,21 +50,21 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 3.5,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": 180.0,
+    "rotation": 0.0,
     "rotateFast": true
   },
   "reversed": false,
-  "folder": "Option 2 - Red Center",
+  "folder": "Option 2 - Blue Top",
   "previewStartingState": {
-    "rotation": -135.0,
-    "velocity": 0
+    "rotation": 45.0,
+    "velocity": 0.0
   },
   "useDefaultConstraints": true
 }
