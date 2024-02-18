@@ -26,7 +26,7 @@ public class AlignToSpeakerCommand extends Command {
         addRequirements(subDrivetrain);
         controller = new ProfiledPIDController(2, 0, 0.1, new Constraints(Math.PI * 4, Math.PI * 3));
         controller.enableContinuousInput(-Math.PI, Math.PI);
-        controller.setTolerance(0.03, 0.05);
+        controller.setTolerance(0.03, 0.03);
     }
 
     @Override

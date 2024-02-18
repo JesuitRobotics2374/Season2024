@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
-import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -11,16 +10,11 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
 
 public class ArmSubsystem extends SubsystemBase {
@@ -60,9 +54,9 @@ public class ArmSubsystem extends SubsystemBase {
                 armController.calculate(encoder.getAbsolutePosition().getValueAsDouble()), -.30), .30);
         if (!armController.atGoal()) {
             if (speed < 0) {
-                speed = Math.min(speed, -.02);
+                speed = Math.min(speed, -.015);
             } else if (speed > 0) {
-                speed = Math.max(speed, 0.02);
+                speed = Math.max(speed, 0.015);
             }
         }
         leftMotor.set(speed);
@@ -126,14 +120,14 @@ public class ArmSubsystem extends SubsystemBase {
         double top = Math.PI / 2;
         double bottom = Math.PI;
 
-        for (int cycle = 0; cycle < 25; cycle++) {
+        for (int cycle = 0; cycle < 11; cycle++) {
             double angle = (top + bottom) / 2;
             double deltaDistance = distance - Constants.armLength * Math.cos(angle);
             double deltaHeight = Constants.deltaHeight - Constants.armLength * Math.sin(angle);
 
             double t = deltaDistance / (Constants.launchVelocity * Math.cos(angle - Constants.armAngleOffset));
             double y = Constants.launchVelocity * Math.sin(angle - Constants.armAngleOffset) * t - 4.903325 * t * t;
-            System.out.println(angle);
+            // System.out.println(angle);
             if (y > deltaHeight) {
                 bottom = angle;
             } else if (y < deltaHeight) {
@@ -147,10 +141,10 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void shoot() {
-        System.out.println(CommandSwerveDrivetrain.getInstance().getDistanceToSpeaker());
+        // System.out.println(CommandSwerveDrivetrain.getInstance().getDistanceToSpeaker());
         double angle = myAngleCalculator(CommandSwerveDrivetrain.getInstance().getDistanceToSpeaker());
         setGoal(angle);
-        System.out.println(angle / 360);
+        // System.out.println(angle / 360);
     }
 
     public static ArmSubsystem getInstance() {

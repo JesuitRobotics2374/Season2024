@@ -30,6 +30,7 @@ public class ShootCommand extends SequentialCommandGroup {
                         new WaitCommand(1)),
                 new InstantCommand(() -> subsystem.intake()), new WaitCommand(.3),
                 new InstantCommand(() -> subsystem.stopIntake())
-                        .alongWith(new InstantCommand(() -> subsystem.stopShooter())));
+                        .alongWith(new InstantCommand(() -> subsystem.stopShooter()))
+                        .alongWith(new InstantCommand(() -> armSubsystem.setGoal(-0.232 * 360))));
     }
 }
