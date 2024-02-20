@@ -18,7 +18,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
 
 public class ArmSubsystem extends SubsystemBase {
-    ProfiledPIDController armController = new ProfiledPIDController(2, 0.3, 0.1, new Constraints(1, 1.3));
+    ProfiledPIDController armController = new ProfiledPIDController(4, 0.3, 0, new Constraints(1.5, 1.6));
     ArmFeedforward armFeedforward = new ArmFeedforward(0, 0, 0, 0);
     TalonFX leftMotor = new TalonFX(Constants.LEFT_ARM_MOTOR_ID);
     TalonFX rightMotor = new TalonFX(Constants.RIGHT_ARM_MOTOR_ID);
@@ -52,14 +52,15 @@ public class ArmSubsystem extends SubsystemBase {
     public void periodic() {
         speed = Math.min(Math.max(
                 armController.calculate(encoder.getAbsolutePosition().getValueAsDouble()), -.30), .30);
-        if (!armController.atGoal()) {
-            if (speed < 0) {
-                speed = Math.min(speed, -.015);
-            } else if (speed > 0) {
-                speed = Math.max(speed, 0.015);
-            }
-        }
-        leftMotor.set(speed);
+        // if (!armController.atGoal()) {
+        // if (speed < 0) {
+        // speed = Math.min(speed, -.015);
+        // } else if (speed > 0) {
+        // speed = Math.max(speed, 0.015);
+        // }
+        // }
+        leftMotor.setVoltage(speed * 12 + Constants.FEED_FORWARD_VOLTAGE
+                * Math.sin(encoder.getAbsolutePosition().getValueAsDouble() * Math.PI * -2));
     }
 
     public void setGoal(double degrees) {

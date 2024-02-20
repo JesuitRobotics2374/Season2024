@@ -30,4 +30,5 @@ public class Constants {
     public static final double armAngleOffset = Math.toRadians(101); // TODO
     public static final double deltaHeight = 2 - 0.28;
     public static final double launchVelocity = 11.8;
+    public static final double FEED_FORWARD_VOLTAGE = 0.3;
 }

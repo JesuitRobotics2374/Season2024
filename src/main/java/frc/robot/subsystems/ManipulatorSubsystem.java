@@ -59,6 +59,10 @@ public class ManipulatorSubsystem extends SubsystemBase {
         intakeMotor.stopMotor();
     }
 
+    public void reverse() {
+        intakeMotor.set(-intakeSpeed);
+    }
+
     @Override
     public void periodic() {
         if (intake && (noteSensor.getRange() <= 100)) {
