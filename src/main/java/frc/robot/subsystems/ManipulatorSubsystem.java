@@ -74,4 +74,8 @@ public class ManipulatorSubsystem extends SubsystemBase {
     public double getShooterSpeed() {
         return shooterMotorA.getEncoder().getVelocity() * Units.inchesToMeters(2 * Math.PI) / 60;
     }
+
+    public boolean shooterAtMaxSpeed() {
+        return getShooterSpeed() > 11.6;
+    }
 }

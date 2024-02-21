@@ -111,7 +111,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("Shoot",
                 new ShootCommand(m_ManipulatorSubsystem, m_DrivetrainSubsystem,
                         m_ArmSubsystem));
-        NamedCommands.registerCommand("Intake", new InstantCommand(() -> m_ManipulatorSubsystem.intake()));
+        NamedCommands.registerCommand("Intake", new InstantCommand(() -> m_ManipulatorSubsystem.intake())
+                .alongWith(new InstantCommand(() -> System.out.println("intake"))));
         NamedCommands.registerCommand("Reset Pose", new InstantCommand(() -> m_DrivetrainSubsystem.alignToVision()));
     }
 
@@ -156,6 +157,7 @@ public class RobotContainer {
         // .onTrue(new InstantCommand(() ->
         // System.out.println(m_DrivetrainSubsystem.getState().Pose)));
         m_driveController.start().onTrue(m_DrivetrainSubsystem.runOnce(() -> m_DrivetrainSubsystem.alignToVision()));
+        m_driveController.a().onTrue(new AlignToSpeakerCommand(m_DrivetrainSubsystem));
 
         // Manipulator
         m_operatorController.y().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.startShooter()));
@@ -165,7 +167,7 @@ public class RobotContainer {
         m_operatorController.povUp().onTrue(new InstantCommand(() -> m_ArmSubsystem.raise()));
         m_operatorController.povDown().onTrue(new InstantCommand(() -> m_ArmSubsystem.lower()));
         m_operatorController.a().onTrue(new InstantCommand(() -> m_ArmSubsystem.setGoal(0.03)));
-        m_operatorController.x().onTrue(new InstantCommand(() -> m_ArmSubsystem.setGoal(-0.232 * 360)));
+        m_operatorController.x().onTrue(new InstantCommand(() -> m_ArmSubsystem.setGoal(-0.242 * 360)));
         m_operatorController.back().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.reverse()));
         m_operatorController.back().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopIntake()));
         m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_ArmSubsystem.shoot()));

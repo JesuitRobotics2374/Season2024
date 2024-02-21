@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ManipulatorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
@@ -26,11 +27,11 @@ public class ShootCommand extends SequentialCommandGroup {
                         new AlignToSpeakerCommand(swerveDrivetrain).alongWith(new FunctionalCommand(
                                 () -> armSubsystem.shoot(), () -> {
                                 }, interrupted -> {
-                                }, () -> armSubsystem.atGoal())),
-                        new WaitCommand(1)),
-                new InstantCommand(() -> subsystem.intake()), new WaitCommand(.3),
+                                }, () -> armSubsystem.atGoal())).andThen(new WaitCommand(0.1)),
+                        new WaitUntilCommand(() -> subsystem.shooterAtMaxSpeed())),
+                new InstantCommand(() -> subsystem.intake()), new WaitCommand(.5),
                 new InstantCommand(() -> subsystem.stopIntake())
                         .alongWith(new InstantCommand(() -> subsystem.stopShooter()))
-                        .alongWith(new InstantCommand(() -> armSubsystem.setGoal(-0.232 * 360))));
+                        .alongWith(new InstantCommand(() -> armSubsystem.setGoal(-0.242 * 360))));
     }
 }

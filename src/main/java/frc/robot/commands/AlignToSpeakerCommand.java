@@ -50,12 +50,19 @@ public class AlignToSpeakerCommand extends Command {
         } else if (rate > 0 + controller.getPositionTolerance()) {
             rate = Math.max(rate, Math.abs(controller.getPositionError()) > .1 ? 1.2 : 0.6);
         }
-        System.out.println(rate);
+        // System.out.println(rate);
         subsystem.setControl(request.withRotationalRate(rate));
     }
 
     @Override
     public boolean isFinished() {
         return controller.atGoal();
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        System.out.println(interrupted);
+        System.out.println(controller.getGoal().position);
+        System.out.println(subsystem.getState().Pose.getRotation().getRadians());
     }
 }

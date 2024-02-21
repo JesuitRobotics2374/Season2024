@@ -38,7 +38,7 @@ public class ArmSubsystem extends SubsystemBase {
         rightMotor.setControl(new Follower(Constants.LEFT_ARM_MOTOR_ID, true));
         encoder.getConfigurator()
                 .apply(new MagnetSensorConfigs().withAbsoluteSensorRange(AbsoluteSensorRangeValue.Signed_PlusMinusHalf)
-                        .withSensorDirection(SensorDirectionValue.Clockwise_Positive).withMagnetOffset(-.405));
+                        .withSensorDirection(SensorDirectionValue.Clockwise_Positive).withMagnetOffset(-.411));
         armController.enableContinuousInput(-.5, .5);
         armController.setTolerance(0.005, 0.01);
         goal = encoder.getAbsolutePosition().getValueAsDouble();
@@ -81,7 +81,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void lower() {
-        if (goal > -0.232) {
+        if (goal > -0.242) {
             goal -= .01;
             armController.setGoal(goal);
         }
