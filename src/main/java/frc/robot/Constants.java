@@ -31,4 +31,6 @@ public class Constants {
     public static final double deltaHeight = 2 - 0.28;
     public static final double launchVelocity = 11.8;
     public static final double FEED_FORWARD_VOLTAGE = 0.3;
+    public static final int LEFT_CLIMBER_MOTOR_ID = 8;
+    public static final int RIGHT_CLIMBER_MOTOR_ID = 9;
 }

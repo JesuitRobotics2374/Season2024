@@ -34,6 +34,7 @@ public class RobotContainer {
     private final CommandSwerveDrivetrain m_DrivetrainSubsystem = TunerConstants.DriveTrain;
     private final ManipulatorSubsystem m_ManipulatorSubsystem;
     private final ArmSubsystem m_ArmSubsystem;
+    private final ClimberSubsystem m_ClimberSubsystem;
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.07) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
@@ -56,6 +57,7 @@ public class RobotContainer {
         m_ChassisSubsystem = new ChassisSubsystem();
         m_ManipulatorSubsystem = new ManipulatorSubsystem();
         m_ArmSubsystem = new ArmSubsystem();
+        m_ClimberSubsystem = new ClimberSubsystem();
         registerAutoCommands();
         System.out.println("container created");
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -157,7 +159,16 @@ public class RobotContainer {
         // .onTrue(new InstantCommand(() ->
         // System.out.println(m_DrivetrainSubsystem.getState().Pose)));
         m_driveController.start().onTrue(m_DrivetrainSubsystem.runOnce(() -> m_DrivetrainSubsystem.alignToVision()));
-        m_driveController.a().onTrue(new AlignToSpeakerCommand(m_DrivetrainSubsystem));
+        // m_driveController.a().onTrue(new
+        // AlignToSpeakerCommand(m_DrivetrainSubsystem));
+        m_driveController.y().onTrue(new InstantCommand(() -> m_ClimberSubsystem.startLeftClimberUp()));
+        m_driveController.y().onFalse(new InstantCommand(() -> m_ClimberSubsystem.stopLeftClimber()));
+        m_driveController.b().onTrue(new InstantCommand(() -> m_ClimberSubsystem.startLeftClimberDown()));
+        m_driveController.b().onFalse(new InstantCommand(() -> m_ClimberSubsystem.stopLeftClimber()));
+        m_driveController.x().onTrue(new InstantCommand(() -> m_ClimberSubsystem.startRightClimberUp()));
+        m_driveController.x().onFalse(new InstantCommand(() -> m_ClimberSubsystem.stopRightClimber()));
+        m_driveController.a().onTrue(new InstantCommand(() -> m_ClimberSubsystem.startRightClimberDown()));
+        m_driveController.a().onFalse(new InstantCommand(() -> m_ClimberSubsystem.stopRightClimber()));
 
         // Manipulator
         m_operatorController.y().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.startShooter()));
@@ -166,7 +177,7 @@ public class RobotContainer {
         m_operatorController.b().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopIntake()));
         m_operatorController.povUp().onTrue(new InstantCommand(() -> m_ArmSubsystem.raise()));
         m_operatorController.povDown().onTrue(new InstantCommand(() -> m_ArmSubsystem.lower()));
-        m_operatorController.a().onTrue(new InstantCommand(() -> m_ArmSubsystem.setGoal(0.03)));
+        m_operatorController.a().onTrue(new InstantCommand(() -> m_ArmSubsystem.setGoal(0.10)));
         m_operatorController.x().onTrue(new InstantCommand(() -> m_ArmSubsystem.setGoal(-0.242 * 360)));
         m_operatorController.back().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.reverse()));
         m_operatorController.back().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopIntake()));

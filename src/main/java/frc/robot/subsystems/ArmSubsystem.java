@@ -73,7 +73,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void raise() {
-        if (goal < 0.03) {
+        if (goal < 0.10) {
             goal += 0.01;
             armController.setGoal(goal);
         }
