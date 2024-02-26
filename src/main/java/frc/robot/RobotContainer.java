@@ -3,15 +3,21 @@ package frc.robot;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.AlignToSpeakerCommand;
+import frc.robot.commands.BasicCommand;
+import frc.robot.commands.ShootCommand;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
 import frc.robot.subsystems.DrivetrainSubsystem.TunerConstants;
@@ -27,14 +33,19 @@ public class RobotContainer {
     private final ChassisSubsystem m_ChassisSubsystem;
     private final CommandSwerveDrivetrain m_DrivetrainSubsystem = TunerConstants.DriveTrain;
     private final ManipulatorSubsystem m_ManipulatorSubsystem;
+    private final ArmSubsystem m_ArmSubsystem;
+    private final ClimberSubsystem m_ClimberSubsystem;
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.07) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
                                                                      // driving in open loop
     private final AutonomousChooser autonomousChooser = new AutonomousChooser();
+    private final SendableChooser<Command> autoChooser;
 
     private final CommandXboxController m_driveController = new CommandXboxController(
             Constants.CONTROLLER_USB_PORT_DRIVER);
+    private final CommandXboxController m_operatorController = new CommandXboxController(
+            Constants.CONTROLLER_USB_PORT_OPERATOR);
 
     private boolean slow = false;
     private boolean roll = false;
@@ -45,15 +56,19 @@ public class RobotContainer {
     public RobotContainer() {
         m_ChassisSubsystem = new ChassisSubsystem();
         m_ManipulatorSubsystem = new ManipulatorSubsystem();
-
+        m_ArmSubsystem = new ArmSubsystem();
+        m_ClimberSubsystem = new ClimberSubsystem();
+        registerAutoCommands();
         System.out.println("container created");
+        autoChooser = AutoBuilder.buildAutoChooser();
         configureShuffleBoard();
         resetDrive();
         configureButtonBindings();
+
         // m_DrivetrainSubsystem.getState().Pose = new
         // Pose2d(m_DrivetrainSubsystem.getState().Pose.getTranslation(),
         // new Rotation2d());
-        m_DrivetrainSubsystem.seedFieldRelative(new Pose2d());
+        // m_DrivetrainSubsystem.seedFieldRelative(new Pose2d());
         // m_DrivetrainSubsystem.getPigeon2().getConfigurator()
         // .apply(new Pigeon2Configuration().withMountPose(new
         // MountPoseConfigs().withMountPoseYaw(0)));
@@ -90,6 +105,20 @@ public class RobotContainer {
     }
 
     /**
+     * Register Auto Commands
+     */
+    public void registerAutoCommands() {
+        NamedCommands.registerCommand("Basic Command", new BasicCommand());
+        NamedCommands.registerCommand("Align to speaker", new AlignToSpeakerCommand(m_DrivetrainSubsystem));
+        NamedCommands.registerCommand("Shoot",
+                new ShootCommand(m_ManipulatorSubsystem, m_DrivetrainSubsystem,
+                        m_ArmSubsystem));
+        NamedCommands.registerCommand("Intake", new InstantCommand(() -> m_ManipulatorSubsystem.intake())
+                .alongWith(new InstantCommand(() -> System.out.println("intake"))));
+        NamedCommands.registerCommand("Reset Pose", new InstantCommand(() -> m_DrivetrainSubsystem.alignToVision()));
+    }
+
+    /**
      * Set up the Shuffleboard
      */
     public void configureShuffleBoard() {
@@ -101,10 +130,12 @@ public class RobotContainer {
         // m_ArmSubsystem.setpointFORWARD()));
         // tab.add("setPointDown", new InstantCommand(() ->
         // m_ArmSubsystem.setpointDOWN()));
-        if (!m_ChassisSubsystem.isTestRobot()) {
-            tab.add(CameraServer.startAutomaticCapture("Camera", 0)).withSize(3, 3).withPosition(6, 0);
-        }
-        tab.add("Autonomous Mode", getAutonomousChooser().getModeChooser()).withSize(2, 1).withPosition(1, 0);
+        // if (!m_ChassisSubsystem.isTestRobot()) {
+        // tab.add(CameraServer.startAutomaticCapture("Camera", 0)).withSize(3,
+        // 3).withPosition(6, 0);
+        // }
+        // tab.add("Autonomous Mode",
+        // getAutonomousChooser().getModeChooser()).withSize(2, 1).withPosition(1, 0);
         // tab.add(m_drivetrainSubsystem.getField()).withSize(3, 2).withPosition(0, 1);
         tab.addBoolean("SLOW", () -> isSlow()).withPosition(1, 1);
         tab.addBoolean("ROLL", () -> isRoll()).withPosition(2, 1);
@@ -113,6 +144,7 @@ public class RobotContainer {
         tab.addDouble("X", () -> m_DrivetrainSubsystem.getState().Pose.getX());
         tab.addDouble("Y", () -> m_DrivetrainSubsystem.getState().Pose.getY());
         tab.addDouble("R", () -> m_DrivetrainSubsystem.getState().Pose.getRotation().getDegrees());
+        tab.add("Auto Chooser", autoChooser);
     }
 
     /**
@@ -127,12 +159,32 @@ public class RobotContainer {
         // .onTrue(new InstantCommand(() ->
         // System.out.println(m_DrivetrainSubsystem.getState().Pose)));
         m_driveController.start().onTrue(m_DrivetrainSubsystem.runOnce(() -> m_DrivetrainSubsystem.alignToVision()));
+        // m_driveController.a().onTrue(new
+        // AlignToSpeakerCommand(m_DrivetrainSubsystem));
+        m_driveController.y().onTrue(new InstantCommand(() -> m_ClimberSubsystem.startLeftClimberUp()));
+        m_driveController.y().onFalse(new InstantCommand(() -> m_ClimberSubsystem.stopLeftClimber()));
+        m_driveController.b().onTrue(new InstantCommand(() -> m_ClimberSubsystem.startLeftClimberDown()));
+        m_driveController.b().onFalse(new InstantCommand(() -> m_ClimberSubsystem.stopLeftClimber()));
+        m_driveController.x().onTrue(new InstantCommand(() -> m_ClimberSubsystem.startRightClimberUp()));
+        m_driveController.x().onFalse(new InstantCommand(() -> m_ClimberSubsystem.stopRightClimber()));
+        m_driveController.a().onTrue(new InstantCommand(() -> m_ClimberSubsystem.startRightClimberDown()));
+        m_driveController.a().onFalse(new InstantCommand(() -> m_ClimberSubsystem.stopRightClimber()));
 
         // Manipulator
-        m_driveController.y().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.startShooter()));
-        m_driveController.y().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopShooter()));
-        m_driveController.b().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.startIntake()));
-        m_driveController.b().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopIntake()));
+        m_operatorController.y().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.startShooter()));
+        m_operatorController.y().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopShooter()));
+        m_operatorController.b().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.intake()));
+        m_operatorController.b().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopIntake()));
+        m_operatorController.povUp().onTrue(new InstantCommand(() -> m_ArmSubsystem.raise()));
+        m_operatorController.povDown().onTrue(new InstantCommand(() -> m_ArmSubsystem.lower()));
+        m_operatorController.a().onTrue(new InstantCommand(() -> m_ArmSubsystem.setGoal(0.10)));
+        m_operatorController.x().onTrue(new InstantCommand(() -> m_ArmSubsystem.setGoal(-0.242 * 360)));
+        m_operatorController.back().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.reverse()));
+        m_operatorController.back().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopIntake()));
+        m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_ArmSubsystem.shoot()));
+        m_operatorController.rightBumper()
+                .onTrue(new ShootCommand(m_ManipulatorSubsystem, m_DrivetrainSubsystem,
+                        m_ArmSubsystem));
 
     }
 
@@ -202,6 +254,10 @@ public class RobotContainer {
         return autonomousChooser;
     }
 
+    public Command getAutonomousCommand() {
+        return autoChooser.getSelected();
+    }
+
     /**
      * Accessor to the Chassis Subsystem
      * 
@@ -218,5 +274,9 @@ public class RobotContainer {
      */
     public CommandSwerveDrivetrain getDrivetrain() {
         return m_DrivetrainSubsystem;
+    }
+
+    public ArmSubsystem getArmSubsystem() {
+        return m_ArmSubsystem;
     }
 }

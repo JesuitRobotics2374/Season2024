@@ -19,7 +19,7 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         // drivetrain
         SmartDashboard.putNumber("Apriltag Number", 1);
-
+        enableLiveWindowInTest(true);
     }
 
     @Override
@@ -32,12 +32,14 @@ public class Robot extends TimedRobot {
         // lights
         if (!m_robotContainer.getChassisSubsystem().isTestRobot()) {
         }
+        CommandScheduler.getInstance().cancelAll();
     }
 
     @Override
     public void disabledExit() {
         if (!m_robotContainer.getChassisSubsystem().isTestRobot()) {
         }
+        m_robotContainer.getArmSubsystem().resetGoal();
     }
 
     @Override
@@ -48,7 +50,7 @@ public class Robot extends TimedRobot {
         // if (!robotContainer.getShooter().isHoodZeroed()) {
         // new ZeroHoodCommand(robotContainer.getShooter(), true).schedule();
         // }
-        m_robotContainer.resetDrive();
+        // m_robotContainer.resetDrive();
         if (m_autonomousCommand != null) {
             m_autonomousCommand.cancel();
         }
@@ -62,9 +64,11 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        if (m_robotContainer.getDrivetrain().getDefaultCommand() != null)
-            m_robotContainer.getDrivetrain().getDefaultCommand().cancel();
-        m_autonomousCommand = m_robotContainer.getAutonomousChooser().getCommand(m_robotContainer);
+        // if (m_robotContainer.getDrivetrain().getDefaultCommand() != null)
+        // m_robotContainer.getDrivetrain().getDefaultCommand().cancel();
+        // m_autonomousCommand =
+        // m_robotContainer.getAutonomousChooser().getCommand(m_robotContainer);
+        m_autonomousCommand = m_robotContainer.getAutonomousCommand();
         // schedule the autonomous command (example)
         if (m_autonomousCommand != null) {
             m_autonomousCommand.schedule();

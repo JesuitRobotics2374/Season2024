@@ -14,46 +14,46 @@ public class Line extends SplineAbstract {
 
     public Line(Constraints XYconstraints, Constraints Rconstraints, Pose2d endPose2d, boolean fieldCentric) {
         this.endPose2d = endPose2d;
-        Xcontroller = new ProfiledPIDController(1.3, 0.3, 0.1, XYconstraints);
-        Ycontroller = new ProfiledPIDController(1.3, 0.3, 0.1, XYconstraints);
-        Rcontroller = new ProfiledPIDController(0.4, 0.08, 0.025, Rconstraints);
+        Xcontroller = new ProfiledPIDController(1.1, 0.15, 0.15, XYconstraints);
+        Ycontroller = new ProfiledPIDController(1.1, 0.15, 0.15, XYconstraints);
+        Rcontroller = new ProfiledPIDController(0.4, 0.06, 0.04, Rconstraints);
         Rcontroller.enableContinuousInput(0, Math.PI * 2);
         Xcontroller.setGoal(endPose2d.getX());
         Ycontroller.setGoal(endPose2d.getY());
         Rcontroller.setGoal(endPose2d.getRotation().getDegrees());
-        Rcontroller.setTolerance(Math.PI / 36);
         Xcontroller.setTolerance(0.05, 0.5);
         Ycontroller.setTolerance(0.05, 0.5);
+        Rcontroller.setTolerance(0.02);
         this.fieldCentric = fieldCentric;
     }
 
     public Line(Constraints XYconstraints, Constraints Rconstraints, Pose2d endPose2d, boolean fieldCentric,
             double positionTolerance, double velocityTolerance) {
         this.endPose2d = endPose2d;
-        Xcontroller = new ProfiledPIDController(1.3, 0.3, 0.1, XYconstraints);
-        Ycontroller = new ProfiledPIDController(1.3, 0.3, 0.1, XYconstraints);
-        Rcontroller = new ProfiledPIDController(0.4, 0.08, 0.025, Rconstraints);
+        Xcontroller = new ProfiledPIDController(1.1, 0.15, 0.15, XYconstraints);
+        Ycontroller = new ProfiledPIDController(1.1, 0.15, 0.15, XYconstraints);
+        Rcontroller = new ProfiledPIDController(0.4, 0.06, 0.04, Rconstraints);
         Rcontroller.enableContinuousInput(0, Math.PI * 2);
         Xcontroller.setGoal(endPose2d.getX());
         Ycontroller.setGoal(endPose2d.getY());
-        Rcontroller.setGoal(endPose2d.getRotation().getDegrees());
-        Rcontroller.setTolerance(Math.PI / 36);
+        Rcontroller.setGoal(endPose2d.getRotation().getRadians());
         Xcontroller.setTolerance(positionTolerance, velocityTolerance);
         Ycontroller.setTolerance(positionTolerance, velocityTolerance);
+        Rcontroller.setTolerance(0.02);
         this.fieldCentric = fieldCentric;
     }
 
     @Override
     public void initialize(Pose2d currentPose2d) {
-        if (fieldCentric) {
-            Xcontroller.setGoal(endPose2d.getX());
-            Ycontroller.setGoal(endPose2d.getY());
-            Rcontroller.setGoal(endPose2d.getRotation().getDegrees());
-        } else {
-            Xcontroller.setGoal(endPose2d.getX() + currentPose2d.getX());
-            Ycontroller.setGoal(endPose2d.getY() + currentPose2d.getY());
-            Rcontroller.setGoal(endPose2d.getRotation().getRadians() + currentPose2d.getRotation().getRadians());
+        if (!fieldCentric) {
+            endPose2d = new Pose2d(endPose2d.getTranslation().plus(currentPose2d.getTranslation()),
+                    endPose2d.getRotation().plus(currentPose2d.getRotation()));
         }
+        Xcontroller.setGoal(endPose2d.getX());
+        Ycontroller.setGoal(endPose2d.getY());
+        Rcontroller.setGoal(endPose2d.getRotation().getRadians());
+        System.out.println(currentPose2d);
+        System.out.println(endPose2d);
         Xcontroller.reset(currentPose2d.getX());
         Ycontroller.reset(currentPose2d.getY());
         Rcontroller.reset(currentPose2d.getRotation().getRadians());
@@ -61,9 +61,33 @@ public class Line extends SplineAbstract {
 
     @Override
     public ChassisSpeeds getMovement(Pose2d currentPose2d) {
-        return new ChassisSpeeds(Xcontroller.calculate(currentPose2d.getX()),
+        ChassisSpeeds speeds = new ChassisSpeeds(Xcontroller.calculate(currentPose2d.getX()),
                 Ycontroller.calculate(currentPose2d.getY()),
                 Rcontroller.calculate(currentPose2d.getRotation().getRadians()));
+        if (Math.abs(speeds.vxMetersPerSecond) > Xcontroller.getConstraints().maxVelocity) {
+            speeds.vxMetersPerSecond = Math.copySign(Xcontroller.getConstraints().maxVelocity,
+                    speeds.vxMetersPerSecond);
+        }
+        if (Math.abs(speeds.vyMetersPerSecond) > Ycontroller.getConstraints().maxVelocity) {
+            speeds.vyMetersPerSecond = Math.copySign(Ycontroller.getConstraints().maxVelocity,
+                    speeds.vyMetersPerSecond);
+        }
+        if ((currentPose2d.getRotation().minus(endPose2d.getRotation()).getDegrees() + 360) % 360 > 4
+                && (currentPose2d.getRotation().minus(endPose2d.getRotation()).getDegrees() + 360) % 360 < 100) {
+            speeds.omegaRadiansPerSecond -= Math.PI / 3;
+            // System.out.println("a");
+        } else if ((currentPose2d.getRotation().minus(endPose2d.getRotation()).getDegrees() + 360) % 360 < 356
+                && (currentPose2d.getRotation().minus(endPose2d.getRotation()).getDegrees() + 360) % 360 > 260) {
+            speeds.omegaRadiansPerSecond += Math.PI / 3;
+            // System.out.println("b");
+        }
+        // System.out.println((currentPose2d.getRotation().minus(endPose2d.getRotation()).getDegrees()
+        // + 360) % 360);
+        if (Math.abs(speeds.omegaRadiansPerSecond) > Rcontroller.getConstraints().maxVelocity) {
+            speeds.omegaRadiansPerSecond = Math.copySign(Rcontroller.getConstraints().maxVelocity,
+                    speeds.omegaRadiansPerSecond);
+        }
+        return speeds;
     }
 
     @Override
