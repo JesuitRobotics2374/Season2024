@@ -1,0 +1,70 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 15.420678122155357,
+        "y": 4.205616935096246
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 14.750612941847415,
+        "y": 4.2882277107506495
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 14.374274963866245,
+        "y": 4.086290259150996
+      },
+      "prevControl": {
+        "x": 14.64046524097488,
+        "y": 4.086290259150996
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "o2rb_1-2"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.25,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Shoot"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 2.7,
+    "maxAcceleration": 2.7,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0.0,
+    "rotation": 180.0,
+    "rotateFast": true
+  },
+  "reversed": false,
+  "folder": "Option 2 - Red Bottom",
+  "previewStartingState": {
+    "rotation": -100.57352341856094,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

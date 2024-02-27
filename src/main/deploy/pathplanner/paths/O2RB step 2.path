@@ -1,0 +1,70 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 14.374274963866245,
+        "y": 4.086290259150996
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 15.145308869974015,
+        "y": 1.5804300643007498
+      },
+      "isLocked": false,
+      "linkedName": "o2rb_1-2"
+    },
+    {
+      "anchor": {
+        "x": 8.894426845457467,
+        "y": 0.956259759356366
+      },
+      "prevControl": {
+        "x": 9.977545904037425,
+        "y": 1.1949131112468658
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "o2rb_3-4"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.8,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 2.7,
+    "maxAcceleration": 2.7,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -161.25865955480734,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Option 2 - Red Bottom",
+  "previewStartingState": {
+    "rotation": -100.57352341856094,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
