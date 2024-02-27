@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.playingwithfusion.TimeOfFlight;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkRelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.util.Units;
@@ -75,7 +76,8 @@ public class ManipulatorSubsystem extends SubsystemBase {
     }
 
     public double getShooterSpeed() {
-        return shooterMotorA.getEncoder().getVelocity() * Units.inchesToMeters(2 * Math.PI) / 60;
+        return shooterMotorA.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42).getVelocity()
+                * Units.inchesToMeters(2 * Math.PI) / 60;
     }
 
     public boolean shooterAtMaxSpeed() {
