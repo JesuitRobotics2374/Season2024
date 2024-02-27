@@ -24,6 +24,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
     private final double shooterSpeed = 0.7;
     private final double intakeSpeed = 0.3;
     ShuffleboardTab tab = Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME);
+    static ManipulatorSubsystem instance;
 
     public ManipulatorSubsystem() {
         shooterMotorA = new CANSparkFlex(Constants.SHOOTER_MOTOR_A_ID, MotorType.kBrushless);
@@ -32,6 +33,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
         noteSensor = new TimeOfFlight(Constants.SENSOR_PORT);
         tab.addDouble("Shooter Speed", () -> getShooterSpeed());
         tab.addDouble("TOF range", () -> noteSensor.getRange());
+        instance = this;
     }
 
     public void intake() {
@@ -84,6 +86,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
     public void periodic() {
         if (intake && (noteSensor.getRange() <= 100)) {
             stopIntake();
+            ChassisSubsystem.getInstance().flash();
             intake = false;
         }
     }
@@ -94,5 +97,9 @@ public class ManipulatorSubsystem extends SubsystemBase {
 
     public boolean shooterAtMaxSpeed() {
         return getShooterSpeed() > 11.6;
+    }
+
+    public static ManipulatorSubsystem getInstance() {
+        return instance;
     }
 }

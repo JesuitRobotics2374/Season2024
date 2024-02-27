@@ -43,4 +43,12 @@ public class ChassisSubsystem extends SubsystemBase {
         return result;
     }
 
+    public void flash() {
+        System.out.println("flash here");
+    }
+
+    public static ChassisSubsystem getInstance() {
+        return instance;
+    }
+
 }
