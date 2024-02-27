@@ -51,6 +51,7 @@ public class Robot extends TimedRobot {
         // new ZeroHoodCommand(robotContainer.getShooter(), true).schedule();
         // }
         // m_robotContainer.resetDrive();
+        m_robotContainer.getDrivetrain().alignWithAliance();
         if (m_autonomousCommand != null) {
             m_autonomousCommand.cancel();
         }

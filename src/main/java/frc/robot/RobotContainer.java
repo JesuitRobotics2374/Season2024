@@ -36,7 +36,6 @@ public class RobotContainer {
     private final ArmSubsystem m_ArmSubsystem;
     private final ClimberSubsystem m_ClimberSubsystem;
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.07) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
                                                                      // driving in open loop
     private final AutonomousChooser autonomousChooser = new AutonomousChooser();
@@ -80,13 +79,22 @@ public class RobotContainer {
      */
     public void resetDrive() {
         m_DrivetrainSubsystem.setDefaultCommand( // Drivetrain will execute this command periodically
-                m_DrivetrainSubsystem.applyRequest(() -> drive.withVelocityX(-m_driveController.getLeftY() * MaxSpeed) // Drive
-                        // forward
-                        // with
-                        // negative Y (forward)
-                        .withVelocityY(-m_driveController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                        .withRotationalRate(-m_driveController.getRightX() * MaxAngularRate) // Drive counterclockwise
-                                                                                             // with
+                m_DrivetrainSubsystem.applyRequest(
+                        () -> drive.withVelocityX(-square(deadband(m_driveController.getLeftY(), 0.1)) * MaxSpeed) // Drive
+                                // forward
+                                // with
+                                // negative Y (forward)
+                                .withVelocityY(-square(deadband(m_driveController.getLeftX(), 0.1)) * MaxSpeed) // Drive
+                                                                                                                // left
+                                                                                                                // with
+                                                                                                                // negative
+                                                                                                                // X
+                                // (left)
+                                .withRotationalRate(
+                                        -square(clampAdd(deadband(m_driveController.getRightX(), 0.1),
+                                                deadband(m_operatorController.getRightX(), 0.1)) * MaxAngularRate)) // Drive
+                // counterclockwise
+                // with
                 // negative X (left)
                 ));
         m_DrivetrainSubsystem.seedFieldRelative();
@@ -211,6 +219,10 @@ public class RobotContainer {
      */
     public static double square(double value) {
         return Math.copySign(value * value, value);
+    }
+
+    public static double clampAdd(double value1, double value2) {
+        return Math.max(Math.min(value1 + value2, 1), -1);
     }
 
     public boolean isSlow() {

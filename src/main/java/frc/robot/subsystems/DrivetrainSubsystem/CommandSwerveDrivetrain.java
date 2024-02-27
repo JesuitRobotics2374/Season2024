@@ -103,7 +103,18 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                         TunerConstants.kSpeedAt12VoltsMps,
                         driveBaseRadius,
                         new ReplanningConfig()),
-                () -> false, // Change this if the path needs to be flipped on red vs blue
+                () -> {
+                    // Boolean supplier that controls when the path will be mirrored for the blue
+                    // alliance
+                    // This will flip the path being followed to the blue side of the field.
+                    // THE ORIGIN WILL REMAIN ON THE RED SIDE
+
+                    var alliance = DriverStation.getAlliance();
+                    if (alliance.isPresent()) {
+                        return alliance.get() == DriverStation.Alliance.Blue;
+                    }
+                    return false;
+                },
                 this); // Subsystem for requirements
     }
 
@@ -200,6 +211,15 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         seedFieldRelative(new Pose2d(field.getObject("Vision").getPose().getTranslation().getX() - 0.77,
                 field.getObject("Vision").getPose().getTranslation().getY() - 0.1,
                 field.getObject("Vision").getPose().getRotation()));
+    }
+
+    public void alignWithAliance() {
+        boolean flag = false;
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) {
+            flag = alliance.get() == Alliance.Red;
+            m_fieldRelativeOffset = (flag ? Rotation2d.fromDegrees(180) : Rotation2d.fromDegrees(0));
+        }
     }
 
     public SwerveDriveKinematics getKinematics() {
