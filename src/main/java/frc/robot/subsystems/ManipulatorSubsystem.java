@@ -22,7 +22,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
     boolean intake = false;
     boolean previousSensorRead = false;
 
-    private final double shooterSpeed = 0.7;
+    private final double shooterSpeed = -0.7;
     private final double intakeSpeed = 0.3;
     ShuffleboardTab tab = Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME);
     static ManipulatorSubsystem instance;
@@ -30,6 +30,9 @@ public class ManipulatorSubsystem extends SubsystemBase {
     public ManipulatorSubsystem() {
         shooterMotorA = new CANSparkFlex(Constants.SHOOTER_MOTOR_A_ID, MotorType.kBrushless);
         shooterMotorB = new CANSparkFlex(Constants.SHOOTER_MOTOR_B_ID, MotorType.kBrushless);
+        shooterMotorA.setInverted(false);
+        shooterMotorA.setCANTimeout(80);
+        shooterMotorB.setInverted(false);
         intakeMotor = new CANSparkMax(Constants.INTAKE_MOTOR_ID, MotorType.kBrushless);
         noteSensor = new TimeOfFlight(Constants.SENSOR_PORT);
         tab.addDouble("Shooter Speed", () -> getShooterSpeed());
@@ -46,7 +49,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
 
     public void startShooter() {
         shooterMotorA.set(shooterSpeed);
-        shooterMotorB.set(shooterSpeed);
+        shooterMotorB.set(-shooterSpeed);
     }
 
     public void stopShooter() {
@@ -66,6 +69,10 @@ public class ManipulatorSubsystem extends SubsystemBase {
         intakeMotor.set(-intakeSpeed);
     }
 
+    public void slowClimb() {
+        shooterMotorB.set(-0.2);
+    }
+
     @Override
     public void periodic() {
         if (intake && (noteSensor.getRange() <= 100)) {
@@ -76,7 +83,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
     }
 
     public double getShooterSpeed() {
-        return shooterMotorA.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42).getVelocity()
+        return -shooterMotorA.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42).getVelocity()
                 * Units.inchesToMeters(2 * Math.PI) / 60;
     }
 

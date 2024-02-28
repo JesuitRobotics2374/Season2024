@@ -185,7 +185,7 @@ public class RobotContainer {
         m_operatorController.b().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopIntake()));
         m_operatorController.povUp().onTrue(new InstantCommand(() -> m_ArmSubsystem.raise()));
         m_operatorController.povDown().onTrue(new InstantCommand(() -> m_ArmSubsystem.lower()));
-        m_operatorController.a().onTrue(new InstantCommand(() -> m_ArmSubsystem.setGoal(0.10)));
+        m_operatorController.a().onTrue(new InstantCommand(() -> m_ArmSubsystem.setGoal(0.1)));
         m_operatorController.x().onTrue(new InstantCommand(() -> m_ArmSubsystem.setGoal(-0.242 * 360)));
         m_operatorController.back().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.reverse()));
         m_operatorController.back().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopIntake()));
@@ -193,6 +193,8 @@ public class RobotContainer {
         m_operatorController.rightBumper()
                 .onTrue(new ShootCommand(m_ManipulatorSubsystem, m_DrivetrainSubsystem,
                         m_ArmSubsystem));
+        m_operatorController.start().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.slowClimb()));
+        m_operatorController.start().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopShooter()));
 
     }
 

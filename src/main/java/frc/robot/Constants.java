@@ -18,10 +18,11 @@ public class Constants {
     public static final int RIGHT_ARM_MOTOR_ID = 6;
     public static final int LEFT_ARM_MOTOR_ID = 7;
     public static final int ARM_ENCODER_ID = 25;
+    public static final double FORWARD_SOFT_STOP = 0.15;
 
     // MANIPUlATIR Subsystem
-    public static final int SHOOTER_MOTOR_A_ID = 31;
-    public static final int SHOOTER_MOTOR_B_ID = 32;
+    public static final int SHOOTER_MOTOR_A_ID = 32;
+    public static final int SHOOTER_MOTOR_B_ID = 31;
     public static final int INTAKE_MOTOR_ID = 33;
     public static final int SENSOR_PORT = 18;
 
