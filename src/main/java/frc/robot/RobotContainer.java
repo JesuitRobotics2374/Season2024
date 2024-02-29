@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AlignToSpeakerCommand;
 import frc.robot.commands.BasicCommand;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
@@ -121,8 +122,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Shoot",
                 new ShootCommand(m_ManipulatorSubsystem, m_DrivetrainSubsystem,
                         m_ArmSubsystem));
-        NamedCommands.registerCommand("Intake", new InstantCommand(() -> m_ManipulatorSubsystem.intake())
-                .alongWith(new InstantCommand(() -> System.out.println("intake"))));
+        NamedCommands.registerCommand("Intake", new IntakeCommand(m_ManipulatorSubsystem));
         NamedCommands.registerCommand("Reset Pose", new InstantCommand(() -> m_DrivetrainSubsystem.alignToVision()));
     }
 

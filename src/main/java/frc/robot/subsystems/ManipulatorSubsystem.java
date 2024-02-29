@@ -4,6 +4,7 @@ import com.playingwithfusion.TimeOfFlight;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkRelativeEncoder;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.util.Units;
@@ -23,7 +24,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
     boolean previousSensorRead = false;
 
     private final double shooterSpeed = -0.7;
-    private final double intakeSpeed = 0.3;
+    private final double intakeSpeed = 0.5;
     ShuffleboardTab tab = Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME);
     static ManipulatorSubsystem instance;
 
@@ -33,7 +34,10 @@ public class ManipulatorSubsystem extends SubsystemBase {
         shooterMotorA.setInverted(false);
         shooterMotorA.setCANTimeout(80);
         shooterMotorB.setInverted(false);
+        shooterMotorA.setIdleMode(IdleMode.kCoast);
+        shooterMotorB.setIdleMode(IdleMode.kCoast);
         intakeMotor = new CANSparkMax(Constants.INTAKE_MOTOR_ID, MotorType.kBrushless);
+        intakeMotor.setIdleMode(IdleMode.kBrake);
         noteSensor = new TimeOfFlight(Constants.SENSOR_PORT);
         tab.addDouble("Shooter Speed", () -> getShooterSpeed());
         tab.addDouble("TOF range", () -> noteSensor.getRange());
@@ -58,15 +62,15 @@ public class ManipulatorSubsystem extends SubsystemBase {
     }
 
     public void startIntake() {
-        intakeMotor.set(intakeSpeed);
-    }
-
-    public void stopIntake() {
-        intakeMotor.stopMotor();
+        intakeMotor.set(intake ? intakeSpeed : 1);
     }
 
     public void reverse() {
         intakeMotor.set(-intakeSpeed);
+    }
+
+    public void stopIntake() {
+        intakeMotor.stopMotor();
     }
 
     public void slowClimb() {
@@ -93,5 +97,9 @@ public class ManipulatorSubsystem extends SubsystemBase {
 
     public static ManipulatorSubsystem getInstance() {
         return instance;
+    }
+
+    public boolean getIntake() {
+        return intake;
     }
 }

@@ -185,7 +185,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             r[i] = (rList.get(i) - rList.get(i + 1)) / (tList.get(i + 1) / 1000);
         }
         for (int i = 0; i < x.length - 1; i++) {
-            if (Math.abs(x[i] - x[i + 1]) > 1.3 || Math.abs(y[i] - y[i + 1]) > 1.3 || Math.abs(x[i] - x[i + 1]) > 135) {
+            if (Math.abs(x[i] - x[i + 1]) > 0.9 || Math.abs(y[i] - y[i + 1]) > 0.9 || Math.abs(x[i] - x[i + 1]) > 90) {
                 xList.remove(0);
                 yList.remove(0);
                 rList.remove(0);

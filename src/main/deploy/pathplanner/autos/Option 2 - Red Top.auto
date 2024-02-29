@@ -18,9 +18,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "O2RT part 1"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "O2RT part 1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
           }
         },
         {
@@ -30,9 +43,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "O2RT part 2"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "O2RT part 2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
           }
         },
         {
@@ -48,9 +74,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "O2RT part 4"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "O2RT part 4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
           }
         },
         {
