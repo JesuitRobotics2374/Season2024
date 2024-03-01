@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ManipulatorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
@@ -23,15 +24,17 @@ public class ShootCommand extends SequentialCommandGroup {
         this.armSubsystem = armSubsystem;
         addRequirements(subsystem, swerveDrivetrain, armSubsystem);
         addCommands(new InstantCommand(() -> subsystem.startShooter()),
-                new ParallelCommandGroup(
-                        new AlignToSpeakerCommand(swerveDrivetrain).alongWith(new FunctionalCommand(
-                                () -> armSubsystem.shoot(), () -> {
-                                }, interrupted -> {
-                                }, () -> armSubsystem.atGoal())).andThen(new WaitCommand(0.1)),
+                new ParallelCommandGroup(new WaitCommand(0.2).andThen(
+                        new AlignToSpeakerCommand(swerveDrivetrain)).alongWith(
+                                new FunctionalCommand(
+                                        () -> armSubsystem.shoot(), () -> {
+                                        }, interrupted -> {
+                                        }, () -> armSubsystem.atGoal()))
+                        .andThen(new WaitCommand(0.02)),
                         new WaitUntilCommand(() -> subsystem.shooterAtMaxSpeed()).withTimeout(1.2)),
-                new InstantCommand(() -> subsystem.intake()), new WaitCommand(.6),
+                new InstantCommand(() -> subsystem.intake()), new WaitCommand(.7),
                 new InstantCommand(() -> subsystem.stopIntake())
                         .alongWith(new InstantCommand(() -> subsystem.stopShooter()))
-                        .alongWith(new InstantCommand(() -> armSubsystem.setGoal(-0.242 * 360))));
+                        .alongWith(new InstantCommand(() -> armSubsystem.setGoal(Constants.BACKWARD_SOFT_STOP * 360))));
     }
 }

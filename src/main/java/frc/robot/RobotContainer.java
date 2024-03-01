@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AlignToSpeakerCommand;
@@ -124,6 +125,10 @@ public class RobotContainer {
                         m_ArmSubsystem));
         NamedCommands.registerCommand("Intake", new IntakeCommand(m_ManipulatorSubsystem));
         NamedCommands.registerCommand("Reset Pose", new InstantCommand(() -> m_DrivetrainSubsystem.alignToVision()));
+        NamedCommands.registerCommand("Slam Arm",
+                new FunctionalCommand(() -> m_ArmSubsystem.setGoal(Constants.BACKWARD_SOFT_STOP * 360), () -> {
+                }, interrupted -> {
+                }, () -> m_ArmSubsystem.atGoal()));
     }
 
     /**
@@ -131,24 +136,8 @@ public class RobotContainer {
      */
     public void configureShuffleBoard() {
         ShuffleboardTab tab = Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME);
-        // tab.add("setPointUp", new InstantCommand(() -> m_ArmSubsystem.setpointUP()));
-        // tab.add("setPointBack", new InstantCommand(() ->
-        // m_ArmSubsystem.setpointBACK()));
-        // tab.add("setPointForward", new InstantCommand(() ->
-        // m_ArmSubsystem.setpointFORWARD()));
-        // tab.add("setPointDown", new InstantCommand(() ->
-        // m_ArmSubsystem.setpointDOWN()));
-        // if (!m_ChassisSubsystem.isTestRobot()) {
-        // tab.add(CameraServer.startAutomaticCapture("Camera", 0)).withSize(3,
-        // 3).withPosition(6, 0);
-        // }
-        // tab.add("Autonomous Mode",
-        // getAutonomousChooser().getModeChooser()).withSize(2, 1).withPosition(1, 0);
-        // tab.add(m_drivetrainSubsystem.getField()).withSize(3, 2).withPosition(0, 1);
         tab.addBoolean("SLOW", () -> isSlow()).withPosition(1, 1);
         tab.addBoolean("ROLL", () -> isRoll()).withPosition(2, 1);
-        // tab.addBoolean("Auto", () ->
-        // m_drivetrainSubsystem.getFollower().getCurrentTrajectory().isPresent());
         tab.addDouble("X", () -> m_DrivetrainSubsystem.getState().Pose.getX());
         tab.addDouble("Y", () -> m_DrivetrainSubsystem.getState().Pose.getY());
         tab.addDouble("R", () -> m_DrivetrainSubsystem.getState().Pose.getRotation().getDegrees());
@@ -186,7 +175,8 @@ public class RobotContainer {
         m_operatorController.povUp().onTrue(new InstantCommand(() -> m_ArmSubsystem.raise()));
         m_operatorController.povDown().onTrue(new InstantCommand(() -> m_ArmSubsystem.lower()));
         m_operatorController.a().onTrue(new InstantCommand(() -> m_ArmSubsystem.setGoal(0.1)));
-        m_operatorController.x().onTrue(new InstantCommand(() -> m_ArmSubsystem.setGoal(-0.242 * 360)));
+        m_operatorController.x()
+                .onTrue(new InstantCommand(() -> m_ArmSubsystem.setGoal(Constants.BACKWARD_SOFT_STOP * 360)));
         m_operatorController.back().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.reverse()));
         m_operatorController.back().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopIntake()));
         m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_ArmSubsystem.shoot()));

@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.playingwithfusion.TimeOfFlight;
+import com.playingwithfusion.TimeOfFlight.RangingMode;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkRelativeEncoder;
@@ -23,8 +24,8 @@ public class ManipulatorSubsystem extends SubsystemBase {
     boolean intake = false;
     boolean previousSensorRead = false;
 
-    private final double shooterSpeed = -0.7;
-    private final double intakeSpeed = 0.5;
+    private final double shooterSpeed = -1;
+    private final double intakeSpeed = 0.8;
     ShuffleboardTab tab = Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME);
     static ManipulatorSubsystem instance;
 
@@ -41,11 +42,13 @@ public class ManipulatorSubsystem extends SubsystemBase {
         noteSensor = new TimeOfFlight(Constants.SENSOR_PORT);
         tab.addDouble("Shooter Speed", () -> getShooterSpeed());
         tab.addDouble("TOF range", () -> noteSensor.getRange());
+        noteSensor.setRangingMode(RangingMode.Short, 24);
+        noteSensor.setRangeOfInterest(9, 9, 11, 11);
         instance = this;
     }
 
     public void intake() {
-        if (noteSensor.getRange() > 100) {
+        if (noteSensor.getRange() > 70) {
             intake = true;
         }
         startIntake();
@@ -79,7 +82,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (intake && (noteSensor.getRange() <= 100)) {
+        if (intake && (noteSensor.getRange() <= 70)) {
             stopIntake();
             ChassisSubsystem.getInstance().flash();
             intake = false;
