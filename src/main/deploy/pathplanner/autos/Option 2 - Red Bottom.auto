@@ -24,9 +24,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "O2RB step 1"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "O2RB step 1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
           }
         },
         {
@@ -36,9 +49,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "O2RB step 2"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "O2RB step 2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
           }
         },
         {
@@ -54,9 +80,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "O2RB step 4"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "O2RB step 4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
           }
         },
         {

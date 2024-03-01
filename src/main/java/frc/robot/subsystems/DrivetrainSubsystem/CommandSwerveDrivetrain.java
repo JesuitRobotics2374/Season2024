@@ -86,6 +86,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         }
         tab.add(field).withPosition(0, 3).withSize(5, 3);
         tab.addDouble("Offset", () -> this.m_fieldRelativeOffset.getDegrees());
+        tab.addDouble("Pigeon", () -> (((m_pigeon2.getAngle() % 360) + 360) % 360));
         Matrix<N3, N1> matrix = new Matrix<>(Nat.N3(), Nat.N1());
         matrix.set(0, 0, 4);
         matrix.set(1, 0, 4);
@@ -220,6 +221,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         seedFieldRelative(new Pose2d(field.getObject("Vision").getPose().getTranslation().getX() - 0.77,
                 field.getObject("Vision").getPose().getTranslation().getY() - 0.1,
                 field.getObject("Vision").getPose().getRotation()));
+        alignWithAliance();
     }
 
     public void alignWithAliance() {

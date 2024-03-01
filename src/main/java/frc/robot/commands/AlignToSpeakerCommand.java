@@ -23,6 +23,7 @@ public class AlignToSpeakerCommand extends Command {
     SwerveRequest.FieldCentric request = new SwerveRequest.FieldCentric();
     boolean flag = false;
     Optional<Alliance> alliance = DriverStation.getAlliance();
+    double target = 0;
 
     public AlignToSpeakerCommand(CommandSwerveDrivetrain subDrivetrain) {
         System.out.println("ALIGN TO THE TING");
@@ -40,18 +41,15 @@ public class AlignToSpeakerCommand extends Command {
         }
         Translation2d offset = (flag ? new Translation2d(16.3, 5.55) : new Translation2d(0.3, 5.55))
                 .minus(subsystem.getState().Pose.getTranslation());
-        controller.setGoal(offset.getAngle().plus(new Rotation2d(Math.PI)).getRadians());
+        target = offset.getAngle().plus(new Rotation2d(Math.PI))
+                .plus(Rotation2d.fromDegrees((((subsystem.getPigeon2().getAngle() % 360) + 360) % 360))).getRadians();
+        controller.setGoal(target);
         System.out.println(Math.toDegrees(controller.getGoal().position));
-        System.out.println(controller
-                .calculate(subsystem.getState().Pose.getRotation().plus(Rotation2d.fromDegrees(180)).getRadians()));
     }
 
     @Override
     public void execute() {
-        Translation2d offset = (flag ? new Translation2d(16.3, 5.55) : new Translation2d(0.3, 5.55))
-                .minus(subsystem.getState().Pose.getTranslation());
-        double rate = controller.calculate(subsystem.getState().Pose.getRotation().getRadians(),
-                offset.getAngle().plus(new Rotation2d(Math.PI)).getRadians());
+        double rate = controller.calculate(Math.toDegrees((((subsystem.getPigeon2().getAngle() % 360) + 360) % 360)));
         if (rate < 0 - controller.getPositionTolerance()) {
             rate = Math.min(rate, Math.abs(controller.getPositionError()) > .1 ? -1.2 : -0.6);
         } else if (rate > 0 + controller.getPositionTolerance()) {
