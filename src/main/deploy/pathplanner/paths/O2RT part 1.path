@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 15.0,
+        "x": 14.3,
         "y": 7.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 14.9,
+        "x": 14.360000000000001,
         "y": 7.0
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "o2rt_1-2"
     },
     {
       "anchor": {
@@ -20,15 +20,21 @@
         "y": 7.0
       },
       "prevControl": {
-        "x": 14.4,
-        "y": 7.0
+        "x": 14.31304819813634,
+        "y": 6.991369417831561
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "o2rt_1-2"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -45,7 +51,7 @@
   "reversed": false,
   "folder": "Option 2 - Red Top",
   "previewStartingState": {
-    "rotation": 130.0,
+    "rotation": 180.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

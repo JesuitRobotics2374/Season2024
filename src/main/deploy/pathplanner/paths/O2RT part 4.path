@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 13.5,
+        "x": 13.50227233195865,
         "y": 6.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 9.535026887457484,
+        "x": 9.537299219416134,
         "y": 6.417538427088266
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "o2rt_3-4"
     },
     {
       "anchor": {
@@ -25,7 +25,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "o2rt_4-5"
     }
   ],
   "rotationTargets": [],

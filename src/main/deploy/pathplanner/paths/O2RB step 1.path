@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 15.420678122155357,
-        "y": 4.205616935096246
+        "x": 14.374274963866245,
+        "y": 4.086290259150996
       },
       "prevControl": null,
       "nextControl": {
-        "x": 14.750612941847415,
-        "y": 4.2882277107506495
+        "x": 14.37745779913814,
+        "y": 4.087081954477746
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "o2rb_1-2"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 4.086290259150996
       },
       "prevControl": {
-        "x": 14.64046524097488,
-        "y": 4.086290259150996
+        "x": 14.37745779913814,
+        "y": 4.087081954477746
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
   "reversed": false,
   "folder": "Option 2 - Red Bottom",
   "previewStartingState": {
-    "rotation": -100.57352341856094,
+    "rotation": 180.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

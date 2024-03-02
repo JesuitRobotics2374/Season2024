@@ -8,11 +8,11 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 9.74411077170556,
-        "y": 5.802790699579704
+        "x": 10.852495998857902,
+        "y": 6.850839379282182
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "o2rt_4-5"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 6.5
       },
       "prevControl": {
-        "x": 9.67555692600686,
-        "y": 6.663465994549679
+        "x": 10.82907432576634,
+        "y": 6.75715268691593
       },
       "nextControl": null,
       "isLocked": false,
