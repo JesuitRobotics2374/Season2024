@@ -28,15 +28,15 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "O2RT part 1"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "O2RT part 1"
                 }
               }
             ]

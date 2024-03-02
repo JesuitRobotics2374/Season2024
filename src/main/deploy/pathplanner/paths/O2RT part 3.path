@@ -12,7 +12,7 @@
         "y": 7.390721285327143
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "o2rt_2-3"
     },
     {
       "anchor": {
@@ -25,7 +25,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "o2rt_3-4"
     }
   ],
   "rotationTargets": [],
@@ -40,7 +40,7 @@
   "goalEndState": {
     "velocity": 0,
     "rotation": 162.0,
-    "rotateFast": false
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "Option 2 - Red Top",

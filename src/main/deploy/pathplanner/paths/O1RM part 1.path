@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 15.218740670555706,
-        "y": 4.132185134514554
+        "x": 14.24,
+        "y": 4.36
       },
       "prevControl": null,
       "nextControl": {
-        "x": 14.778149867065551,
-        "y": 4.47180721220488
+        "x": 14.248638597134542,
+        "y": 4.368142031576503
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "o2rm_1-2"
     },
     {
       "anchor": {
-        "x": 14.23659033777557,
-        "y": 4.361659511332342
+        "x": 14.24,
+        "y": 4.36
       },
       "prevControl": {
-        "x": 14.851581667647245,
-        "y": 4.692102613949956
+        "x": 14.248638597134542,
+        "y": 4.356431195030721
       },
       "nextControl": null,
       "isLocked": false,
@@ -57,13 +57,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -154.32318431816162,
-    "rotateFast": false
+    "rotation": -154.32,
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "Option 1 - Red Middle",
   "previewStartingState": {
-    "rotation": 178.47247455778714,
+    "rotation": -154.32,
     "velocity": 0
   },
   "useDefaultConstraints": true

@@ -40,7 +40,7 @@
   "goalEndState": {
     "velocity": 0,
     "rotation": -161.25865955480734,
-    "rotateFast": false
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "Option 2 - Red Bottom",
