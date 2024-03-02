@@ -86,7 +86,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         }
         tab.add(field).withPosition(0, 3).withSize(5, 3);
         tab.addDouble("Offset", () -> this.m_fieldRelativeOffset.getDegrees());
-        tab.addDouble("Pigeon", () -> (((m_pigeon2.getAngle() % 360) + 360) % 360));
+        tab.addDouble("Pigeon", () -> (getState().Pose.getRotation().getDegrees()));
         Matrix<N3, N1> matrix = new Matrix<>(Nat.N3(), Nat.N1());
         matrix.set(0, 0, 4);
         matrix.set(1, 0, 4);

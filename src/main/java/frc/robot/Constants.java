@@ -29,7 +29,7 @@ public class Constants {
 
     // ANGLE Calculator
     public static final double armLength = 0.62;
-    public static final double armAngleOffset = Math.toRadians(110.5);
+    public static final double armAngleOffset = Math.toRadians(109);
     public static final double deltaHeight = 2 - 0.30;
     public static final double launchVelocity = 15.5;
     public static final double FEED_FORWARD_VOLTAGE = 0.3;

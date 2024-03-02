@@ -23,13 +23,12 @@ public class AlignToSpeakerCommand extends Command {
     SwerveRequest.FieldCentric request = new SwerveRequest.FieldCentric();
     boolean flag = false;
     Optional<Alliance> alliance = DriverStation.getAlliance();
-    double target = 0;
 
     public AlignToSpeakerCommand(CommandSwerveDrivetrain subDrivetrain) {
         System.out.println("ALIGN TO THE TING");
         subsystem = subDrivetrain;
         addRequirements(subDrivetrain);
-        controller = new ProfiledPIDController(2, 0, 0.1, new Constraints(Math.PI * 4, Math.PI * 3));
+        controller = new ProfiledPIDController(2, 0.05, 0.1, new Constraints(Math.PI * 4, Math.PI * 3));
         controller.enableContinuousInput(-Math.PI, Math.PI);
         controller.setTolerance(0.025, 0.025);
     }
@@ -41,15 +40,16 @@ public class AlignToSpeakerCommand extends Command {
         }
         Translation2d offset = (flag ? new Translation2d(16.3, 5.55) : new Translation2d(0.3, 5.55))
                 .minus(subsystem.getState().Pose.getTranslation());
-        target = offset.getAngle().plus(new Rotation2d(Math.PI))
-                .plus(Rotation2d.fromDegrees((((subsystem.getPigeon2().getAngle() % 360) + 360) % 360))).getRadians();
-        controller.setGoal(target);
+        controller.setGoal(offset.getAngle().plus(new Rotation2d(Math.PI)).getRadians());
         System.out.println(Math.toDegrees(controller.getGoal().position));
     }
 
     @Override
     public void execute() {
-        double rate = controller.calculate(Math.toDegrees((((subsystem.getPigeon2().getAngle() % 360) + 360) % 360)));
+        Translation2d offset = (flag ? new Translation2d(16.3, 5.55) : new Translation2d(0.3, 5.55))
+                .minus(subsystem.getState().Pose.getTranslation());
+        double rate = controller.calculate(subsystem.getState().Pose.getRotation().getRadians(),
+                offset.getAngle().plus(new Rotation2d(Math.PI)).getRadians());
         if (rate < 0 - controller.getPositionTolerance()) {
             rate = Math.min(rate, Math.abs(controller.getPositionError()) > .1 ? -1.2 : -0.6);
         } else if (rate > 0 + controller.getPositionTolerance()) {

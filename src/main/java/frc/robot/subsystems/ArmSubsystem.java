@@ -40,7 +40,7 @@ public class ArmSubsystem extends SubsystemBase {
                 .apply(new MagnetSensorConfigs().withAbsoluteSensorRange(AbsoluteSensorRangeValue.Signed_PlusMinusHalf)
                         .withSensorDirection(SensorDirectionValue.Clockwise_Positive).withMagnetOffset(-.411));
         armController.enableContinuousInput(-.5, .5);
-        armController.setTolerance(0.005, 0.005);
+        armController.setTolerance(0.007, 0.015);
         goal = encoder.getAbsolutePosition().getValueAsDouble();
         armController.setGoal(goal);
         tab.addDouble("Setpoint", () -> armController.getSetpoint().position);
