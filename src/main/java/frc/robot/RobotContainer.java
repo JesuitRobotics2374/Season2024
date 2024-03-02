@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AlignToSpeakerCommand;
 import frc.robot.commands.BasicCommand;
@@ -128,7 +129,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Slam Arm",
                 new FunctionalCommand(() -> m_ArmSubsystem.setGoal(Constants.BACKWARD_SOFT_STOP * 360), () -> {
                 }, interrupted -> {
-                }, () -> m_ArmSubsystem.atGoal()));
+                }, () -> m_ArmSubsystem.atGoal()).andThen(new WaitCommand(0.4)));
     }
 
     /**

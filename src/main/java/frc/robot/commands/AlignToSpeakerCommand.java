@@ -30,14 +30,16 @@ public class AlignToSpeakerCommand extends Command {
         addRequirements(subDrivetrain);
         controller = new ProfiledPIDController(2, 0.05, 0.1, new Constraints(Math.PI * 4, Math.PI * 3));
         controller.enableContinuousInput(-Math.PI, Math.PI);
-        controller.setTolerance(0.025, 0.025);
+        controller.setTolerance(0.03, 0.03);
     }
 
     @Override
     public void initialize() {
         if (alliance.isPresent()) {
             flag = alliance.get() == Alliance.Red;
+            System.out.println("good");
         }
+        System.out.println(flag);
         Translation2d offset = (flag ? new Translation2d(16.3, 5.55) : new Translation2d(0.3, 5.55))
                 .minus(subsystem.getState().Pose.getTranslation());
         controller.setGoal(offset.getAngle().plus(new Rotation2d(Math.PI)).getRadians());

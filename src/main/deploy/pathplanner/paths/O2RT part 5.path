@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.85,
+        "x": 8.75,
         "y": 5.7
       },
       "prevControl": null,
       "nextControl": {
-        "x": 10.852495998857902,
-        "y": 6.850839379282182
+        "x": 9.644110771705561,
+        "y": 5.802790699579704
       },
       "isLocked": false,
       "linkedName": "o2rt_4-5"

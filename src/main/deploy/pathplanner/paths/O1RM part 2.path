@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 14.897476543010802,
-        "y": 4.6003128632228405
+        "x": 14.374274963866245,
+        "y": 4.563596962931995
       },
       "isLocked": false,
       "linkedName": "o2rm_1-2"
     },
     {
       "anchor": {
-        "x": 14.23659033777557,
-        "y": 5.527389345566705
+        "x": 13.658314908194747,
+        "y": 5.509031395421283
       },
       "prevControl": {
-        "x": 14.970908343592493,
-        "y": 5.490673445275858
+        "x": 13.740925683849149,
+        "y": 4.462628237132168
       },
       "nextControl": null,
       "isLocked": false,
@@ -57,7 +57,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
+    "rotation": 99.94057303311305,
     "rotateFast": true
   },
   "reversed": false,

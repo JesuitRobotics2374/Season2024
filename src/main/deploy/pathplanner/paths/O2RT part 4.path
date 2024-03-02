@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 9.537299219416134,
-        "y": 6.417538427088266
+        "x": 11.161633688417211,
+        "y": 7.271394609381894
       },
       "isLocked": false,
       "linkedName": "o2rt_3-4"
     },
     {
       "anchor": {
-        "x": 8.85,
-        "y": 5.7
+        "x": 8.848531970093909,
+        "y": 5.986338099202281
       },
       "prevControl": {
-        "x": 9.851219474193584,
-        "y": 5.60804488815825
+        "x": 10.684326984636213,
+        "y": 6.729835080091914
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
+    "rotation": -160.86635679409446,
     "rotateFast": true
   },
   "reversed": false,

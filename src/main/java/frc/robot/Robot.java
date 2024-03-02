@@ -1,5 +1,10 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+
+import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -7,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
     private final RobotContainer m_robotContainer = new RobotContainer();
+    public static Alliance team = null;
 
     private Command m_autonomousCommand;
 
@@ -55,6 +61,11 @@ public class Robot extends TimedRobot {
         if (m_autonomousCommand != null) {
             m_autonomousCommand.cancel();
         }
+        if (team == null) {
+            if (DriverStation.getAlliance().isPresent()) {
+                team = DriverStation.getAlliance().get();
+            }
+        }
     }
 
     @Override
@@ -64,7 +75,30 @@ public class Robot extends TimedRobot {
     }
 
     @Override
+    public void autonomousPeriodic() {
+        if (team == null) {
+            if (DriverStation.getAlliance().isPresent()) {
+                team = DriverStation.getAlliance().get();
+            }
+        }
+    }
+
+    @Override
+    public void teleopPeriodic() {
+        if (team == null) {
+            if (DriverStation.getAlliance().isPresent()) {
+                team = DriverStation.getAlliance().get();
+            }
+        }
+    }
+
+    @Override
     public void autonomousInit() {
+        if (team == null) {
+            if (DriverStation.getAlliance().isPresent()) {
+                team = DriverStation.getAlliance().get();
+            }
+        }
         // if (m_robotContainer.getDrivetrain().getDefaultCommand() != null)
         // m_robotContainer.getDrivetrain().getDefaultCommand().cancel();
         // m_autonomousCommand =

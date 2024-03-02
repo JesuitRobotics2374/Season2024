@@ -6,7 +6,11 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -15,8 +19,9 @@ public class ChassisSubsystem extends SubsystemBase {
     private String serialNumber = "unknown";
     private final NetworkTable visionTable;
     private final NetworkTableEntry visionEntry;
-
+    ShuffleboardTab tab = Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME);
     private static ChassisSubsystem instance;
+    Alliance team = null;
 
     /**
      * Handles robot wide and generic systems
@@ -34,6 +39,13 @@ public class ChassisSubsystem extends SubsystemBase {
 
         // Retrieve handles to specific entries
         visionEntry = visionTable.getEntry("NotePose");
+        // tab.addBoolean("Is Red?", () -> {
+        // if (DriverStation.getAlliance().isPresent()) {
+        // return DriverStation.getAlliance().get() == Alliance.Red;
+        // } else {
+        // return false;
+        // }
+        // });
     }
 
     /**
@@ -74,4 +86,7 @@ public class ChassisSubsystem extends SubsystemBase {
         return instance;
     }
 
+    @Override
+    public void periodic() {
+    }
 }
