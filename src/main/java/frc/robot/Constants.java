@@ -19,7 +19,7 @@ public class Constants {
     public static final int LEFT_ARM_MOTOR_ID = 7;
     public static final int ARM_ENCODER_ID = 25;
     public static final double FORWARD_SOFT_STOP = 0.15;
-    public static final double BACKWARD_SOFT_STOP = -0.236;
+    public static final double BACKWARD_SOFT_STOP = -0.268;
 
     // MANIPUlATIR Subsystem
     public static final int SHOOTER_MOTOR_A_ID = 32;
@@ -32,7 +32,7 @@ public class Constants {
     public static final double armAngleOffset = Math.toRadians(109);
     public static final double deltaHeight = 2 - 0.30;
     public static final double launchVelocity = 15.5;
-    public static final double FEED_FORWARD_VOLTAGE = 0.3;
+    public static final double FEED_FORWARD_VOLTAGE = 0.7;
     public static final int LEFT_CLIMBER_MOTOR_ID = 8;
     public static final int RIGHT_CLIMBER_MOTOR_ID = 9;
 }

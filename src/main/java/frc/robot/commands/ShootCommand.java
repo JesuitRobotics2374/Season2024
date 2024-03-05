@@ -23,14 +23,14 @@ public class ShootCommand extends SequentialCommandGroup {
         this.subsystem = subsystem;
         this.swerveDrivetrain = swerveDrivetrain;
         this.armSubsystem = armSubsystem;
-        if (instance == null) {
-            instance = this;
-        } else {
-            instance.cancel();
-            instance = null;
-            subsystem.startIntake();
-            return;
-        }
+        // if (instance == null) {
+        // instance = this;
+        // } else {
+        // instance.cancel();
+        // instance = null;
+        // subsystem.startIntake();
+        // return;
+        // }
         addRequirements(subsystem, swerveDrivetrain, armSubsystem);
         addCommands(new InstantCommand(() -> subsystem.startShooter()),
                 new ParallelCommandGroup(new WaitCommand(0.2).andThen(
