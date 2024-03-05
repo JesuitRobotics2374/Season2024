@@ -21,7 +21,6 @@ public class AlignToSpeakerCommand extends Command {
     CommandSwerveDrivetrain subsystem;
     ProfiledPIDController controller;
     SwerveRequest.FieldCentric request = new SwerveRequest.FieldCentric();
-    boolean flag = false;
     Optional<Alliance> alliance = DriverStation.getAlliance();
 
     public AlignToSpeakerCommand(CommandSwerveDrivetrain subDrivetrain) {
@@ -35,12 +34,12 @@ public class AlignToSpeakerCommand extends Command {
 
     @Override
     public void initialize() {
-        if (alliance.isPresent()) {
-            flag = alliance.get() == Alliance.Red;
-            System.out.println("good");
-        }
-        System.out.println(flag);
-        Translation2d offset = (flag ? new Translation2d(16.3, 5.55) : new Translation2d(0.3, 5.55))
+        /*
+         * swap > if shooting wrong target (also in CommandSwerveDriveTrain.java and a
+         * second one in here)
+         */
+        Translation2d offset = (subsystem.getState().Pose.getX() > 8.4 ? new Translation2d(16.3, 5.55)
+                : new Translation2d(0.3, 5.55))
                 .minus(subsystem.getState().Pose.getTranslation());
         controller.setGoal(offset.getAngle().plus(new Rotation2d(Math.PI)).getRadians());
         System.out.println(Math.toDegrees(controller.getGoal().position));
@@ -48,7 +47,12 @@ public class AlignToSpeakerCommand extends Command {
 
     @Override
     public void execute() {
-        Translation2d offset = (flag ? new Translation2d(16.3, 5.55) : new Translation2d(0.3, 5.55))
+        /*
+         * swap > if shooting wrong target (also in CommandSwerveDriveTrain.java and a
+         * second one in here)
+         */
+        Translation2d offset = (subsystem.getState().Pose.getX() > 8.4 ? new Translation2d(16.3, 5.55)
+                : new Translation2d(0.3, 5.55))
                 .minus(subsystem.getState().Pose.getTranslation());
         double rate = controller.calculate(subsystem.getState().Pose.getRotation().getRadians(),
                 offset.getAngle().plus(new Rotation2d(Math.PI)).getRadians());

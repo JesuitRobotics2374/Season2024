@@ -254,12 +254,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     }
 
     public double getDistanceToSpeaker() {
-        boolean flag = false;
-        var alliance = DriverStation.getAlliance();
-        if (alliance.isPresent()) {
-            flag = alliance.get() == Alliance.Red;
-        }
-        double offset = (flag ? new Translation2d(16.3, 5.55) : new Translation2d(0.3, 5.55))
+        /* swap > if wrong target (also in AlignToSpeakerComand.java) */
+        double offset = (getState().Pose.getX() > 8.4 ? new Translation2d(16.3, 5.55) : new Translation2d(0.3, 5.55))
                 .getDistance(getState().Pose.getTranslation());
         return offset;
     }
