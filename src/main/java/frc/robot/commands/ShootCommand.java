@@ -17,22 +17,32 @@ public class ShootCommand extends SequentialCommandGroup {
     ArmSubsystem armSubsystem;
     CommandSwerveDrivetrain swerveDrivetrain;
     static ShootCommand instance = null;
+    public static boolean isSequenceActive = false;
 
     public ShootCommand(ManipulatorSubsystem subsystem, CommandSwerveDrivetrain swerveDrivetrain,
             ArmSubsystem armSubsystem) {
         this.subsystem = subsystem;
         this.swerveDrivetrain = swerveDrivetrain;
         this.armSubsystem = armSubsystem;
-        // if (instance == null) {
-        // instance = this;
-        // } else {
-        // instance.cancel();
-        // instance = null;
-        // subsystem.startIntake();
+
+        // if (isSequenceActive) {
+        // armSubsystem.shoot();
+        // isSequenceActive = false;
         // return;
         // }
+
+        // isSequenceActive = true;
+
         addRequirements(subsystem, swerveDrivetrain, armSubsystem);
         addCommands(new InstantCommand(() -> subsystem.startShooter()),
+                new InstantCommand(() -> {
+                    if (instance == null) {
+                        instance = this;
+                    } else {
+                        armSubsystem.shoot();
+                        instance.cancel();
+                    }
+                }),
                 new ParallelCommandGroup(new WaitCommand(0.2).andThen(
                         new AlignToSpeakerCommand(swerveDrivetrain)).alongWith(
                                 new FunctionalCommand(
@@ -45,6 +55,8 @@ public class ShootCommand extends SequentialCommandGroup {
                 new InstantCommand(() -> subsystem.stopIntake())
                         .alongWith(new InstantCommand(() -> subsystem.stopShooter()))
                         .alongWith(new InstantCommand(() -> armSubsystem.setGoal(Constants.BACKWARD_SOFT_STOP * 360)))
-                        .andThen(new InstantCommand(() -> instance = null)));
+                        .andThen(new InstantCommand(() -> instance = null))
+        // .andThen(new InstantCommand(() -> isSequenceActive = false))
+        );
     }
 }

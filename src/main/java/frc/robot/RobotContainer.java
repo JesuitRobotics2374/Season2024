@@ -182,8 +182,7 @@ public class RobotContainer {
         m_operatorController.back().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopIntake()));
         m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_ArmSubsystem.shoot()));
         m_operatorController.rightBumper()
-                .onTrue(new ShootCommand(m_ManipulatorSubsystem, m_DrivetrainSubsystem,
-                        m_ArmSubsystem));
+                .onTrue(new ShootCommand(m_ManipulatorSubsystem, m_DrivetrainSubsystem, m_ArmSubsystem));
         m_operatorController.start().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.slowClimb()));
         m_operatorController.start().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopShooter()));
 
@@ -203,6 +202,15 @@ public class RobotContainer {
 
         return Math.copySign(value, (value - tolerance) / (1.0 - tolerance));
     }
+
+    // public void checkAndShoot() {
+    // if (ShootCommand.isSequenceActive) {
+    // new ShootCommand(m_ManipulatorSubsystem,
+    // m_DrivetrainSubsystem,m_ArmSubsystem);
+    // } else {
+    // // CANCEL AND SHOOT
+    // }
+    // }
 
     /**
      * Copy sign square
