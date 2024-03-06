@@ -61,11 +61,13 @@ public class Robot extends TimedRobot {
         if (m_autonomousCommand != null) {
             m_autonomousCommand.cancel();
         }
-        if (team == null) {
-            if (DriverStation.getAlliance().isPresent()) {
-                team = DriverStation.getAlliance().get();
-            }
+        // if (team == null) {
+        if (DriverStation.getAlliance().isPresent()) {
+            team = DriverStation.getAlliance().get();
         }
+        // }
+        m_robotContainer.getDrivetrain().alignToVision();
+        // m_DrivetrainSubsystem.alignToVision()
     }
 
     @Override
@@ -76,34 +78,35 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousPeriodic() {
-        if (team == null) {
-            if (DriverStation.getAlliance().isPresent()) {
-                team = DriverStation.getAlliance().get();
-            }
+        // if (team == null) {
+        if (DriverStation.getAlliance().isPresent()) {
+            team = DriverStation.getAlliance().get();
         }
+        // }
     }
 
     @Override
     public void teleopPeriodic() {
-        if (team == null) {
-            if (DriverStation.getAlliance().isPresent()) {
-                team = DriverStation.getAlliance().get();
-            }
+        // if (team == null) {
+        if (DriverStation.getAlliance().isPresent()) {
+            team = DriverStation.getAlliance().get();
         }
+        // }
     }
 
     @Override
     public void autonomousInit() {
-        if (team == null) {
-            if (DriverStation.getAlliance().isPresent()) {
-                team = DriverStation.getAlliance().get();
-            }
+        // if (team == null) {
+        if (DriverStation.getAlliance().isPresent()) {
+            team = DriverStation.getAlliance().get();
         }
+        // }
         // if (m_robotContainer.getDrivetrain().getDefaultCommand() != null)
         // m_robotContainer.getDrivetrain().getDefaultCommand().cancel();
         // m_autonomousCommand =
         // m_robotContainer.getAutonomousChooser().getCommand(m_robotContainer);
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+        m_robotContainer.getDrivetrain().alignToVision();
         // schedule the autonomous command (example)
         if (m_autonomousCommand != null) {
             m_autonomousCommand.schedule();
