@@ -40,7 +40,7 @@ public class ShootCommand extends SequentialCommandGroup {
                                         }, interrupted -> {
                                         }, () -> armSubsystem.atGoal()))
                         .andThen(new WaitCommand(0.02)),
-                        new WaitUntilCommand(() -> subsystem.shooterAtMaxSpeed()).withTimeout(1.2)),
+                        new WaitUntilCommand(() -> subsystem.shooterAtMaxSpeed()).withTimeout(0.75)),
                 new InstantCommand(() -> subsystem.intake()), new WaitCommand(.7),
                 new InstantCommand(() -> subsystem.stopIntake())
                         .alongWith(new InstantCommand(() -> subsystem.stopShooter()))
