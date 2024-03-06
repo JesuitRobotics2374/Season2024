@@ -32,7 +32,7 @@ public class Constants {
     public static final double armAngleOffset = Math.toRadians(115);
     public static final double deltaHeight = 2 - 0.30;
     public static final double launchVelocity = 15.5;
-    public static final double FEED_FORWARD_VOLTAGE = 0.7;
+    public static final double FEED_FORWARD_VOLTAGE = 0.8;
     public static final int LEFT_CLIMBER_MOTOR_ID = 8;
     public static final int RIGHT_CLIMBER_MOTOR_ID = 9;
 }

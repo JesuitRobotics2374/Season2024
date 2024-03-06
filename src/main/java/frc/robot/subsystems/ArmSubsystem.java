@@ -18,7 +18,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
 
 public class ArmSubsystem extends SubsystemBase {
-    ProfiledPIDController armController = new ProfiledPIDController(4.5, 0.2, 0.18, new Constraints(1.5, 1.6));
+    ProfiledPIDController armController = new ProfiledPIDController(4.3, 0.3, 0.12, new Constraints(1.5, 1.6));
     ArmFeedforward armFeedforward = new ArmFeedforward(0, 0, 0, 0);
     TalonFX leftMotor = new TalonFX(Constants.LEFT_ARM_MOTOR_ID);
     TalonFX rightMotor = new TalonFX(Constants.RIGHT_ARM_MOTOR_ID);
