@@ -43,6 +43,7 @@ public class ShootCommand extends SequentialCommandGroup {
                     } else {
                         armSubsystem.shoot();
                         instance.cancel();
+                        instance = null;
                     }
                 }),
                 new ParallelCommandGroup(new WaitCommand(0.2).andThen(

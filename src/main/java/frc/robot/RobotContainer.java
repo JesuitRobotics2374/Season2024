@@ -236,17 +236,23 @@ public class RobotContainer {
 
     public void toggleSlow() {
         slow = !slow;
+        if (slow && roll) {
+            roll = false;
+        }
         updateSpeeds();
     }
 
     public void toggleRoll() {
         roll = !roll;
+        if (slow && roll) {
+            slow = false;
+        }
         updateSpeeds();
     }
 
     private void updateSpeeds() {
         if (slow) {
-            MaxSpeed = 0.75;
+            MaxSpeed = 0.9;
             MaxAngularRate = Math.PI * .5;
         } else if (roll) {
             MaxSpeed = 1.5;
