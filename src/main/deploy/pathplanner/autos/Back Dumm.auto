@@ -1,6 +1,12 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 1.3023087957730821,
+      "y": 5.6212015419751244
+    },
+    "rotation": 0
+  },
   "command": {
     "type": "sequential",
     "data": {
@@ -8,13 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Reset Pose"
+            "name": "Shoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "O2BT part 1"
+            "pathName": "New Path"
           }
         }
       ]
