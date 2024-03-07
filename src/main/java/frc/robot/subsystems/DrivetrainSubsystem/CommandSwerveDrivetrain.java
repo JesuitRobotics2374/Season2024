@@ -221,6 +221,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         seedFieldRelative(new Pose2d(field.getObject("Vision").getPose().getTranslation().getX() - 0.77,
                 field.getObject("Vision").getPose().getTranslation().getY() - 0.1,
                 field.getObject("Vision").getPose().getRotation()));
+
         alignWithAliance();
     }
 
