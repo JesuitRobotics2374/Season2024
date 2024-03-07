@@ -33,6 +33,8 @@ public class ShootCommand extends SequentialCommandGroup {
 
         // isSequenceActive = true;
 
+        System.out.println(instance);
+
         addRequirements(subsystem, swerveDrivetrain, armSubsystem);
         addCommands(new InstantCommand(() -> subsystem.startShooter()),
                 new InstantCommand(() -> {

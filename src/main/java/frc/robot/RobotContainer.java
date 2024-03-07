@@ -292,4 +292,8 @@ public class RobotContainer {
     public ArmSubsystem getArmSubsystem() {
         return m_ArmSubsystem;
     }
+
+    public void alignPigeonVision() {
+        m_DrivetrainSubsystem.alignToVision();
+    }
 }

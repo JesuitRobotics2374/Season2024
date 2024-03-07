@@ -66,7 +66,7 @@ public class Robot extends TimedRobot {
             team = DriverStation.getAlliance().get();
         }
         // }
-        m_robotContainer.getDrivetrain().alignToVision();
+        m_robotContainer.alignPigeonVision();
         // m_DrivetrainSubsystem.alignToVision()
     }
 
@@ -106,7 +106,7 @@ public class Robot extends TimedRobot {
         // m_autonomousCommand =
         // m_robotContainer.getAutonomousChooser().getCommand(m_robotContainer);
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-        m_robotContainer.getDrivetrain().alignToVision();
+        m_robotContainer.alignPigeonVision();
         // schedule the autonomous command (example)
         if (m_autonomousCommand != null) {
             m_autonomousCommand.schedule();
