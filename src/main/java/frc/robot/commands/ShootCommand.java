@@ -20,45 +20,45 @@ public class ShootCommand extends SequentialCommandGroup {
     static ShootCommand instance = null;
     public static boolean isSequenceActive = false;
 
-    /// Commands
-
-    private InstantCommand startShooter = new InstantCommand(() -> subsystem.startShooter());
-
-    private Command alignDrivetrain = new AlignToSpeakerCommand(swerveDrivetrain); // used in aimCommands
-    private Command alignArm = new FunctionalCommand(
-            () -> armSubsystem.shoot(), () -> {
-            }, interrupted -> {
-            }, () -> armSubsystem.atGoal()); // used in aimCommands
-
-    private Command aimCommands = new WaitCommand(0.2)
-            .andThen(new ParallelCommandGroup(alignDrivetrain, alignArm))
-            .andThen(new WaitCommand(0.02));
-
-    private Command checkShooterSpeed = new WaitUntilCommand(() -> subsystem.shooterAtMaxSpeed()).withTimeout(0.75);
-
-    private InstantCommand intakeToShooter = new InstantCommand(() -> subsystem.intake());
-
-    private InstantCommand stopIntake = new InstantCommand(() -> subsystem.stopIntake());
-    private InstantCommand stopShooter = new InstantCommand(() -> subsystem.stopShooter());
-    private InstantCommand resetArm = new InstantCommand(
-            () -> armSubsystem.setGoal(Constants.BACKWARD_SOFT_STOP * 360));
-    private InstantCommand nullifyInstance = new InstantCommand(() -> instance = null);
-
-    private InstantCommand checkAndCancel = new InstantCommand(() -> {
-        if (instance == null) {
-            instance = this;
-        } else {
-            subsystem.intake();
-            instance.cancel();
-            instance = null;
-        }
-    });
-
     public ShootCommand(ManipulatorSubsystem subsystem, CommandSwerveDrivetrain swerveDrivetrain,
             ArmSubsystem armSubsystem) {
         this.subsystem = subsystem;
         this.swerveDrivetrain = swerveDrivetrain;
         this.armSubsystem = armSubsystem;
+
+        /// Commands
+
+        InstantCommand startShooter = new InstantCommand(() -> subsystem.startShooter());
+
+        Command alignDrivetrain = new AlignToSpeakerCommand(swerveDrivetrain); // used in aimCommands
+        Command alignArm = new FunctionalCommand(
+                () -> armSubsystem.shoot(), () -> {
+                }, interrupted -> {
+                }, () -> armSubsystem.atGoal()); // used in aimCommands
+
+        Command aimCommands = new WaitCommand(0.2)
+                .andThen(new ParallelCommandGroup(alignDrivetrain, alignArm))
+                .andThen(new WaitCommand(0.02));
+
+        Command checkShooterSpeed = new WaitUntilCommand(() -> subsystem.shooterAtMaxSpeed()).withTimeout(0.75);
+
+        InstantCommand intakeToShooter = new InstantCommand(() -> subsystem.intake());
+
+        InstantCommand stopIntake = new InstantCommand(() -> subsystem.stopIntake());
+        InstantCommand stopShooter = new InstantCommand(() -> subsystem.stopShooter());
+        InstantCommand resetArm = new InstantCommand(
+                () -> armSubsystem.setGoal(Constants.BACKWARD_SOFT_STOP * 360));
+        InstantCommand nullifyInstance = new InstantCommand(() -> instance = null);
+
+        InstantCommand checkAndCancel = new InstantCommand(() -> {
+            if (instance == null) {
+                instance = this;
+            } else {
+                subsystem.intake();
+                instance.cancel();
+                instance = null;
+            }
+        });
 
         System.out.println(instance);
 
