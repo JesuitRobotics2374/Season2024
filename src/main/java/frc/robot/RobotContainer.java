@@ -31,6 +31,7 @@ import frc.robot.util.AutonomousChooser;
  */
 
 public class RobotContainer {
+    private ShootCommand shootCmd;
     private double MaxSpeed = 6; // 6 meters per second desired top speed
     private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
     private final ChassisSubsystem m_ChassisSubsystem;
@@ -56,6 +57,7 @@ public class RobotContainer {
      * The robot container. Need I say more?
      */
     public RobotContainer() {
+        shootCmd = null;
         m_ChassisSubsystem = new ChassisSubsystem();
         m_ManipulatorSubsystem = new ManipulatorSubsystem();
         m_ArmSubsystem = new ArmSubsystem();
@@ -182,7 +184,8 @@ public class RobotContainer {
         m_operatorController.back().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopIntake()));
         m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_ArmSubsystem.shoot()));
         m_operatorController.rightBumper()
-                .onTrue(new ShootCommand(m_ManipulatorSubsystem, m_DrivetrainSubsystem, m_ArmSubsystem));
+                .onTrue(new ShootCommand(m_ManipulatorSubsystem,
+                        m_DrivetrainSubsystem, m_ArmSubsystem));
         m_operatorController.start().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.slowClimb()));
         m_operatorController.start().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopShooter()));
 
@@ -204,11 +207,12 @@ public class RobotContainer {
     }
 
     // public void checkAndShoot() {
-    // if (ShootCommand.isSequenceActive) {
-    // new ShootCommand(m_ManipulatorSubsystem,
-    // m_DrivetrainSubsystem,m_ArmSubsystem);
+    // if (shootCmd == null) {
+    // shootCmd = new ShootCommand(m_ManipulatorSubsystem,
+    // m_DrivetrainSubsystem, m_ArmSubsystem);
     // } else {
-    // // CANCEL AND SHOOT
+    // shootCmd.cancel();
+    // shootCmd = null;
     // }
     // }
 

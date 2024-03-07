@@ -17,7 +17,7 @@ public class ShootCommand extends SequentialCommandGroup {
     ManipulatorSubsystem subsystem;
     ArmSubsystem armSubsystem;
     CommandSwerveDrivetrain swerveDrivetrain;
-    static ShootCommand instance = null;
+    // public static ShootCommand instance = null;
     public static boolean isSequenceActive = false;
 
     public ShootCommand(ManipulatorSubsystem subsystem, CommandSwerveDrivetrain swerveDrivetrain,
@@ -48,22 +48,30 @@ public class ShootCommand extends SequentialCommandGroup {
         InstantCommand stopShooter = new InstantCommand(() -> subsystem.stopShooter());
         InstantCommand resetArm = new InstantCommand(
                 () -> armSubsystem.setGoal(Constants.BACKWARD_SOFT_STOP * 360));
-        InstantCommand nullifyInstance = new InstantCommand(() -> instance = null);
-
-        InstantCommand checkAndCancel = new InstantCommand(() -> {
-            if (instance == null) {
-                instance = this;
-            } else {
-                subsystem.intake();
-                instance.cancel();
-                instance = null;
-            }
+        InstantCommand nullifyInstance = new InstantCommand(() -> {
+            // instance = null;
+            isSequenceActive = false;
         });
 
-        System.out.println(instance);
+        // InstantCommand cancel = new InstantCommand(() -> {
+        // // System.err.println(instance);
+        // // if (false) {
+        // // instance = this;
+        // // System.err.println("New Shot");
+        // // } else {
+        // subsystem.intake(); // intake to shooter
+        // System.err.println("Shot Cancelled");
+        // // instance.cancel();
+        // // instance = null;
+        // // }
+        // });
+
+        // System.err.println(instance);
+
+        isSequenceActive = true;
 
         addRequirements(subsystem, swerveDrivetrain, armSubsystem);
-        addCommands(startShooter, checkAndCancel,
+        addCommands(startShooter,
                 new ParallelCommandGroup(aimCommands, checkShooterSpeed),
                 intakeToShooter, new WaitCommand(.7),
                 new ParallelCommandGroup(resetArm, stopShooter, stopIntake),
