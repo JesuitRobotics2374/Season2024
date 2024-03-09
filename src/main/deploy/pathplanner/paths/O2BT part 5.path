@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.6,
-        "y": 5.8
+        "x": 7.79,
+        "y": 5.7
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.012228672626047,
-        "y": 7.207141783872914
+        "x": 6.9,
+        "y": 5.802790699579704
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "o2rt_4-5"
     },
     {
       "anchor": {
-        "x": 3.2,
+        "x": 3.04,
         "y": 6.5
       },
       "prevControl": {
-        "x": 3.818453630247994,
-        "y": 6.977667407055125
+        "x": 5.72,
+        "y": 6.75715268691593
       },
       "nextControl": null,
       "isLocked": false,
