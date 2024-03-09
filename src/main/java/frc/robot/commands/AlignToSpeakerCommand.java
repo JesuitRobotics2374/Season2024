@@ -38,8 +38,8 @@ public class AlignToSpeakerCommand extends Command {
          * swap > if shooting wrong target (also in CommandSwerveDriveTrain.java and a
          * second one in here)
          */
-        Translation2d offset = (subsystem.getState().Pose.getX() > 8.4 ? new Translation2d(15.7, 5.55)
-                : new Translation2d(0.25, 5.55))
+        Translation2d offset = (subsystem.getState().Pose.getX() > 8.4 ? new Translation2d(15.7, 5.5)
+                : new Translation2d(0.25, 5.5))
                 .minus(subsystem.getState().Pose.getTranslation());
         controller.setGoal(offset.getAngle().plus(new Rotation2d(Math.PI)).getRadians());
         System.out.println(Math.toDegrees(controller.getGoal().position));

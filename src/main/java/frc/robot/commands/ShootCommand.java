@@ -38,7 +38,7 @@ public class ShootCommand extends SequentialCommandGroup {
 
         Command aimCommands = new WaitCommand(0.2)
                 .andThen(new ParallelCommandGroup(alignDrivetrain, alignArm))
-                .andThen(new WaitCommand(0.3));
+                .andThen(new WaitCommand(0.5));
 
         Command checkShooterSpeed = new WaitUntilCommand(() -> subsystem.shooterAtMaxSpeed()).withTimeout(0.75);
 
@@ -73,7 +73,7 @@ public class ShootCommand extends SequentialCommandGroup {
         addRequirements(subsystem, swerveDrivetrain, armSubsystem);
         addCommands(startShooter,
                 new ParallelCommandGroup(aimCommands, checkShooterSpeed),
-                intakeToShooter, new WaitCommand(.7),
+                intakeToShooter, new WaitCommand(.9),
                 new ParallelCommandGroup(resetArm, stopShooter, stopIntake),
                 nullifyInstance);
     }

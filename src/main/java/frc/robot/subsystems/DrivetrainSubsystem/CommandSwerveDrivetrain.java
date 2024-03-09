@@ -266,7 +266,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     public double getDistanceToSpeaker() {
         /* swap > if wrong target (also in AlignToSpeakerComand.java) */
-        double offset = (getState().Pose.getX() > 8.4 ? new Translation2d(15.7, 5.55) : new Translation2d(0.2, 5.55))
+        double offset = (getState().Pose.getX() > 8.4 ? new Translation2d(15.7, 5.5) : new Translation2d(0.2, 5.5))
                 .getDistance(getState().Pose.getTranslation());
         return offset;
     }
