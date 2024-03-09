@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class ChassisSubsystem extends SubsystemBase {
 
@@ -21,7 +22,7 @@ public class ChassisSubsystem extends SubsystemBase {
     private final NetworkTableEntry visionEntry;
     ShuffleboardTab tab = Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME);
     private static ChassisSubsystem instance;
-    Alliance team = null;
+    boolean isBlue = false;
 
     /**
      * Handles robot wide and generic systems
@@ -88,5 +89,6 @@ public class ChassisSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+
     }
 }

@@ -131,7 +131,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Slam Arm",
                 new FunctionalCommand(() -> m_ArmSubsystem.setGoal(Constants.BACKWARD_SOFT_STOP * 360), () -> {
                 }, interrupted -> {
-                }, () -> m_ArmSubsystem.atGoal()).andThen(new WaitCommand(0.4)));
+                }, () -> m_ArmSubsystem.atGoal()).andThen(new WaitCommand(0.4)).withTimeout(2));
     }
 
     /**

@@ -38,7 +38,7 @@ public class ShootCommand extends SequentialCommandGroup {
 
         Command aimCommands = new WaitCommand(0.2)
                 .andThen(new ParallelCommandGroup(alignDrivetrain, alignArm))
-                .andThen(new WaitCommand(0.02));
+                .andThen(new WaitCommand(0.3));
 
         Command checkShooterSpeed = new WaitUntilCommand(() -> subsystem.shooterAtMaxSpeed()).withTimeout(0.75);
 

@@ -82,7 +82,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (intake && (noteSensor.getRange() <= 70)) {
+        if (intake && (noteSensor.getRange() <= 200)) {
             stopIntake();
             ChassisSubsystem.getInstance().flash();
             intake = false;

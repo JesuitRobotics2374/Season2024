@@ -43,6 +43,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.ChassisSubsystem;
 import frc.robot.subsystems.ManipulatorSubsystem;
@@ -118,10 +119,19 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                     // This will flip the path being followed to the blue side of the field.
                     // THE ORIGIN WILL REMAIN ON THE RED SIDE
 
-                    var alliance = DriverStation.getAlliance();
-                    if (alliance.isPresent()) {
-                        return alliance.get() == DriverStation.Alliance.Blue;
-                    }
+                    // var alliance = DriverStation.getAlliance();
+                    // if (alliance.isPresent()) {
+                    // System.out.println("Present: " + (alliance.get() ==
+                    // DriverStation.Alliance.Blue));
+                    // return alliance.get() == DriverStation.Alliance.Blue;
+                    // } else {
+                    // System.out.println("NOPE");
+                    // }
+                    // return false;
+                    // System.out.println(Robot.getAlliance());
+                    // System.out.println(DriverStation.Alliance.Blue);
+                    // System.out.println(Robot.getAlliance() == DriverStation.Alliance.Blue);
+                    // return Robot.getAlliance() == DriverStation.Alliance.Blue;
                     return false;
                 },
                 this); // Subsystem for requirements
@@ -256,7 +266,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     public double getDistanceToSpeaker() {
         /* swap > if wrong target (also in AlignToSpeakerComand.java) */
-        double offset = (getState().Pose.getX() > 8.4 ? new Translation2d(16.3, 5.55) : new Translation2d(0.3, 5.55))
+        double offset = (getState().Pose.getX() > 8.4 ? new Translation2d(15.7, 5.55) : new Translation2d(0.2, 5.55))
                 .getDistance(getState().Pose.getTranslation());
         return offset;
     }

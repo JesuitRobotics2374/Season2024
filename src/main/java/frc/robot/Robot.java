@@ -6,6 +6,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.ADXL345_I2C.AllAxes;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -21,11 +22,24 @@ public class Robot extends TimedRobot {
     // CharacterizeDrivetrainCommand(
     // m_robotContainer.getDrivetrain());
 
+    // TODO make a 1 second periodic to check for the aliance, and if it is present
+    // then overwrite the result
+
     @Override
     public void robotInit() {
         // drivetrain
         SmartDashboard.putNumber("Apriltag Number", 1);
         enableLiveWindowInTest(true);
+        addPeriodic(() -> {
+            var ally = DriverStation.getAlliance();
+            if (ally.isPresent()) {
+                team = ally.get();
+            }
+        }, 0.5);
+    }
+
+    public static Alliance getAlliance() {
+        return team;
     }
 
     @Override
