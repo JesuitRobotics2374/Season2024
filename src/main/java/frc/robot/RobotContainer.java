@@ -31,6 +31,7 @@ import frc.robot.util.AutonomousChooser;
  */
 
 public class RobotContainer {
+    private ShootCommand shootCmd;
     private double MaxSpeed = 6; // 6 meters per second desired top speed
     private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
     private final ChassisSubsystem m_ChassisSubsystem;
@@ -56,6 +57,7 @@ public class RobotContainer {
      * The robot container. Need I say more?
      */
     public RobotContainer() {
+        shootCmd = null;
         m_ChassisSubsystem = new ChassisSubsystem();
         m_ManipulatorSubsystem = new ManipulatorSubsystem();
         m_ArmSubsystem = new ArmSubsystem();
@@ -129,7 +131,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Slam Arm",
                 new FunctionalCommand(() -> m_ArmSubsystem.setGoal(Constants.BACKWARD_SOFT_STOP * 360), () -> {
                 }, interrupted -> {
-                }, () -> m_ArmSubsystem.atGoal()).andThen(new WaitCommand(0.4)));
+                }, () -> m_ArmSubsystem.atGoal()).andThen(new WaitCommand(0.4)).withTimeout(2));
     }
 
     /**
@@ -182,8 +184,8 @@ public class RobotContainer {
         m_operatorController.back().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopIntake()));
         m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_ArmSubsystem.shoot()));
         m_operatorController.rightBumper()
-                .onTrue(new ShootCommand(m_ManipulatorSubsystem, m_DrivetrainSubsystem,
-                        m_ArmSubsystem));
+                .onTrue(new ShootCommand(m_ManipulatorSubsystem,
+                        m_DrivetrainSubsystem, m_ArmSubsystem));
         m_operatorController.start().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.slowClimb()));
         m_operatorController.start().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopShooter()));
 
@@ -203,6 +205,16 @@ public class RobotContainer {
 
         return Math.copySign(value, (value - tolerance) / (1.0 - tolerance));
     }
+
+    // public void checkAndShoot() {
+    // if (shootCmd == null) {
+    // shootCmd = new ShootCommand(m_ManipulatorSubsystem,
+    // m_DrivetrainSubsystem, m_ArmSubsystem);
+    // } else {
+    // shootCmd.cancel();
+    // shootCmd = null;
+    // }
+    // }
 
     /**
      * Copy sign square
@@ -228,17 +240,23 @@ public class RobotContainer {
 
     public void toggleSlow() {
         slow = !slow;
+        if (slow && roll) {
+            roll = false;
+        }
         updateSpeeds();
     }
 
     public void toggleRoll() {
         roll = !roll;
+        if (slow && roll) {
+            slow = false;
+        }
         updateSpeeds();
     }
 
     private void updateSpeeds() {
         if (slow) {
-            MaxSpeed = 0.75;
+            MaxSpeed = 0.9;
             MaxAngularRate = Math.PI * .5;
         } else if (roll) {
             MaxSpeed = 1.5;
@@ -283,5 +301,9 @@ public class RobotContainer {
 
     public ArmSubsystem getArmSubsystem() {
         return m_ArmSubsystem;
+    }
+
+    public void alignPigeonVision() {
+        m_DrivetrainSubsystem.alignToVision();
     }
 }

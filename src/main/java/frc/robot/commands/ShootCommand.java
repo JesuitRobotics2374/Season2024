@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -16,35 +17,64 @@ public class ShootCommand extends SequentialCommandGroup {
     ManipulatorSubsystem subsystem;
     ArmSubsystem armSubsystem;
     CommandSwerveDrivetrain swerveDrivetrain;
-    static ShootCommand instance = null;
+    // public static ShootCommand instance = null;
+    public static boolean isSequenceActive = false;
 
     public ShootCommand(ManipulatorSubsystem subsystem, CommandSwerveDrivetrain swerveDrivetrain,
             ArmSubsystem armSubsystem) {
         this.subsystem = subsystem;
         this.swerveDrivetrain = swerveDrivetrain;
         this.armSubsystem = armSubsystem;
-        // if (instance == null) {
-        // instance = this;
-        // } else {
-        // instance.cancel();
-        // instance = null;
-        // subsystem.startIntake();
-        // return;
-        // }
+
+        /// Commands
+
+        InstantCommand startShooter = new InstantCommand(() -> subsystem.startShooter());
+
+        Command alignDrivetrain = new AlignToSpeakerCommand(swerveDrivetrain); // used in aimCommands
+        Command alignArm = new FunctionalCommand(
+                () -> armSubsystem.shoot(), () -> {
+                }, interrupted -> {
+                }, () -> armSubsystem.atGoal()); // used in aimCommands
+
+        Command aimCommands = new WaitCommand(0.2)
+                .andThen(new ParallelCommandGroup(alignDrivetrain, alignArm))
+                .andThen(new WaitCommand(0.5));
+
+        Command checkShooterSpeed = new WaitUntilCommand(() -> subsystem.shooterAtMaxSpeed()).withTimeout(0.75);
+
+        InstantCommand intakeToShooter = new InstantCommand(() -> subsystem.intake());
+
+        InstantCommand stopIntake = new InstantCommand(() -> subsystem.stopIntake());
+        InstantCommand stopShooter = new InstantCommand(() -> subsystem.stopShooter());
+        InstantCommand resetArm = new InstantCommand(
+                () -> armSubsystem.setGoal(Constants.BACKWARD_SOFT_STOP * 360));
+        InstantCommand nullifyInstance = new InstantCommand(() -> {
+            // instance = null;
+            isSequenceActive = false;
+        });
+
+        // InstantCommand cancel = new InstantCommand(() -> {
+        // // System.err.println(instance);
+        // // if (false) {
+        // // instance = this;
+        // // System.err.println("New Shot");
+        // // } else {
+        // subsystem.intake(); // intake to shooter
+        // System.err.println("Shot Cancelled");
+        // // instance.cancel();
+        // // instance = null;
+        // // }
+        // });
+
+        // System.err.println(instance);
+
+        isSequenceActive = true;
+
         addRequirements(subsystem, swerveDrivetrain, armSubsystem);
-        addCommands(new InstantCommand(() -> subsystem.startShooter()),
-                new ParallelCommandGroup(new WaitCommand(0.2).andThen(
-                        new AlignToSpeakerCommand(swerveDrivetrain)).alongWith(
-                                new FunctionalCommand(
-                                        () -> armSubsystem.shoot(), () -> {
-                                        }, interrupted -> {
-                                        }, () -> armSubsystem.atGoal()))
-                        .andThen(new WaitCommand(0.02)),
-                        new WaitUntilCommand(() -> subsystem.shooterAtMaxSpeed()).withTimeout(1.2)),
-                new InstantCommand(() -> subsystem.intake()), new WaitCommand(.7),
-                new InstantCommand(() -> subsystem.stopIntake())
-                        .alongWith(new InstantCommand(() -> subsystem.stopShooter()))
-                        .alongWith(new InstantCommand(() -> armSubsystem.setGoal(Constants.BACKWARD_SOFT_STOP * 360)))
-                        .andThen(new InstantCommand(() -> instance = null)));
+        addCommands(startShooter,
+                new ParallelCommandGroup(aimCommands, checkShooterSpeed)/* .withTimeout(5) */,
+                intakeToShooter, new WaitCommand(.9),
+                new ParallelCommandGroup(resetArm, stopShooter, stopIntake),
+                nullifyInstance);
     }
 }

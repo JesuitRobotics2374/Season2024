@@ -6,6 +6,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.ADXL345_I2C.AllAxes;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -21,11 +22,24 @@ public class Robot extends TimedRobot {
     // CharacterizeDrivetrainCommand(
     // m_robotContainer.getDrivetrain());
 
+    // TODO make a 1 second periodic to check for the aliance, and if it is present
+    // then overwrite the result
+
     @Override
     public void robotInit() {
         // drivetrain
         SmartDashboard.putNumber("Apriltag Number", 1);
         enableLiveWindowInTest(true);
+        addPeriodic(() -> {
+            var ally = DriverStation.getAlliance();
+            if (ally.isPresent()) {
+                team = ally.get();
+            }
+        }, 0.5);
+    }
+
+    public static Alliance getAlliance() {
+        return team;
     }
 
     @Override
@@ -61,11 +75,13 @@ public class Robot extends TimedRobot {
         if (m_autonomousCommand != null) {
             m_autonomousCommand.cancel();
         }
-        if (team == null) {
-            if (DriverStation.getAlliance().isPresent()) {
-                team = DriverStation.getAlliance().get();
-            }
+        // if (team == null) {
+        if (DriverStation.getAlliance().isPresent()) {
+            team = DriverStation.getAlliance().get();
         }
+        // }
+        m_robotContainer.alignPigeonVision();
+        // m_DrivetrainSubsystem.alignToVision()
     }
 
     @Override
@@ -76,34 +92,35 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousPeriodic() {
-        if (team == null) {
-            if (DriverStation.getAlliance().isPresent()) {
-                team = DriverStation.getAlliance().get();
-            }
+        // if (team == null) {
+        if (DriverStation.getAlliance().isPresent()) {
+            team = DriverStation.getAlliance().get();
         }
+        // }
     }
 
     @Override
     public void teleopPeriodic() {
-        if (team == null) {
-            if (DriverStation.getAlliance().isPresent()) {
-                team = DriverStation.getAlliance().get();
-            }
+        // if (team == null) {
+        if (DriverStation.getAlliance().isPresent()) {
+            team = DriverStation.getAlliance().get();
         }
+        // }
     }
 
     @Override
     public void autonomousInit() {
-        if (team == null) {
-            if (DriverStation.getAlliance().isPresent()) {
-                team = DriverStation.getAlliance().get();
-            }
+        // if (team == null) {
+        if (DriverStation.getAlliance().isPresent()) {
+            team = DriverStation.getAlliance().get();
         }
+        // }
         // if (m_robotContainer.getDrivetrain().getDefaultCommand() != null)
         // m_robotContainer.getDrivetrain().getDefaultCommand().cancel();
         // m_autonomousCommand =
         // m_robotContainer.getAutonomousChooser().getCommand(m_robotContainer);
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+        m_robotContainer.alignPigeonVision();
         // schedule the autonomous command (example)
         if (m_autonomousCommand != null) {
             m_autonomousCommand.schedule();

@@ -1,6 +1,20 @@
 {
+  "Clients": {
+    "open": true
+  },
   "NetworkTables Settings": {
-    "mode": "Client (NT3)",
+    "mode": "Client (NT4)",
     "serverTeam": "2374"
+  },
+  "Server": {
+    "open": true
+  },
+  "transitory": {
+    "FMSInfo": {
+      "open": true
+    },
+    "SmartDashboard": {
+      "open": true
+    }
   }
 }
