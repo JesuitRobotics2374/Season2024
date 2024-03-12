@@ -72,7 +72,7 @@ public class ShootCommand extends SequentialCommandGroup {
 
         addRequirements(subsystem, swerveDrivetrain, armSubsystem);
         addCommands(startShooter,
-                new ParallelCommandGroup(aimCommands, checkShooterSpeed),
+                new ParallelCommandGroup(aimCommands, checkShooterSpeed)/* .withTimeout(5) */,
                 intakeToShooter, new WaitCommand(.9),
                 new ParallelCommandGroup(resetArm, stopShooter, stopIntake),
                 nullifyInstance);

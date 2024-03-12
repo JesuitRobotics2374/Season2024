@@ -39,7 +39,7 @@ public class AlignToSpeakerCommand extends Command {
          * second one in here)
          */
         Translation2d offset = (subsystem.getState().Pose.getX() > 8.4 ? new Translation2d(15.7, 5.5)
-                : new Translation2d(0.25, 5.5))
+                : new Translation2d(0, 5.5))
                 .minus(subsystem.getState().Pose.getTranslation());
         controller.setGoal(offset.getAngle().plus(new Rotation2d(Math.PI)).getRadians());
         System.out.println(Math.toDegrees(controller.getGoal().position));
