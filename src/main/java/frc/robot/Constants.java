@@ -26,7 +26,25 @@ public class Constants {
     public static final double ARM_PID_I = 0.25;
     public static final double ARM_PID_D = 0.0;
 
-    //
+    //Profiled PID
+    public static final double P_ARM_PID_P = 2.0;
+    public static final double P_ARM_PID_I = 0.05;
+    public static final double P_ARM_PID_D = 0.1;
+
+    //Center of field
+    public static final double CENTER_FIELD_X = 8.4;
+
+    //Translation2d
+    public static final double RED_SPEAKER_X = 16.3;
+    public static final double RED_SPEAKER_Y = 5.55;
+
+    public static final double BLUE_SPEAKER_X = 0.3;
+    public static final double BLUE_SPEAKER_Y = 5.55;
+
+    //Align speeds
+    public static final double ALIGN_SPEED_THRESHOLD = 0.1;
+    public static final double ALIGN_SPEED_FAST = -1.2;
+    public static final double ALIGN_SPEED_SLOW = -0.6;
 
     // MANIPUlATIR Subsystem
     public static final int SHOOTER_MOTOR_A_ID = 32;

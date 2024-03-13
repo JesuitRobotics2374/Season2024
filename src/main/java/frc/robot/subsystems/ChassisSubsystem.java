@@ -40,13 +40,6 @@ public class ChassisSubsystem extends SubsystemBase {
 
         // Retrieve handles to specific entries
         visionEntry = visionTable.getEntry("NotePose");
-        // tab.addBoolean("Is Red?", () -> {
-        // if (DriverStation.getAlliance().isPresent()) {
-        // return DriverStation.getAlliance().get() == Alliance.Red;
-        // } else {
-        // return false;
-        // }
-        // });
     }
 
     /**

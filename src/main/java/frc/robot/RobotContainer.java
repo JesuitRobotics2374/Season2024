@@ -69,13 +69,6 @@ public class RobotContainer {
         resetDrive();
         configureButtonBindings();
 
-        // m_DrivetrainSubsystem.getState().Pose = new
-        // Pose2d(m_DrivetrainSubsystem.getState().Pose.getTranslation(),
-        // new Rotation2d());
-        // m_DrivetrainSubsystem.seedFieldRelative(new Pose2d());
-        // m_DrivetrainSubsystem.getPigeon2().getConfigurator()
-        // .apply(new Pigeon2Configuration().withMountPose(new
-        // MountPoseConfigs().withMountPoseYaw(0)));
 
     }
 
@@ -155,12 +148,9 @@ public class RobotContainer {
         m_driveController.back().onTrue(m_DrivetrainSubsystem.runOnce(() -> m_DrivetrainSubsystem.seedFieldRelative()));
         m_driveController.leftBumper().onTrue(new InstantCommand(() -> toggleSlow()));
         m_driveController.rightBumper().onTrue(new InstantCommand(() -> toggleRoll()));
-        // m_driveController.start()
-        // .onTrue(new InstantCommand(() ->
-        // System.out.println(m_DrivetrainSubsystem.getState().Pose)));
+
         m_driveController.start().onTrue(m_DrivetrainSubsystem.runOnce(() -> m_DrivetrainSubsystem.alignToVision()));
-        // m_driveController.a().onTrue(new
-        // AlignToSpeakerCommand(m_DrivetrainSubsystem));
+     
         m_driveController.y().onTrue(new InstantCommand(() -> m_ClimberSubsystem.startLeftClimberUp()));
         m_driveController.y().onFalse(new InstantCommand(() -> m_ClimberSubsystem.stopLeftClimber()));
         m_driveController.b().onTrue(new InstantCommand(() -> m_ClimberSubsystem.startLeftClimberDown()));
@@ -206,15 +196,7 @@ public class RobotContainer {
         return Math.copySign(value, (value - tolerance) / (1.0 - tolerance));
     }
 
-    // public void checkAndShoot() {
-    // if (shootCmd == null) {
-    // shootCmd = new ShootCommand(m_ManipulatorSubsystem,
-    // m_DrivetrainSubsystem, m_ArmSubsystem);
-    // } else {
-    // shootCmd.cancel();
-    // shootCmd = null;
-    // }
-    // }
+    
 
     /**
      * Copy sign square

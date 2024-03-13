@@ -28,37 +28,6 @@ public class VisionSubsystem extends SubsystemBase {
         return new Translation2d(noteDistance, new Rotation2d(noteAngle*(Math.PI/180.0)));
     }
 
-    // /**
-    // * Get the min X coordinate of the target from NetworkTables.
-    // * @return The min X coordinate of the target.
-    // */
-    // public double getTargetXMin() {
-    // return targetXMinEntry.getDouble(0.0);
-    // }
-
-    // /**
-    // * Get the min Y coordinate of the target from NetworkTables.
-    // * @return The min Y coordinate of the target.
-    // */
-    // public double getTargetYMin() {
-    // return targetYMinEntry.getDouble(0.0);
-    // }
-
-    // /**
-    // * Get the max X coordinate of the target from NetworkTables.
-    // * @return The max X coordinate of the target.
-    // */
-    // public double getTargetXMax() {
-    // return targetXMaxEntry.getDouble(0.0);
-    // }
-
-    // /**
-    // * Get the max Y coordinate of the target from NetworkTables.
-    // * @return The max Y coordinate of the target.
-    // */
-    // public double getTargetYMax() {
-    // return targetYMaxEntry.getDouble(0.0);
-    // }
 
     @Override
     public void periodic() {

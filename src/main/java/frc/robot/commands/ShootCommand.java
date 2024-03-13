@@ -53,21 +53,6 @@ public class ShootCommand extends SequentialCommandGroup {
             isSequenceActive = false;
         });
 
-        // InstantCommand cancel = new InstantCommand(() -> {
-        // // System.err.println(instance);
-        // // if (false) {
-        // // instance = this;
-        // // System.err.println("New Shot");
-        // // } else {
-        // subsystem.intake(); // intake to shooter
-        // System.err.println("Shot Cancelled");
-        // // instance.cancel();
-        // // instance = null;
-        // // }
-        // });
-
-        // System.err.println(instance);
-
         isSequenceActive = true;
 
         addRequirements(subsystem, swerveDrivetrain, armSubsystem);
