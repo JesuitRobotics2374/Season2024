@@ -19,7 +19,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
     private final CANSparkFlex shooterMotorA;
     private final CANSparkFlex shooterMotorB;
     private final CANSparkMax intakeMotor;
-    private final TimeOfFlight noteSensor;
+    public final TimeOfFlight noteSensor;
 
     boolean intake = false;
     boolean previousSensorRead = false;
