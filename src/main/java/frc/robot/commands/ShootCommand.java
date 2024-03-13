@@ -31,6 +31,7 @@ public class ShootCommand extends SequentialCommandGroup {
         InstantCommand startShooter = new InstantCommand(() -> subsystem.startShooter());
 
         Command alignDrivetrain = new AlignToSpeakerCommand(swerveDrivetrain); // used in aimCommands
+
         Command alignArm = new FunctionalCommand(
                 () -> armSubsystem.shoot(), () -> {
                 }, interrupted -> {
