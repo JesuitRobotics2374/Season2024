@@ -18,8 +18,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
 
 public class ArmSubsystem extends SubsystemBase {
-    ProfiledPIDController armController = new ProfiledPIDController(4, 0.25, 0.0, new Constraints(1.5, 1.6));
-    ArmFeedforward armFeedforward = new ArmFeedforward(0, 0, 0, 0);
+    ProfiledPIDController armController = new ProfiledPIDController(Constants.ARM_PID_P, Constants.ARM_PID_I, Constants.ARM_PID_D, new Constraints(1.5, 1.6));
     TalonFX leftMotor = new TalonFX(Constants.LEFT_ARM_MOTOR_ID);
     TalonFX rightMotor = new TalonFX(Constants.RIGHT_ARM_MOTOR_ID);
     CANcoder encoder = new CANcoder(Constants.ARM_ENCODER_ID, Constants.CAN_BUS_NAME_CANIVORE);
@@ -52,13 +51,8 @@ public class ArmSubsystem extends SubsystemBase {
     public void periodic() {
         speed = Math.min(Math.max(
                 armController.calculate(encoder.getAbsolutePosition().getValueAsDouble()), -.30), .30);
-        // if (!armController.atGoal()) {
-        // if (speed < 0) {
-        // speed = Math.min(speed, -.015);
-        // } else if (speed > 0) {
-        // speed = Math.max(speed, 0.015);
-        // }
-        // }
+        
+        //the 12 represents 12 volts
         leftMotor.setVoltage(speed * 12 + Constants.FEED_FORWARD_VOLTAGE
                 * Math.sin(encoder.getAbsolutePosition().getValueAsDouble() * Math.PI * -2));
     }

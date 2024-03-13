@@ -21,6 +21,13 @@ public class Constants {
     public static final double FORWARD_SOFT_STOP = 0.15;
     public static final double BACKWARD_SOFT_STOP = -0.255;
 
+    //PID
+    public static final double ARM_PID_P = 4.0;
+    public static final double ARM_PID_I = 0.25;
+    public static final double ARM_PID_D = 0.0;
+
+    //
+
     // MANIPUlATIR Subsystem
     public static final int SHOOTER_MOTOR_A_ID = 32;
     public static final int SHOOTER_MOTOR_B_ID = 31;
