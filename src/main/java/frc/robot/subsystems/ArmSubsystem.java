@@ -115,12 +115,13 @@ public class ArmSubsystem extends SubsystemBase {
         double top = Math.PI / 2;
         double bottom = Math.PI;
 
-        for (int cycle = 0; cycle < 11; cycle++) {
+        for (int cycle = 0; cycle < 13; cycle++) {
             double angle = (top + bottom) / 2;
             double deltaDistance = distance - Constants.armLength * Math.cos(angle);
             double deltaHeight = Constants.deltaHeight - Constants.armLength * Math.sin(angle);
 
-            double t = deltaDistance / (Constants.launchVelocity * Math.cos(angle - Constants.armAngleOffset));
+            double vX = Constants.launchVelocity * Math.cos(angle - Constants.armAngleOffset);
+            double t = (vX - Math.sqrt(vX * vX - 2 * Constants.dragCoefficient * deltaDistance)) / Constants.dragCoefficient; //Quadratic Equation | drag = accel
             double y = Constants.launchVelocity * Math.sin(angle - Constants.armAngleOffset) * t - 4.903325 * t * t;
             // System.out.println(angle);
             if (y > deltaHeight) {
