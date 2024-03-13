@@ -54,6 +54,9 @@ public class ChassisSubsystem extends SubsystemBase {
     public Transform2d getNearestNotePose() {
         double noteDistance = this.visionEntry.getDoubleArray(new double[] { 0.0, 0.0 })[0];
         double noteAngle = this.visionEntry.getDoubleArray(new double[] { 0.0, 0.0 })[1];
+        if (noteDistance == 0.0 && noteAngle == 0.0) {
+            return null;
+        }
         return new Transform2d(new Translation2d(noteDistance, new Rotation2d(noteAngle * (Math.PI / 180.0))),
                 new Rotation2d());
     }

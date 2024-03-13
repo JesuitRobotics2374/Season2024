@@ -8,7 +8,6 @@ import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -18,7 +17,8 @@ import frc.robot.Constants;
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
 
 public class ArmSubsystem extends SubsystemBase {
-    ProfiledPIDController armController = new ProfiledPIDController(Constants.ARM_PID_P, Constants.ARM_PID_I, Constants.ARM_PID_D, new Constraints(1.5, 1.6));
+    ProfiledPIDController armController = new ProfiledPIDController(Constants.ARM_PID_P, Constants.ARM_PID_I,
+            Constants.ARM_PID_D, new Constraints(1.5, 1.6));
     TalonFX leftMotor = new TalonFX(Constants.LEFT_ARM_MOTOR_ID);
     TalonFX rightMotor = new TalonFX(Constants.RIGHT_ARM_MOTOR_ID);
     CANcoder encoder = new CANcoder(Constants.ARM_ENCODER_ID, Constants.CAN_BUS_NAME_CANIVORE);
@@ -52,8 +52,8 @@ public class ArmSubsystem extends SubsystemBase {
     public void periodic() {
         speed = Math.min(Math.max(
                 armController.calculate(encoder.getAbsolutePosition().getValueAsDouble()), -.30), .30);
-        
-        //the 12 represents 12 volts
+
+        // the 12 represents 12 volts
         leftMotor.setVoltage(speed * 12 + Constants.FEED_FORWARD_VOLTAGE
                 * Math.sin(encoder.getAbsolutePosition().getValueAsDouble() * Math.PI * -2));
     }
@@ -122,7 +122,8 @@ public class ArmSubsystem extends SubsystemBase {
             double deltaHeight = Constants.deltaHeight - Constants.armLength * Math.sin(angle);
 
             double vX = Constants.launchVelocity * Math.cos(angle - Constants.armAngleOffset);
-            double t = (vX - Math.sqrt(vX * vX - 2 * Constants.dragCoefficient * deltaDistance)) / Constants.dragCoefficient; //Quadratic Equation | drag = accel
+            double t = (vX - Math.sqrt(vX * vX - 2 * Constants.dragCoefficient * deltaDistance))
+                    / Constants.dragCoefficient; // Quadratic Equation | drag = accel
             double y = Constants.launchVelocity * Math.sin(angle - Constants.armAngleOffset) * t - 4.903325 * t * t;
             // System.out.println(angle);
             if (y > deltaHeight) {

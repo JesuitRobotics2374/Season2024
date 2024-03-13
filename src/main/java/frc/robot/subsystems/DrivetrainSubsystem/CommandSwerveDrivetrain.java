@@ -113,7 +113,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                         driveBaseRadius,
                         new ReplanningConfig()),
                 () -> {
-                   
+
                     return false;
                 },
                 this); // Subsystem for requirements
@@ -248,14 +248,16 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     public double getDistanceToSpeaker() {
         /* swap > if wrong target (also in AlignToSpeakerComand.java) */
-        double offset = (getState().Pose.getX() > 8.4 ? new Translation2d(Constants.RED_SPEAKER_X, Constants.RED_SPEAKER_Y) : new Translation2d(0, Constants.RED_SPEAKER_Y))
+        double offset = (getState().Pose.getX() > 8.4
+                ? new Translation2d(Constants.RED_SPEAKER_X, Constants.RED_SPEAKER_Y)
+                : new Translation2d(0, Constants.RED_SPEAKER_Y))
                 .getDistance(getState().Pose.getTranslation());
         return offset;
     }
 
     public boolean goToNote() {
         Transform2d notePose = ChassisSubsystem.getInstance().getNearestNotePose();
-        if (notePose.getTranslation().getNorm() == 0.0) {
+        if (notePose == null || notePose.getTranslation().getNorm() > 5) {
             return false;
         }
         // Create a list of bezier points from poses. Each pose represents one waypoint.
