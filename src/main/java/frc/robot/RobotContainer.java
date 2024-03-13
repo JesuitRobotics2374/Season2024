@@ -134,6 +134,7 @@ public class RobotContainer {
         ShuffleboardTab tab = Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME);
         tab.addBoolean("SLOW", () -> isSlow()).withPosition(1, 1);
         tab.addBoolean("ROLL", () -> isRoll()).withPosition(2, 1);
+        tab.addBoolean("Note?", () -> m_ManipulatorSubsystem.noteSensor.getRange() <= 150);
         tab.addDouble("X", () -> m_DrivetrainSubsystem.getState().Pose.getX());
         tab.addDouble("Y", () -> m_DrivetrainSubsystem.getState().Pose.getY());
         tab.addDouble("R", () -> m_DrivetrainSubsystem.getState().Pose.getRotation().getDegrees());
@@ -178,6 +179,8 @@ public class RobotContainer {
                         m_DrivetrainSubsystem, m_ArmSubsystem));
         m_operatorController.start().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.slowClimb()));
         m_operatorController.start().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopShooter()));
+        m_operatorController.povLeft().onTrue(new InstantCommand(() -> m_ArmSubsystem.decreaseOffset()));
+        m_operatorController.povRight().onTrue(new InstantCommand(() -> m_ArmSubsystem.increaseOffset()));
 
     }
 
@@ -242,9 +245,9 @@ public class RobotContainer {
             MaxAngularRate = Math.PI * .5;
         } else if (roll) {
             MaxSpeed = 1.5;
-            MaxAngularRate = Math.PI * 1;
+            MaxAngularRate = Math.PI * 0.8; // from 1
         } else {
-            MaxSpeed = 3;
+            MaxSpeed = 4; // from 3
             MaxAngularRate = Math.PI * 1.5;
         }
         System.out.println(MaxSpeed);

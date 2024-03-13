@@ -25,6 +25,7 @@ public class ArmSubsystem extends SubsystemBase {
     ShuffleboardTab tab = Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME);
     double goal;
     double speed;
+    double manualOffset = 0;
 
     static ArmSubsystem instance;
 
@@ -133,7 +134,7 @@ public class ArmSubsystem extends SubsystemBase {
             }
         }
 
-        return Math.toDegrees((Math.PI / 2) - ((top + bottom) / 2));
+        return Math.toDegrees((Math.PI / 2) - ((top + bottom) / 2)) + manualOffset;
     }
 
     public void shoot() {
@@ -141,6 +142,16 @@ public class ArmSubsystem extends SubsystemBase {
         double angle = myAngleCalculator(CommandSwerveDrivetrain.getInstance().getDistanceToSpeaker());
         setGoal(angle);
         // System.out.println(angle / 360);
+    }
+
+    public void increaseOffset() {
+        manualOffset += 0.5;
+        System.out.println(manualOffset);
+    }
+
+    public void decreaseOffset() {
+        manualOffset -= 0.5;
+        System.out.println(manualOffset);
     }
 
     public static ArmSubsystem getInstance() {
