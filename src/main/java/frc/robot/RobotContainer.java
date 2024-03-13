@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AlignToSpeakerCommand;
 import frc.robot.commands.BasicCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.ShootCommand;
 import frc.robot.commands.AutoShootCommand;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
@@ -169,8 +170,6 @@ public class RobotContainer {
         m_driveController.a().onFalse(new InstantCommand(() -> m_ClimberSubsystem.stopRightClimber()));
 
         // Manipulator
-        Command shootCommand = new AutoShootCommand(m_ManipulatorSubsystem, m_DrivetrainSubsystem, m_ArmSubsystem);
-        Command alignCommand = new AlignToSpeakerCommand(m_DrivetrainSubsystem);
         m_operatorController.y().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.startShooter()));
         m_operatorController.y().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopShooter()));
         m_operatorController.b().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.intake()));
@@ -182,20 +181,11 @@ public class RobotContainer {
                 .onTrue(new InstantCommand(() -> m_ArmSubsystem.setGoal(Constants.BACKWARD_SOFT_STOP * 360)));
         m_operatorController.back().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.reverse()));
         m_operatorController.back().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopIntake()));
-        m_operatorController.leftBumper().onTrue(alignCommand);
+        m_operatorController.leftBumper().toggleOnTrue(new AlignToSpeakerCommand(m_DrivetrainSubsystem));
         m_operatorController.rightBumper()
-                .onTrue(shootCommand);
-        m_operatorController.back().onTrue(new InstantCommand(() -> {
-            if (shootCommand.isScheduled()) {
-                shootCommand.cancel();
-            }
-            if (alignCommand.isScheduled()) {
-                alignCommand.cancel();
-            }
-        }));
+                .toggleOnTrue(new ShootCommand(m_ManipulatorSubsystem, m_ArmSubsystem));
         m_operatorController.start().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.slowClimb()));
         m_operatorController.start().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopShooter()));
-
     }
 
     /**
