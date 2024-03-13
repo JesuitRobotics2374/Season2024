@@ -15,9 +15,6 @@ public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
 
     // @SuppressWarnings("unused")
-    // private final CharacterizeDrivetrainCommand characterizeCommand = new
-    // CharacterizeDrivetrainCommand(
-    // m_robotContainer.getDrivetrain());
 
     // TODO make a 1 second periodic to check for the aliance, and if it is present
     // then overwrite the result
@@ -61,13 +58,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        // if (!robotContainer.getClimber().isClimberZeroed()) {
-        // new ZeroClimberCommand(robotContainer.getClimber()).schedule();
-        // }
-        // if (!robotContainer.getShooter().isHoodZeroed()) {
-        // new ZeroHoodCommand(robotContainer.getShooter(), true).schedule();
-        // }
-        // m_robotContainer.resetDrive();
+        
         m_robotContainer.getDrivetrain().alignWithAliance();
         if (m_autonomousCommand != null) {
             m_autonomousCommand.cancel();
@@ -112,10 +103,6 @@ public class Robot extends TimedRobot {
             team = DriverStation.getAlliance().get();
         }
         // }
-        // if (m_robotContainer.getDrivetrain().getDefaultCommand() != null)
-        // m_robotContainer.getDrivetrain().getDefaultCommand().cancel();
-        // m_autonomousCommand =
-        // m_robotContainer.getAutonomousChooser().getCommand(m_robotContainer);
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
         m_robotContainer.alignPigeonVision();
         // schedule the autonomous command (example)

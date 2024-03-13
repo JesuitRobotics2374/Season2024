@@ -15,6 +15,7 @@ public class ShootCommand extends SequentialCommandGroup {
     public ShootCommand(ManipulatorSubsystem subsystem,
             ArmSubsystem armSubsystem) {
         InstantCommand startShooter = new InstantCommand(() -> subsystem.startShooter());
+
         InstantCommand stopShooter = new InstantCommand(() -> subsystem.stopShooter());
         Command alignArm = new FunctionalCommand(
                 () -> armSubsystem.shoot(), () -> {

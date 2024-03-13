@@ -68,13 +68,6 @@ public class RobotContainer {
         resetDrive();
         configureButtonBindings();
 
-        // m_DrivetrainSubsystem.getState().Pose = new
-        // Pose2d(m_DrivetrainSubsystem.getState().Pose.getTranslation(),
-        // new Rotation2d());
-        // m_DrivetrainSubsystem.seedFieldRelative(new Pose2d());
-        // m_DrivetrainSubsystem.getPigeon2().getConfigurator()
-        // .apply(new Pigeon2Configuration().withMountPose(new
-        // MountPoseConfigs().withMountPoseYaw(0)));
 
     }
 
@@ -140,6 +133,7 @@ public class RobotContainer {
         ShuffleboardTab tab = Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME);
         tab.addBoolean("SLOW", () -> isSlow()).withPosition(1, 1);
         tab.addBoolean("ROLL", () -> isRoll()).withPosition(2, 1);
+        tab.addBoolean("Note?", () -> m_ManipulatorSubsystem.noteSensor.getRange() <= 150);
         tab.addDouble("X", () -> m_DrivetrainSubsystem.getState().Pose.getX());
         tab.addDouble("Y", () -> m_DrivetrainSubsystem.getState().Pose.getY());
         tab.addDouble("R", () -> m_DrivetrainSubsystem.getState().Pose.getRotation().getDegrees());
@@ -154,12 +148,9 @@ public class RobotContainer {
         m_driveController.back().onTrue(m_DrivetrainSubsystem.runOnce(() -> m_DrivetrainSubsystem.seedFieldRelative()));
         m_driveController.leftBumper().onTrue(new InstantCommand(() -> toggleSlow()));
         m_driveController.rightBumper().onTrue(new InstantCommand(() -> toggleRoll()));
-        // m_driveController.start()
-        // .onTrue(new InstantCommand(() ->
-        // System.out.println(m_DrivetrainSubsystem.getState().Pose)));
+
         m_driveController.start().onTrue(m_DrivetrainSubsystem.runOnce(() -> m_DrivetrainSubsystem.alignToVision()));
-        // m_driveController.a().onTrue(new
-        // AlignToSpeakerCommand(m_DrivetrainSubsystem));
+     
         m_driveController.y().onTrue(new InstantCommand(() -> m_ClimberSubsystem.startLeftClimberUp()));
         m_driveController.y().onFalse(new InstantCommand(() -> m_ClimberSubsystem.stopLeftClimber()));
         m_driveController.b().onTrue(new InstantCommand(() -> m_ClimberSubsystem.startLeftClimberDown()));
@@ -186,6 +177,8 @@ public class RobotContainer {
                 .toggleOnTrue(new ShootCommand(m_ManipulatorSubsystem, m_ArmSubsystem));
         m_operatorController.start().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.slowClimb()));
         m_operatorController.start().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopShooter()));
+        m_operatorController.povLeft().onTrue(new InstantCommand(() -> m_ArmSubsystem.decreaseOffset()));
+        m_operatorController.povRight().onTrue(new InstantCommand(() -> m_ArmSubsystem.increaseOffset()));
     }
 
     /**
@@ -203,15 +196,7 @@ public class RobotContainer {
         return Math.copySign(value, (value - tolerance) / (1.0 - tolerance));
     }
 
-    // public void checkAndShoot() {
-    // if (shootCmd == null) {
-    // shootCmd = new ShootCommand(m_ManipulatorSubsystem,
-    // m_DrivetrainSubsystem, m_ArmSubsystem);
-    // } else {
-    // shootCmd.cancel();
-    // shootCmd = null;
-    // }
-    // }
+    
 
     /**
      * Copy sign square
@@ -257,9 +242,9 @@ public class RobotContainer {
             MaxAngularRate = Math.PI * .5;
         } else if (roll) {
             MaxSpeed = 1.5;
-            MaxAngularRate = Math.PI * 1;
+            MaxAngularRate = Math.PI * 0.8; // from 1
         } else {
-            MaxSpeed = 3;
+            MaxSpeed = 4; // from 3
             MaxAngularRate = Math.PI * 1.5;
         }
         System.out.println(MaxSpeed);

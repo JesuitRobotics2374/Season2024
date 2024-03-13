@@ -113,24 +113,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                         driveBaseRadius,
                         new ReplanningConfig()),
                 () -> {
-                    // Boolean supplier that controls when the path will be mirrored for the blue
-                    // alliance
-                    // This will flip the path being followed to the blue side of the field.
-                    // THE ORIGIN WILL REMAIN ON THE RED SIDE
-
-                    // var alliance = DriverStation.getAlliance();
-                    // if (alliance.isPresent()) {
-                    // System.out.println("Present: " + (alliance.get() ==
-                    // DriverStation.Alliance.Blue));
-                    // return alliance.get() == DriverStation.Alliance.Blue;
-                    // } else {
-                    // System.out.println("NOPE");
-                    // }
-                    // return false;
-                    // System.out.println(Robot.getAlliance());
-                    // System.out.println(DriverStation.Alliance.Blue);
-                    // System.out.println(Robot.getAlliance() == DriverStation.Alliance.Blue);
-                    // return Robot.getAlliance() == DriverStation.Alliance.Blue;
+                   
                     return false;
                 },
                 this); // Subsystem for requirements
@@ -265,7 +248,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     public double getDistanceToSpeaker() {
         /* swap > if wrong target (also in AlignToSpeakerComand.java) */
-        double offset = (getState().Pose.getX() > 8.4 ? new Translation2d(15.7, 5.5) : new Translation2d(0, 5.5))
+        double offset = (getState().Pose.getX() > 8.4 ? new Translation2d(Constants.RED_SPEAKER_X, Constants.RED_SPEAKER_Y) : new Translation2d(0, Constants.RED_SPEAKER_Y))
                 .getDistance(getState().Pose.getTranslation());
         return offset;
     }

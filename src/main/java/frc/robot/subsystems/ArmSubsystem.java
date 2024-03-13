@@ -18,14 +18,14 @@ import frc.robot.Constants;
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
 
 public class ArmSubsystem extends SubsystemBase {
-    ProfiledPIDController armController = new ProfiledPIDController(4, 0.25, 0.0, new Constraints(1.5, 1.6));
-    ArmFeedforward armFeedforward = new ArmFeedforward(0, 0, 0, 0);
+    ProfiledPIDController armController = new ProfiledPIDController(Constants.ARM_PID_P, Constants.ARM_PID_I, Constants.ARM_PID_D, new Constraints(1.5, 1.6));
     TalonFX leftMotor = new TalonFX(Constants.LEFT_ARM_MOTOR_ID);
     TalonFX rightMotor = new TalonFX(Constants.RIGHT_ARM_MOTOR_ID);
     CANcoder encoder = new CANcoder(Constants.ARM_ENCODER_ID, Constants.CAN_BUS_NAME_CANIVORE);
     ShuffleboardTab tab = Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME);
     double goal;
     double speed;
+    double manualOffset = 0;
 
     static ArmSubsystem instance;
 
@@ -52,13 +52,8 @@ public class ArmSubsystem extends SubsystemBase {
     public void periodic() {
         speed = Math.min(Math.max(
                 armController.calculate(encoder.getAbsolutePosition().getValueAsDouble()), -.30), .30);
-        // if (!armController.atGoal()) {
-        // if (speed < 0) {
-        // speed = Math.min(speed, -.015);
-        // } else if (speed > 0) {
-        // speed = Math.max(speed, 0.015);
-        // }
-        // }
+        
+        //the 12 represents 12 volts
         leftMotor.setVoltage(speed * 12 + Constants.FEED_FORWARD_VOLTAGE
                 * Math.sin(encoder.getAbsolutePosition().getValueAsDouble() * Math.PI * -2));
     }
@@ -121,12 +116,13 @@ public class ArmSubsystem extends SubsystemBase {
         double top = Math.PI / 2;
         double bottom = Math.PI;
 
-        for (int cycle = 0; cycle < 11; cycle++) {
+        for (int cycle = 0; cycle < 13; cycle++) {
             double angle = (top + bottom) / 2;
             double deltaDistance = distance - Constants.armLength * Math.cos(angle);
             double deltaHeight = Constants.deltaHeight - Constants.armLength * Math.sin(angle);
 
-            double t = deltaDistance / (Constants.launchVelocity * Math.cos(angle - Constants.armAngleOffset));
+            double vX = Constants.launchVelocity * Math.cos(angle - Constants.armAngleOffset);
+            double t = (vX - Math.sqrt(vX * vX - 2 * Constants.dragCoefficient * deltaDistance)) / Constants.dragCoefficient; //Quadratic Equation | drag = accel
             double y = Constants.launchVelocity * Math.sin(angle - Constants.armAngleOffset) * t - 4.903325 * t * t;
             // System.out.println(angle);
             if (y > deltaHeight) {
@@ -138,7 +134,7 @@ public class ArmSubsystem extends SubsystemBase {
             }
         }
 
-        return Math.toDegrees((Math.PI / 2) - ((top + bottom) / 2));
+        return Math.toDegrees((Math.PI / 2) - ((top + bottom) / 2)) + manualOffset;
     }
 
     public void shoot() {
@@ -146,6 +142,16 @@ public class ArmSubsystem extends SubsystemBase {
         double angle = myAngleCalculator(CommandSwerveDrivetrain.getInstance().getDistanceToSpeaker());
         setGoal(angle);
         // System.out.println(angle / 360);
+    }
+
+    public void increaseOffset() {
+        manualOffset += 0.5;
+        System.out.println(manualOffset);
+    }
+
+    public void decreaseOffset() {
+        manualOffset -= 0.5;
+        System.out.println(manualOffset);
     }
 
     public static ArmSubsystem getInstance() {
