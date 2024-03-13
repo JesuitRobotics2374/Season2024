@@ -12,7 +12,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ManipulatorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
 
-public class ShootCommand extends SequentialCommandGroup {
+public class AutoShootCommand extends SequentialCommandGroup {
 
     ManipulatorSubsystem subsystem;
     ArmSubsystem armSubsystem;
@@ -20,7 +20,7 @@ public class ShootCommand extends SequentialCommandGroup {
     // public static ShootCommand instance = null;
     public static boolean isSequenceActive = false;
 
-    public ShootCommand(ManipulatorSubsystem subsystem, CommandSwerveDrivetrain swerveDrivetrain,
+    public AutoShootCommand(ManipulatorSubsystem subsystem, CommandSwerveDrivetrain swerveDrivetrain,
             ArmSubsystem armSubsystem) {
         this.subsystem = subsystem;
         this.swerveDrivetrain = swerveDrivetrain;
@@ -72,7 +72,7 @@ public class ShootCommand extends SequentialCommandGroup {
 
         addRequirements(subsystem, swerveDrivetrain, armSubsystem);
         addCommands(startShooter,
-                new ParallelCommandGroup(aimCommands, checkShooterSpeed)/* .withTimeout(5) */,
+                new ParallelCommandGroup(aimCommands, checkShooterSpeed).withTimeout(5),
                 intakeToShooter, new WaitCommand(.9),
                 new ParallelCommandGroup(resetArm, stopShooter, stopIntake),
                 nullifyInstance);
