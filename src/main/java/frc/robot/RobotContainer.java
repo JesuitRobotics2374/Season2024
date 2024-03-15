@@ -68,7 +68,6 @@ public class RobotContainer {
         resetDrive();
         configureButtonBindings();
 
-
     }
 
     /**
@@ -124,6 +123,7 @@ public class RobotContainer {
                 new FunctionalCommand(() -> m_ArmSubsystem.setGoal(Constants.BACKWARD_SOFT_STOP * 360), () -> {
                 }, interrupted -> {
                 }, () -> m_ArmSubsystem.atGoal()).andThen(new WaitCommand(0.4)).withTimeout(2));
+        NamedCommands.registerCommand("Shoot No Aim", new ShootCommand(m_ManipulatorSubsystem, m_ArmSubsystem));
     }
 
     /**
@@ -150,7 +150,7 @@ public class RobotContainer {
         m_driveController.rightBumper().onTrue(new InstantCommand(() -> toggleRoll()));
 
         m_driveController.start().onTrue(m_DrivetrainSubsystem.runOnce(() -> m_DrivetrainSubsystem.alignToVision()));
-     
+
         m_driveController.y().onTrue(new InstantCommand(() -> m_ClimberSubsystem.startLeftClimberUp()));
         m_driveController.y().onFalse(new InstantCommand(() -> m_ClimberSubsystem.stopLeftClimber()));
         m_driveController.b().onTrue(new InstantCommand(() -> m_ClimberSubsystem.startLeftClimberDown()));
@@ -195,8 +195,6 @@ public class RobotContainer {
 
         return Math.copySign(value, (value - tolerance) / (1.0 - tolerance));
     }
-
-    
 
     /**
      * Copy sign square

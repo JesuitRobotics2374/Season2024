@@ -38,9 +38,9 @@ public class ArmSubsystem extends SubsystemBase {
         rightMotor.setControl(new Follower(Constants.LEFT_ARM_MOTOR_ID, true));
         encoder.getConfigurator()
                 .apply(new MagnetSensorConfigs().withAbsoluteSensorRange(AbsoluteSensorRangeValue.Signed_PlusMinusHalf)
-                        .withSensorDirection(SensorDirectionValue.Clockwise_Positive).withMagnetOffset(-.411));
+                        .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive).withMagnetOffset(.094));
         armController.enableContinuousInput(-.5, .5);
-        armController.setTolerance(0.007, 0.02);
+        armController.setTolerance(0.02, 0.02);
         goal = encoder.getAbsolutePosition().getValueAsDouble();
         armController.setGoal(goal);
         tab.addDouble("Setpoint", () -> armController.getSetpoint().position);
@@ -121,9 +121,10 @@ public class ArmSubsystem extends SubsystemBase {
             double deltaDistance = distance - Constants.armLength * Math.cos(angle);
             double deltaHeight = Constants.deltaHeight - Constants.armLength * Math.sin(angle);
 
-            double vX = Constants.launchVelocity * Math.cos(angle - Constants.armAngleOffset);
-            double t = (vX - Math.sqrt(vX * vX - 2 * Constants.dragCoefficient * deltaDistance))
-                    / Constants.dragCoefficient; // Quadratic Equation | drag = accel
+            // double vX = Constants.launchVelocity * Math.cos(angle -
+            // Constants.armAngleOffset);
+            double t = deltaDistance * (deltaDistance * 0.01 + 1)
+                    / (Constants.launchVelocity * Math.cos(angle - Constants.armAngleOffset));
             double y = Constants.launchVelocity * Math.sin(angle - Constants.armAngleOffset) * t - 4.903325 * t * t;
             // System.out.println(angle);
             if (y > deltaHeight) {

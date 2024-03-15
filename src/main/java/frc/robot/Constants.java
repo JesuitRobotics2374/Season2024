@@ -19,29 +19,29 @@ public class Constants {
     public static final int LEFT_ARM_MOTOR_ID = 7;
     public static final int ARM_ENCODER_ID = 25;
     public static final double FORWARD_SOFT_STOP = 0.15;
-    public static final double BACKWARD_SOFT_STOP = -0.255;
+    public static final double BACKWARD_SOFT_STOP = -0.265;
 
-    //PID
+    // PID
     public static final double ARM_PID_P = 4.0;
     public static final double ARM_PID_I = 0.25;
     public static final double ARM_PID_D = 0.0;
 
-    //Profiled PID
+    // Profiled PID
     public static final double P_ARM_PID_P = 2.0;
     public static final double P_ARM_PID_I = 0.05;
     public static final double P_ARM_PID_D = 0.1;
 
-    //Center of field
+    // Center of field
     public static final double CENTER_FIELD_X = 8.4;
 
-    //Translation2d
+    // Translation2d
     public static final double RED_SPEAKER_X = 16.3;
     public static final double RED_SPEAKER_Y = 5.55;
 
-    public static final double BLUE_SPEAKER_X = 0.3;
+    public static final double BLUE_SPEAKER_X = -.2;
     public static final double BLUE_SPEAKER_Y = 5.55;
 
-    //Align speeds
+    // Align speeds
     public static final double ALIGN_SPEED_THRESHOLD = 0.1;
     public static final double ALIGN_SPEED_FAST = -1.2;
     public static final double ALIGN_SPEED_SLOW = -0.6;
@@ -54,10 +54,10 @@ public class Constants {
 
     // ANGLE Calculator
     public static final double armLength = 0.62;
-    public static final double armAngleOffset = Math.toRadians(111);
+    public static final double armAngleOffset = Math.toRadians(123);
     public static final double deltaHeight = 2 - 0.30;
     public static final double launchVelocity = 14.2;
-    public static final double dragCoefficient = 0.0; //Positive - TODO
+    public static final double dragCoefficient = 0.0; // Positive - TODO
     public static final double FEED_FORWARD_VOLTAGE = 0.3;
 
     // CLIMBER Subsystem

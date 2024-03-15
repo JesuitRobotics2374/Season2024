@@ -12,7 +12,7 @@
         "y": 7.271394609381894
       },
       "isLocked": false,
-      "linkedName": "o2rt_3-4"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -25,7 +25,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "o2rt_4-5"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],

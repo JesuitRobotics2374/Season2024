@@ -72,7 +72,7 @@ public class AutoShootCommand extends SequentialCommandGroup {
 
         addRequirements(subsystem, swerveDrivetrain, armSubsystem);
         addCommands(startShooter,
-                new ParallelCommandGroup(aimCommands, checkShooterSpeed).withTimeout(5),
+                new ParallelCommandGroup(aimCommands, checkShooterSpeed).withTimeout(2.5),
                 intakeToShooter, new WaitCommand(.9),
                 new ParallelCommandGroup(resetArm, stopShooter, stopIntake),
                 nullifyInstance);
