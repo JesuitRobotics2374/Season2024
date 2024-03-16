@@ -31,7 +31,7 @@ public class AlignToSpeakerCommand extends Command {
         controller = new ProfiledPIDController(Constants.P_ARM_PID_P, Constants.P_ARM_PID_I, Constants.P_ARM_PID_D,
                 new Constraints(Math.PI * 4, Math.PI * 3));
         controller.enableContinuousInput(-Math.PI, Math.PI);
-        controller.setTolerance(0.03, 0.03);
+        controller.setTolerance(0.05, 0.05);
     }
 
     @Override

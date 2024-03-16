@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.461681613805452,
-        "y": 4.379852868122284
+        "x": 2.25,
+        "y": 4.15
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5013930170513679,
-        "y": 5.3752739745137115
+        "x": 1.289711403245916,
+        "y": 5.145421106391428
       },
       "isLocked": false,
-      "linkedName": "o1bm_2-3"
+      "linkedName": "SCB_2-3"
     },
     {
       "anchor": {
-        "x": 2.6841875081753006,
-        "y": 6.921104398556871
+        "x": 2.7,
+        "y": 6.97
       },
       "prevControl": {
-        "x": 1.5833688728718385,
-        "y": 6.4175384270882665
+        "x": 1.599181364696538,
+        "y": 6.4664340285313955
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,8 +32,8 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 3.5,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 1080.0
   },
