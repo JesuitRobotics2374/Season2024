@@ -14,12 +14,6 @@
         {
           "type": "named",
           "data": {
-            "name": "Slam Arm"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "Shoot No Aim"
           }
         },
