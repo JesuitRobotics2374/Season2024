@@ -123,7 +123,7 @@ public class ArmSubsystem extends SubsystemBase {
 
             // double vX = Constants.launchVelocity * Math.cos(angle -
             // Constants.armAngleOffset);
-            double t = deltaDistance * (deltaDistance * 0.01 + 1)
+            double t = deltaDistance * (deltaDistance * 0.042 + 1)
                     / (Constants.launchVelocity * Math.cos(angle - Constants.armAngleOffset));
             double y = Constants.launchVelocity * Math.sin(angle - Constants.armAngleOffset) * t - 4.903325 * t * t;
             // System.out.println(angle);

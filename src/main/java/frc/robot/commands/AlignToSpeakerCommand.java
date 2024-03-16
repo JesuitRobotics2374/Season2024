@@ -28,7 +28,8 @@ public class AlignToSpeakerCommand extends Command {
         System.out.println("ALIGN TO THE TING");
         subsystem = subDrivetrain;
         addRequirements(subDrivetrain);
-        controller = new ProfiledPIDController(Constants.P_ARM_PID_P, Constants.P_ARM_PID_I, Constants.P_ARM_PID_D, new Constraints(Math.PI * 4, Math.PI * 3));
+        controller = new ProfiledPIDController(Constants.P_ARM_PID_P, Constants.P_ARM_PID_I, Constants.P_ARM_PID_D,
+                new Constraints(Math.PI * 4, Math.PI * 3));
         controller.enableContinuousInput(-Math.PI, Math.PI);
         controller.setTolerance(0.03, 0.03);
     }
@@ -56,17 +57,26 @@ public class AlignToSpeakerCommand extends Command {
          * second one in here)
          */
         Translation2d offset;
-        if (subsystem.getState().Pose.getX() > Constants.CENTER_FIELD_X) { //Red Side
-            offset = new Translation2d(Constants.RED_SPEAKER_X, Constants.RED_SPEAKER_Y).minus(subsystem.getState().Pose.getTranslation());
-        } else { //Blue Side
-            offset = new Translation2d(Constants.BLUE_SPEAKER_X, Constants.BLUE_SPEAKER_Y).minus(subsystem.getState().Pose.getTranslation());
+        if (subsystem.getState().Pose.getX() > Constants.CENTER_FIELD_X) { // Red Side
+            offset = new Translation2d(Constants.RED_SPEAKER_X, Constants.RED_SPEAKER_Y)
+                    .minus(subsystem.getState().Pose.getTranslation());
+        } else { // Blue Side
+            offset = new Translation2d(Constants.BLUE_SPEAKER_X, Constants.BLUE_SPEAKER_Y)
+                    .minus(subsystem.getState().Pose.getTranslation());
         }
         double rate = controller.calculate(subsystem.getState().Pose.getRotation().getRadians(),
                 offset.getAngle().plus(new Rotation2d(Math.PI)).getRadians());
         if (rate < -controller.getPositionTolerance()) {
-            rate = Math.min(rate, Math.abs(controller.getPositionError()) > Constants.ALIGN_SPEED_THRESHOLD ? Constants.ALIGN_SPEED_FAST : Constants.ALIGN_SPEED_SLOW);
+            rate = Math.min(rate,
+                    Math.abs(controller.getPositionError()) > Constants.ALIGN_SPEED_THRESHOLD
+                            ? -Constants.ALIGN_SPEED_FAST
+                            : -Constants.ALIGN_SPEED_SLOW);
+            // System.out.println("low");
         } else if (rate > controller.getPositionTolerance()) {
-            rate = Math.max(rate, Math.abs(controller.getPositionError()) > Constants.ALIGN_SPEED_THRESHOLD ? Constants.ALIGN_SPEED_FAST : Constants.ALIGN_SPEED_SLOW);
+            rate = Math.max(rate,
+                    Math.abs(controller.getPositionError()) > Constants.ALIGN_SPEED_THRESHOLD
+                            ? Constants.ALIGN_SPEED_FAST
+                            : Constants.ALIGN_SPEED_SLOW);
         }
         // System.out.println(rate);
         subsystem.setControl(request.withRotationalRate(rate));

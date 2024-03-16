@@ -28,15 +28,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "Intake"
+                  "pathName": "SCB part 1"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "O2BT part 1"
+                  "name": "Intake"
                 }
               }
             ]
@@ -55,7 +55,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "O2BT part 2"
+                  "pathName": "SCB part 2"
                 }
               },
               {
@@ -65,12 +65,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "O2BT part 3"
           }
         },
         {
@@ -86,7 +80,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "O2BT part 4"
+                  "pathName": "SCB part 3"
                 }
               },
               {
@@ -101,7 +95,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "O2BT part 5"
+            "pathName": "SCB part 4"
           }
         },
         {

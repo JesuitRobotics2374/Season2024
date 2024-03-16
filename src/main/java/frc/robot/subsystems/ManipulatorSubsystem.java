@@ -95,7 +95,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
     }
 
     public boolean shooterAtMaxSpeed() {
-        return getShooterSpeed() > 11.6;
+        return getShooterSpeed() > 13;
     }
 
     public static ManipulatorSubsystem getInstance() {

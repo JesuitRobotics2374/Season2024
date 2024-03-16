@@ -36,8 +36,7 @@ public class AutoShootCommand extends SequentialCommandGroup {
                 }, interrupted -> {
                 }, () -> armSubsystem.atGoal()); // used in aimCommands
 
-        Command aimCommands = new WaitCommand(0.2)
-                .andThen(new ParallelCommandGroup(alignDrivetrain, alignArm))
+        Command aimCommands = new ParallelCommandGroup(alignDrivetrain, alignArm)
                 .andThen(new WaitCommand(0.5));
 
         Command checkShooterSpeed = new WaitUntilCommand(() -> subsystem.shooterAtMaxSpeed()).withTimeout(0.75);

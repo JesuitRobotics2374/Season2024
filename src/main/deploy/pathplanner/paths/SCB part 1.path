@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.75,
-        "y": 5.7
+        "x": 1.4,
+        "y": 5.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 9.644110771705561,
-        "y": 5.802790699579704
+        "x": 2.3999999999999995,
+        "y": 5.55
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 13.50227233195865,
-        "y": 6.5
+        "x": 2.75,
+        "y": 5.55
       },
       "prevControl": {
-        "x": 10.82907432576634,
-        "y": 6.75715268691593
+        "x": 1.75,
+        "y": 5.55
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "SCB_1-2"
     }
   ],
   "rotationTargets": [],
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 162.0,
-    "rotateFast": true
+    "rotation": 0,
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": "Option 2 - Red Top",
+  "folder": "SERT comp Blue",
   "previewStartingState": {
-    "rotation": 180.0,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

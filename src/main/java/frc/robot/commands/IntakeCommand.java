@@ -1,7 +1,10 @@
 package frc.robot.commands;
 
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ManipulatorSubsystem;
+import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
 
 public class IntakeCommand extends Command {
     ManipulatorSubsystem m_ManipulatorSubsystem;
@@ -19,5 +22,10 @@ public class IntakeCommand extends Command {
     @Override
     public boolean isFinished() {
         return !m_ManipulatorSubsystem.getIntake();
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        CommandSwerveDrivetrain.getInstance().setControl(new SwerveRequest.SwerveDriveBrake());
     }
 }

@@ -8,38 +8,38 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4662605074140238,
-        "y": 7.14361029292672
+        "x": 1.454549670868242,
+        "y": 6.4292492636340475
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.39,
-        "y": 7.01
+        "x": 2.625633325446393,
+        "y": 6.897682725465309
       },
       "prevControl": {
-        "x": 2.18,
-        "y": 7.024791090923124
+        "x": 1.9464048057910655,
+        "y": 6.300430061630451
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "o2bt_1-2"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 2.0,
-    "maxAngularVelocity": 1000.0,
-    "maxAngularAcceleration": 1200.0
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 1080.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 28.0,
     "rotateFast": true
   },
   "reversed": false,
@@ -48,5 +48,5 @@
     "rotation": 50.0,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

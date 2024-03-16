@@ -38,13 +38,13 @@ public class Constants {
     public static final double RED_SPEAKER_X = 16.3;
     public static final double RED_SPEAKER_Y = 5.55;
 
-    public static final double BLUE_SPEAKER_X = -.2;
+    public static final double BLUE_SPEAKER_X = 0;
     public static final double BLUE_SPEAKER_Y = 5.55;
 
     // Align speeds
     public static final double ALIGN_SPEED_THRESHOLD = 0.1;
-    public static final double ALIGN_SPEED_FAST = -1.2;
-    public static final double ALIGN_SPEED_SLOW = -0.6;
+    public static final double ALIGN_SPEED_FAST = 1.2;
+    public static final double ALIGN_SPEED_SLOW = 0.8;
 
     // MANIPUlATIR Subsystem
     public static final int SHOOTER_MOTOR_A_ID = 32;
@@ -54,7 +54,7 @@ public class Constants {
 
     // ANGLE Calculator
     public static final double armLength = 0.62;
-    public static final double armAngleOffset = Math.toRadians(123);
+    public static final double armAngleOffset = Math.toRadians(122);
     public static final double deltaHeight = 2 - 0.30;
     public static final double launchVelocity = 14.2;
     public static final double dragCoefficient = 0.0; // Positive - TODO
