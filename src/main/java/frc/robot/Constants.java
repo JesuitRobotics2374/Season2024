@@ -35,7 +35,7 @@ public class Constants {
     public static final double CENTER_FIELD_X = 8.4;
 
     // Translation2d
-    public static final double RED_SPEAKER_X = 16.3;
+    public static final double RED_SPEAKER_X = 16.54;
     public static final double RED_SPEAKER_Y = 5.55;
 
     public static final double BLUE_SPEAKER_X = 0;
