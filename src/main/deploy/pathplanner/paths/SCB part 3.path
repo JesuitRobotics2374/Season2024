@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.6,
-        "y": 4.2
+        "x": 2.25,
+        "y": 4.15
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.543657469625922,
-        "y": 5.161057243598082
+        "x": 2.193657469625922,
+        "y": 5.111057243598082
       },
       "isLocked": false,
       "linkedName": "SCB_2-3"
