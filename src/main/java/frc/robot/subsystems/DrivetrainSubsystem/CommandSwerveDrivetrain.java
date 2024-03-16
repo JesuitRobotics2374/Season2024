@@ -43,6 +43,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.ChassisSubsystem;
 import frc.robot.subsystems.ManipulatorSubsystem;
@@ -113,8 +114,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                         driveBaseRadius,
                         new ReplanningConfig()),
                 () -> {
-
-                    return false;
+                    return Robot.getIsRed();
                 },
                 this); // Subsystem for requirements
 
