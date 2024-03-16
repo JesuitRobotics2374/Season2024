@@ -4,11 +4,8 @@
   "holonomicMode": true,
   "pathFolders": [
     "Dummys",
-    "Option 1 - Blue Middle",
-    "Option 1 - Red Middle",
+    "Option 1 - Blue Mid",
     "Option 2 - Blue Top",
-    "Option 2 - Red Bottom",
-    "Option 2 - Red Top",
     "Option 3 - Blue Bottom",
     "SERT comp Blue"
   ],

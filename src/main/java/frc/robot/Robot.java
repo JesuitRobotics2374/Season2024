@@ -89,7 +89,7 @@ public class Robot extends TimedRobot {
         // if (team == null) {
         // }
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-        m_robotContainer.alignPigeonVision();
+        // m_robotContainer.alignPigeonVision();
         // schedule the autonomous command (example)
         if (m_autonomousCommand != null) {
             m_autonomousCommand.schedule();

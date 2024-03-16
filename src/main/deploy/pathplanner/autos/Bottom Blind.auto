@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3023087957730821,
-      "y": 5.6212015419751244
+      "x": 0.72,
+      "y": 4.39
     },
-    "rotation": 0
+    "rotation": -59.65999999999997
   },
   "command": {
     "type": "sequential",
@@ -14,19 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Slam Arm"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
+            "name": "Shoot No Aim"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Back Dumm 1"
+            "pathName": "Bot Dumm"
           }
         }
       ]
