@@ -1,0 +1,93 @@
+{
+  "version": 1.0,
+  "startingPose": null,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Reset Pose"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot No Aim"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "O3BB step 1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "O3BB step 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot No Aim"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "O3BB step 3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "O3BB step 4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot No Aim"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "O3BB step 5"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
