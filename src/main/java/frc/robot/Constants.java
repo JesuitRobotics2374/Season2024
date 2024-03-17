@@ -54,9 +54,9 @@ public class Constants {
 
     // ANGLE Calculator
     public static final double armLength = 0.62;
-    public static final double armAngleOffset = Math.toRadians(122);
-    public static final double deltaHeight = 2 - 0.33;
-    public static final double launchVelocity = 14.2;
+    public static final double armAngleOffset = Math.toRadians(119);
+    public static final double deltaHeight = 2 - 0.36;
+    public static final double launchVelocity = 15.5;
     public static final double dragCoefficient = 0.0; // Positive - TODO
     public static final double FEED_FORWARD_VOLTAGE = 0.3;
 
