@@ -90,6 +90,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
         if (intake && (noteSensor.getRange() <= 150)) {
             stopIntake();
             ChassisSubsystem.getInstance().flash();
+            ArmSubsystem.getInstance().raise();
             intake = false;
         }
     }

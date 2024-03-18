@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.625633325446393,
-        "y": 6.97
+        "x": 2.63,
+        "y": 6.93
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.525633325446393,
-        "y": 6.97
+        "x": 2.53,
+        "y": 6.93
       },
       "isLocked": false,
       "linkedName": "o2bt_1-2"

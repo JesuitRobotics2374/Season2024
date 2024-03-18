@@ -3,6 +3,8 @@ package frc.robot.commands;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ManipulatorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
 
@@ -27,5 +29,6 @@ public class IntakeCommand extends Command {
     @Override
     public void end(boolean interrupted) {
         CommandSwerveDrivetrain.getInstance().setControl(new SwerveRequest.SwerveDriveBrake());
+        ArmSubsystem.getInstance().setGoal(Constants.HOLD_NOTE * 360);
     }
 }

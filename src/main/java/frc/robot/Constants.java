@@ -20,6 +20,7 @@ public class Constants {
     public static final int ARM_ENCODER_ID = 25;
     public static final double FORWARD_SOFT_STOP = 0.15;
     public static final double BACKWARD_SOFT_STOP = -0.265;
+    public static final double HOLD_NOTE = -0.19;
 
     // PID
     public static final double ARM_PID_P = 4.0;
@@ -35,10 +36,10 @@ public class Constants {
     public static final double CENTER_FIELD_X = 8.4;
 
     // Translation2d
-    public static final double RED_SPEAKER_X = 16.54;
+    public static final double RED_SPEAKER_X = 16.49;
     public static final double RED_SPEAKER_Y = 5.55;
 
-    public static final double BLUE_SPEAKER_X = 0;
+    public static final double BLUE_SPEAKER_X = 0.05;
     public static final double BLUE_SPEAKER_Y = 5.55;
 
     // Align speeds
