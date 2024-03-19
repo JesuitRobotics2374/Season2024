@@ -3,50 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.7,
-        "y": 7.15
+        "x": 2.25,
+        "y": 4.2
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.695421106391428,
-        "y": 7.278819202003598
+        "x": 2.7778742005415524,
+        "y": 4.988816368502922
       },
       "isLocked": false,
-      "linkedName": "o1bm_3-4"
+      "linkedName": "SCB_2-3"
     },
     {
       "anchor": {
-        "x": 8.04775064614323,
-        "y": 7.401248696933913
+        "x": 2.67,
+        "y": 6.9
       },
       "prevControl": {
-        "x": 6.595606914466323,
-        "y": 7.225586148747191
+        "x": 2.6190549985379556,
+        "y": 5.913972455619661
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "o1bm_4-5"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 4.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 1080.0
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 1080.0,
+    "maxAngularAcceleration": 1500.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 6.340191745909794,
+    "rotation": 90.0,
     "rotateFast": true
   },
   "reversed": false,
   "folder": "Option 1 - Blue Mid",
   "previewStartingState": {
-    "rotation": 29.148071845713076,
+    "rotation": 0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

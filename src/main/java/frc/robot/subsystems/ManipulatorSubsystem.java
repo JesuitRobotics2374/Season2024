@@ -25,7 +25,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
     boolean previousSensorRead = false;
 
     private final double shooterSpeed = -1;
-    private final double intakeSpeed = 1;
+    private final double intakeSpeed = 0.8;
     ShuffleboardTab tab = Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME);
     static ManipulatorSubsystem instance;
 
@@ -90,6 +90,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
         if (intake && (noteSensor.getRange() <= 150)) {
             stopIntake();
             ChassisSubsystem.getInstance().flash();
+            ArmSubsystem.getInstance().raise();
             ArmSubsystem.getInstance().raise();
             intake = false;
         }

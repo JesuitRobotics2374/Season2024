@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 2.25,
-        "y": 4.15
+        "y": 4.2
       },
       "prevControl": null,
       "nextControl": {
         "x": 2.193657469625922,
-        "y": 5.111057243598082
+        "y": 5.161057243598082
       },
       "isLocked": false,
       "linkedName": "SCB_2-3"
@@ -49,11 +49,11 @@
     {
       "anchor": {
         "x": 8.012618136505887,
-        "y": 4.18
+        "y": 4.15
       },
       "prevControl": {
         "x": 7.438787145762593,
-        "y": 4.180768646843998
+        "y": 4.150768646843999
       },
       "nextControl": null,
       "isLocked": false,

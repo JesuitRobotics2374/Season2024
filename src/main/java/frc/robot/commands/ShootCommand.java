@@ -35,7 +35,7 @@ public class ShootCommand extends SequentialCommandGroup {
         addRequirements(subsystem, armSubsystem);
         addCommands(startShooter, stopDrive, alignArm.alongWith(checkShooterSpeed), new WaitCommand(0.5),
                 intakeToShooter,
-                new WaitCommand(0.9),
+                new WaitCommand(0.7),
                 new ParallelCommandGroup(resetArm, stopShooter, stopIntake));
     }
 

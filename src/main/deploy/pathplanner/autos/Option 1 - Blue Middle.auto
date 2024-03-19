@@ -74,7 +74,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "O1BM part 3"
+                  "pathName": "O1BM part 3 v2"
                 }
               },
               {
@@ -89,7 +89,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot No Aim"
+            "name": "Shoot"
           }
         },
         {

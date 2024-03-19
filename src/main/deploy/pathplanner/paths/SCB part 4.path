@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 8.012618136505887,
-        "y": 4.18
+        "y": 4.16
       },
       "prevControl": null,
       "nextControl": {
         "x": 7.087462049389147,
-        "y": 4.180768646843998
+        "y": 4.160768646843999
       },
       "isLocked": false,
       "linkedName": "SCB_3-4"

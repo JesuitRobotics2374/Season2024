@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 2.25,
-        "y": 4.15
+        "y": 4.2
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.289711403245916,
-        "y": 5.145421106391428
+        "x": 0.7401886415755699,
+        "y": 4.871708003045107
       },
       "isLocked": false,
       "linkedName": "SCB_2-3"
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 2.7,
-        "y": 6.97
+        "y": 7.15
       },
       "prevControl": {
-        "x": 1.599181364696538,
-        "y": 6.4664340285313955
+        "x": 1.3140196323188638,
+        "y": 6.241610859626856
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,7 +29,19 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "New Constraints Zone",
+      "minWaypointRelativePos": 0.8,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 2.5,
+        "maxAcceleration": 2.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 1080.0
+      }
+    }
+  ],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
@@ -39,7 +51,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 31.373005140108386,
+    "rotation": 28.0,
     "rotateFast": true
   },
   "reversed": false,
