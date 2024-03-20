@@ -46,6 +46,7 @@ public class ArmSubsystem extends SubsystemBase {
         tab.addDouble("Setpoint", () -> armController.getSetpoint().position);
         tab.addDouble("Point", () -> encoder.getAbsolutePosition().getValueAsDouble());
         tab.addDouble("Motor Power", () -> speed);
+        tab.addDouble("Offset", () -> manualOffset);
     }
 
     @Override
@@ -123,7 +124,7 @@ public class ArmSubsystem extends SubsystemBase {
 
             // double vX = Constants.launchVelocity * Math.cos(angle -
             // Constants.armAngleOffset);
-            double t = deltaDistance * (deltaDistance * 0.048 + 1)
+            double t = deltaDistance * (deltaDistance * 0.05 + 1)
                     / (Constants.launchVelocity * Math.cos(angle - Constants.armAngleOffset));
             double y = Constants.launchVelocity * Math.sin(angle - Constants.armAngleOffset) * t - 4.903325 * t * t;
             // System.out.println(angle);
@@ -147,13 +148,11 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void increaseOffset() {
-        manualOffset += 0.5;
-        System.out.println(manualOffset);
+        manualOffset -= 0.5;
     }
 
     public void decreaseOffset() {
-        manualOffset -= 0.5;
-        System.out.println(manualOffset);
+        manualOffset += 0.5;
     }
 
     public static ArmSubsystem getInstance() {

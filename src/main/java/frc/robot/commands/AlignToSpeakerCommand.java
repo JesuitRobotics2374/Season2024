@@ -89,6 +89,7 @@ public class AlignToSpeakerCommand extends Command {
 
     @Override
     public void end(boolean interrupted) {
+        subsystem.setControl(new SwerveRequest.SwerveDriveBrake());
         System.out.println(interrupted);
         System.out.println(Math.toDegrees(controller.getGoal().position));
         System.out.println(subsystem.getState().Pose.getRotation().getDegrees());
