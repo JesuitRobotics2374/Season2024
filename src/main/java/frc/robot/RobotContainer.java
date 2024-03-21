@@ -88,7 +88,7 @@ public class RobotContainer {
                                 // (left)
                                 .withRotationalRate(
                                         -square(clampAdd(deadband(m_driveController.getRightX(), 0.1),
-                                                deadband(m_operatorController.getRightX(), 0.1)) * MaxAngularRate)) // Drive
+                                                deadband(m_operatorController.getLeftX(), 0.1)) * MaxAngularRate)) // Drive
                 // counterclockwise
                 // with
                 // negative X (left)
