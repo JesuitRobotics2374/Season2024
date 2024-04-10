@@ -20,6 +20,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -43,6 +44,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
+import frc.robot.LimelightHelpers;
 import frc.robot.Robot;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.ChassisSubsystem;
@@ -140,29 +142,55 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     @Override
     public void periodic() {
-        double[] array = pose.getDoubleArray(new double[0]);
-        boolean flag = isTargetValid(array);
-        // System.out.println(array.length);
-        if (array.length > 0) {
-            Pose2d visionPose2d = new Pose2d(array[0] + 8.23, array[1] + 4.1, new Rotation2d(Math.toRadians(array[5])));
-            field.getObject("Vision").setPose(
-                    new Pose2d(visionPose2d.getX() + .77, visionPose2d.getY() + .1, visionPose2d.getRotation()));// 9,
-            // 4.2
-            // new Pose2d(array[0] + 8.23, array[1] + 4.1, new
-            // Rotation2d(Math.toRadians(array[5]))));
-            if (visionPose2d.getX() != 0 || visionPose2d.getY() != 0) {
-                double offset = Math
-                        .sqrt(Math.pow(visionPose2d.relativeTo(getState().Pose).getX(), 2)
-                                + Math.pow(visionPose2d.relativeTo(getState().Pose).getY(), 2));
-                if (flag && offset < 1.5 && Math.abs(visionPose2d.getRotation().getDegrees()
-                        - getState().Pose.getRotation().getDegrees()) < 30) {
-                    addVisionMeasurement(visionPose2d,
-                            Timer.getFPGATimestamp() - (array[6] / 1000.0));
-                } // Timer.getFPGATimestamp() - (botpose[6]/1000.0)
-            }
+        // double[] array = pose.getDoubleArray(new double[0]);
+        // boolean flag = isTargetValid(array);
+        // // System.out.println(array.length);
+        // if (array.length > 0) {
+        // Pose2d visionPose2d = new Pose2d(array[0] + 8.23, array[1] + 4.1, new
+        // Rotation2d(Math.toRadians(array[5])));
+        // field.getObject("Vision").setPose(
+        // new Pose2d(visionPose2d.getX() + .77, visionPose2d.getY() + .1,
+        // visionPose2d.getRotation()));// 9,
+        // // 4.2
+        // // new Pose2d(array[0] + 8.23, array[1] + 4.1, new
+        // // Rotation2d(Math.toRadians(array[5]))));
+        // if (visionPose2d.getX() != 0 || visionPose2d.getY() != 0) {
+        // double offset = Math
+        // .sqrt(Math.pow(visionPose2d.relativeTo(getState().Pose).getX(), 2)
+        // + Math.pow(visionPose2d.relativeTo(getState().Pose).getY(), 2));
+        // if (flag && offset < 1.5 && Math.abs(visionPose2d.getRotation().getDegrees()
+        // - getState().Pose.getRotation().getDegrees()) < 30) {
+        // addVisionMeasurement(visionPose2d,
+        // Timer.getFPGATimestamp() - (array[6] / 1000.0));
+        // } // Timer.getFPGATimestamp() - (botpose[6]/1000.0)
+        // }
+        // }
+        LimelightHelpers.SetRobotOrientation("limelight",
+                getState().Pose.getRotation().getDegrees(), 0, 0, 0, 0, 0);
+        LimelightHelpers.PoseEstimate mt2 = LimelightHelpers
+                .getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+        boolean doRejectUpdate = false;
+        if (Math.abs(getPigeon2().getAngularVelocityZDevice().getValueAsDouble()) > 720) // if our angular
+                                                                                         // velocity is
+                                                                                         // greater than 720
+                                                                                         // degrees per
+        // second, ignore vision updates
+        {
+            doRejectUpdate = true;
         }
-        field.setRobotPose(
-                new Pose2d(getState().Pose.getX() + .77, getState().Pose.getY() + .1, getState().Pose.getRotation()));
+        if (mt2.tagCount == 0) {
+            doRejectUpdate = true;
+        }
+        if (!doRejectUpdate) {
+            field.getObject("Vision").setPose(mt2.pose);
+            setVisionMeasurementStdDevs(VecBuilder.fill(.7, .7, 9999999));
+            addVisionMeasurement(
+                    mt2.pose,
+                    mt2.timestampSeconds);
+        } else {
+            field.getObject("Vision").setPose(new Pose2d(0, 0, new Rotation2d()));
+        }
+        field.setRobotPose(getState().Pose);
     }
 
     public boolean isTargetValid(double[] array) {
@@ -204,14 +232,24 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     }
 
     public void alignToVision() {
-        System.out.println(field.getObject("Vision").getPose());
+        // System.out.println(field.getObject("Vision").getPose());
         // getState().Pose = field.getObject("Vision").getPose();
-        seedFieldRelative(new Pose2d(field.getObject("Vision").getPose().getTranslation().getX() - 0.77,
-                field.getObject("Vision").getPose().getTranslation().getY() - 0.1, new Rotation2d()));
-        seedFieldRelative();
-        seedFieldRelative(new Pose2d(field.getObject("Vision").getPose().getTranslation().getX() - 0.77,
-                field.getObject("Vision").getPose().getTranslation().getY() - 0.1,
-                field.getObject("Vision").getPose().getRotation()));
+        // seedFieldRelative(new
+        // Pose2d(field.getObject("Vision").getPose().getTranslation().getX() - 0.77,
+        // field.getObject("Vision").getPose().getTranslation().getY() - 0.1, new
+        // Rotation2d()));
+        // seedFieldRelative();
+        // seedFieldRelative(new
+        // Pose2d(field.getObject("Vision").getPose().getTranslation().getX() - 0.77,
+        // field.getObject("Vision").getPose().getTranslation().getY() - 0.1,
+        // field.getObject("Vision").getPose().getRotation()));
+        double[] array = pose.getDoubleArray(new double[0]);
+        if (array.length > 0) {
+            System.out.println(array[5]);
+            // getState().Pose = new Pose2d(getState().Pose.getTranslation(),
+            // Rotation2d.fromDegrees(array[5]));
+            seedFieldRelative(new Pose2d(getState().Pose.getTranslation(), Rotation2d.fromDegrees(array[5])));
+        }
 
         alignWithAliance();
     }
