@@ -25,7 +25,7 @@ public class ArmSubsystem extends SubsystemBase {
     ShuffleboardTab tab = Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME);
     double goal;
     double speed;
-    double manualOffset = 0;
+    double manualOffset = 4;
 
     static ArmSubsystem instance;
 

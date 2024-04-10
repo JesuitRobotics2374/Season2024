@@ -38,7 +38,7 @@ public class RobotContainer {
     private final CommandSwerveDrivetrain m_DrivetrainSubsystem = TunerConstants.DriveTrain;
     private final ManipulatorSubsystem m_ManipulatorSubsystem;
     private final ArmSubsystem m_ArmSubsystem;
-    private final ClimberSubsystem m_ClimberSubsystem;
+    // private final ClimberSubsystem m_ClimberSubsystem;
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
                                                                      // driving in open loop
@@ -60,7 +60,7 @@ public class RobotContainer {
         m_ChassisSubsystem = new ChassisSubsystem();
         m_ManipulatorSubsystem = new ManipulatorSubsystem();
         m_ArmSubsystem = new ArmSubsystem();
-        m_ClimberSubsystem = new ClimberSubsystem();
+        // m_ClimberSubsystem = new ClimberSubsystem();
         registerAutoCommands();
         System.out.println("container created");
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -151,14 +151,22 @@ public class RobotContainer {
 
         m_driveController.start().onTrue(m_DrivetrainSubsystem.runOnce(() -> m_DrivetrainSubsystem.alignToVision()));
 
-        m_driveController.y().onTrue(new InstantCommand(() -> m_ClimberSubsystem.startLeftClimberUp()));
-        m_driveController.y().onFalse(new InstantCommand(() -> m_ClimberSubsystem.stopLeftClimber()));
-        m_driveController.b().onTrue(new InstantCommand(() -> m_ClimberSubsystem.startLeftClimberDown()));
-        m_driveController.b().onFalse(new InstantCommand(() -> m_ClimberSubsystem.stopLeftClimber()));
-        m_driveController.x().onTrue(new InstantCommand(() -> m_ClimberSubsystem.startRightClimberUp()));
-        m_driveController.x().onFalse(new InstantCommand(() -> m_ClimberSubsystem.stopRightClimber()));
-        m_driveController.a().onTrue(new InstantCommand(() -> m_ClimberSubsystem.startRightClimberDown()));
-        m_driveController.a().onFalse(new InstantCommand(() -> m_ClimberSubsystem.stopRightClimber()));
+        // m_driveController.y().onTrue(new InstantCommand(() ->
+        // m_ClimberSubsystem.startLeftClimberUp()));
+        // m_driveController.y().onFalse(new InstantCommand(() ->
+        // m_ClimberSubsystem.stopLeftClimber()));
+        // m_driveController.b().onTrue(new InstantCommand(() ->
+        // m_ClimberSubsystem.startLeftClimberDown()));
+        // m_driveController.b().onFalse(new InstantCommand(() ->
+        // m_ClimberSubsystem.stopLeftClimber()));
+        // m_driveController.x().onTrue(new InstantCommand(() ->
+        // m_ClimberSubsystem.startRightClimberUp()));
+        // m_driveController.x().onFalse(new InstantCommand(() ->
+        // m_ClimberSubsystem.stopRightClimber()));
+        // m_driveController.a().onTrue(new InstantCommand(() ->
+        // m_ClimberSubsystem.startRightClimberDown()));
+        // m_driveController.a().onFalse(new InstantCommand(() ->
+        // m_ClimberSubsystem.stopRightClimber()));
 
         // Manipulator
         m_operatorController.y().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.startShooter()));

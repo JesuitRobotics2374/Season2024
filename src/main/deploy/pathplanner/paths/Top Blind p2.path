@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 2.63,
-        "y": 6.93
+        "y": 6.9
       },
       "prevControl": null,
       "nextControl": {
         "x": 3.630000000000001,
-        "y": 6.93
+        "y": 6.9
       },
       "isLocked": false,
       "linkedName": "o2bt_1-2"
