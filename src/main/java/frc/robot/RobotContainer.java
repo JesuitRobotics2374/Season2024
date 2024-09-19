@@ -172,7 +172,8 @@ public class RobotContainer {
         m_operatorController.y().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.startShooter()));
         m_operatorController.y().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopShooter()));
         m_operatorController.b().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.intake()));
-        m_operatorController.b().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopIntake()));
+        // m_operatorController.b().onFalse(new InstantCommand(() ->
+        // m_ManipulatorSubsystem.stopIntake()));
         m_operatorController.povUp().onTrue(new InstantCommand(() -> m_ArmSubsystem.raise()));
         m_operatorController.povDown().onTrue(new InstantCommand(() -> m_ArmSubsystem.lower()));
         m_operatorController.a().onTrue(new InstantCommand(() -> m_ArmSubsystem.setGoal(0.1)));
@@ -244,13 +245,13 @@ public class RobotContainer {
 
     private void updateSpeeds() {
         if (slow) {
-            MaxSpeed = 0.9;
-            MaxAngularRate = Math.PI * .5;
+            MaxSpeed = 1;
+            MaxAngularRate = Math.PI * 1;
         } else if (roll) {
             MaxSpeed = 1.5;
             MaxAngularRate = Math.PI * 0.8; // from 1
         } else {
-            MaxSpeed = 4; // from 3
+            MaxSpeed = 1.5; // from 3
             MaxAngularRate = Math.PI * 1.5;
         }
         System.out.println(MaxSpeed);
