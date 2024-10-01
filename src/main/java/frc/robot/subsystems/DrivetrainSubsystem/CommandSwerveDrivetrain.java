@@ -146,7 +146,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         if (array.length > 0) {
             Pose2d visionPose2d = new Pose2d(array[0] + 8.23, array[1] + 4.1, new Rotation2d(Math.toRadians(array[5])));
             field.getObject("Vision").setPose(
-                    new Pose2d(visionPose2d.getX() + .77, visionPose2d.getY() + .1, visionPose2d.getRotation()));// 9,
+                    new Pose2d((-1 * visionPose2d.getX() + .77), (-1 * visionPose2d.getY() + .1),
+                            visionPose2d.getRotation().rotateBy(new Rotation2d(180))));// 9,
             // 4.2
             // new Pose2d(array[0] + 8.23, array[1] + 4.1, new
             // Rotation2d(Math.toRadians(array[5]))));
@@ -162,7 +163,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             }
         }
         field.setRobotPose(
-                new Pose2d(getState().Pose.getX() + .77, getState().Pose.getY() + .1, getState().Pose.getRotation()));
+                new Pose2d((-1 * getState().Pose.getX() + .77), (-1 * getState().Pose.getY() + .1),
+                        getState().Pose.getRotation().rotateBy(new Rotation2d(180))));
     }
 
     public boolean isTargetValid(double[] array) {
