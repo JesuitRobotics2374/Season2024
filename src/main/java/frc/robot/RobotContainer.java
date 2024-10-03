@@ -87,7 +87,7 @@ public class RobotContainer {
                                                                                                                 // X
                                 // (left)
                                 .withRotationalRate(
-                                        -square(clampAdd(deadband(m_driveController.getRightX(), 0.1),
+                                        square(clampAdd(deadband(m_driveController.getRightX(), 0.1),
                                                 deadband(m_operatorController.getLeftX(), 0.1)) * MaxAngularRate)) // Drive
                 // counterclockwise
                 // with
@@ -249,9 +249,9 @@ public class RobotContainer {
             MaxAngularRate = Math.PI * 1;
         } else if (roll) {
             MaxSpeed = 1.5;
-            MaxAngularRate = Math.PI * 0.8; // from 1
+            MaxAngularRate = Math.PI * 1; // from 1
         } else {
-            MaxSpeed = 1.5; // from 3
+            MaxSpeed = 3; // from 3
             MaxAngularRate = Math.PI * 1.5;
         }
         System.out.println(MaxSpeed);
