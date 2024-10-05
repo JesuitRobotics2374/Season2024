@@ -28,9 +28,9 @@ public class Constants {
     public static final double ARM_PID_D = 0.0;
 
     // Profiled PID
-    public static final double P_ARM_PID_P = 2.0;
-    public static final double P_ARM_PID_I = 0.05;
-    public static final double P_ARM_PID_D = 0.1;
+    public static final double P_ARM_PID_P = 0.9;
+    public static final double P_ARM_PID_I = 0.0;
+    public static final double P_ARM_PID_D = 0.0;
 
     // Center of field
     public static final double CENTER_FIELD_X = 8.4;
