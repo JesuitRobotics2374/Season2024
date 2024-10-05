@@ -28,7 +28,7 @@ public class Constants {
     public static final double ARM_PID_D = 0.0;
 
     // Profiled PID
-    public static final double P_ARM_PID_P = 0.9;
+    public static final double P_ARM_PID_P = 0.5;
     public static final double P_ARM_PID_I = 0.0;
     public static final double P_ARM_PID_D = 0.0;
 
@@ -55,7 +55,7 @@ public class Constants {
 
     // ANGLE Calculator
     public static final double armLength = 0.62;
-    public static final double armAngleOffset = Math.toRadians(117);
+    public static final double armAngleOffset = Math.toRadians(114);
     public static final double deltaHeight = 2 - 0.36;
     public static final double launchVelocity = 15.5;
     public static final double dragCoefficient = 0.0; // Positive - TODO
