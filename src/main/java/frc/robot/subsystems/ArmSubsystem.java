@@ -69,6 +69,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void raise() {
+        System.out.println("asdfsa" + goal + " " + this.atGoal());
         if (goal < Constants.FORWARD_SOFT_STOP) {
             goal += 0.01;
             armController.setGoal(goal);
@@ -77,6 +78,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void lower() {
+        System.out.println("asssd" + goal + " " + this.atGoal());
         if (goal > Constants.BACKWARD_SOFT_STOP) {
             goal -= .01;
             armController.setGoal(goal);
