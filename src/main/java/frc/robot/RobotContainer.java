@@ -36,7 +36,7 @@ public class RobotContainer {
     private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
     private final ChassisSubsystem m_ChassisSubsystem;
     private final CommandSwerveDrivetrain m_DrivetrainSubsystem = TunerConstants.DriveTrain;
-    private final ManipulatorSubsystem m_ManipulatorSubsystem;
+    private final VacummSubystem m_VacummSubystem;
     private final ArmSubsystem m_ArmSubsystem;
     // private final ClimberSubsystem m_ClimberSubsystem;
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -58,8 +58,8 @@ public class RobotContainer {
      */
     public RobotContainer() {
         m_ChassisSubsystem = new ChassisSubsystem();
-        m_ManipulatorSubsystem = new ManipulatorSubsystem();
         m_ArmSubsystem = new ArmSubsystem();
+        m_VacummSubystem = new VacummSubystem();
         // m_ClimberSubsystem = new ClimberSubsystem();
         registerAutoCommands();
         System.out.println("container created");
@@ -114,16 +114,18 @@ public class RobotContainer {
     public void registerAutoCommands() {
         NamedCommands.registerCommand("Basic Command", new BasicCommand());
         NamedCommands.registerCommand("Align to speaker", new AlignToSpeakerCommand(m_DrivetrainSubsystem));
-        NamedCommands.registerCommand("Shoot",
-                new AutoShootCommand(m_ManipulatorSubsystem, m_DrivetrainSubsystem,
-                        m_ArmSubsystem));
-        NamedCommands.registerCommand("Intake", new IntakeCommand(m_ManipulatorSubsystem));
+        // NamedCommands.registerCommand("Shoot",
+        // new AutoShootCommand(m_ManipulatorSubsystem, m_DrivetrainSubsystem,
+        // m_ArmSubsystem));
+        // NamedCommands.registerCommand("Intake", new
+        // IntakeCommand(m_ManipulatorSubsystem));
         NamedCommands.registerCommand("Reset Pose", new InstantCommand(() -> m_DrivetrainSubsystem.alignToVision()));
         NamedCommands.registerCommand("Slam Arm",
                 new FunctionalCommand(() -> m_ArmSubsystem.setGoal(Constants.BACKWARD_SOFT_STOP * 360), () -> {
                 }, interrupted -> {
                 }, () -> m_ArmSubsystem.atGoal()).andThen(new WaitCommand(0.4)).withTimeout(2));
-        NamedCommands.registerCommand("Shoot No Aim", new ShootCommand(m_ManipulatorSubsystem, m_ArmSubsystem));
+        // NamedCommands.registerCommand("Shoot No Aim", new
+        // ShootCommand(m_ManipulatorSubsystem, m_ArmSubsystem));
     }
 
     /**
@@ -133,7 +135,8 @@ public class RobotContainer {
         ShuffleboardTab tab = Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME);
         tab.addBoolean("SLOW", () -> isSlow()).withPosition(1, 1);
         tab.addBoolean("ROLL", () -> isRoll()).withPosition(2, 1);
-        tab.addBoolean("Note?", () -> m_ManipulatorSubsystem.noteSensor.getRange() <= 150);
+        // tab.addBoolean("Note?", () -> m_ManipulatorSubsystem.noteSensor.getRange() <=
+        // 150);
         tab.addDouble("X", () -> m_DrivetrainSubsystem.getState().Pose.getX());
         tab.addDouble("Y", () -> m_DrivetrainSubsystem.getState().Pose.getY());
         tab.addDouble("R", () -> m_DrivetrainSubsystem.getState().Pose.getRotation().getDegrees());
@@ -168,25 +171,46 @@ public class RobotContainer {
         // m_driveController.a().onFalse(new InstantCommand(() ->
         // m_ClimberSubsystem.stopRightClimber()));
 
-        // Manipulator
-        m_operatorController.y().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.startShooter()));
-        m_operatorController.y().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopShooter()));
-        m_operatorController.b().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.intake()));
-        m_operatorController.b().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopIntake()));
-        m_operatorController.povUp().onTrue(new InstantCommand(() -> m_ArmSubsystem.raise()));
-        m_operatorController.povDown().onTrue(new InstantCommand(() -> m_ArmSubsystem.lower()));
-        m_operatorController.a().onTrue(new InstantCommand(() -> m_ArmSubsystem.setGoal(0.1)));
-        m_operatorController.x()
-                .onTrue(new InstantCommand(() -> m_ArmSubsystem.setGoal(Constants.BACKWARD_SOFT_STOP * 360)));
-        m_operatorController.back().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.reverse()));
-        m_operatorController.back().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopIntake()));
-        m_operatorController.leftBumper().toggleOnTrue(new AlignToSpeakerCommand(m_DrivetrainSubsystem));
-        m_operatorController.rightBumper()
-                .toggleOnTrue(new ShootCommand(m_ManipulatorSubsystem, m_ArmSubsystem));
-        m_operatorController.start().onTrue(new InstantCommand(() -> m_ManipulatorSubsystem.slowClimb()));
-        m_operatorController.start().onFalse(new InstantCommand(() -> m_ManipulatorSubsystem.stopShooter()));
-        m_operatorController.povLeft().onTrue(new InstantCommand(() -> m_ArmSubsystem.decreaseOffset()));
-        m_operatorController.povRight().onTrue(new InstantCommand(() -> m_ArmSubsystem.increaseOffset()));
+        m_driveController.y().onTrue(m_VacummSubystem.runOnce(() -> m_VacummSubystem.intakeFull()));
+        m_driveController.b().onTrue(m_VacummSubystem.runOnce(() -> m_VacummSubystem.intakePartial()));
+        m_driveController.x().onTrue(m_VacummSubystem.runOnce(() -> m_VacummSubystem.stop()));
+        m_driveController.a().onTrue(m_VacummSubystem.runOnce(() -> m_VacummSubystem.outtake()));
+
+        // m_driveController.povDown().onTrue(new InstantCommand(() ->
+        // m_VacummSubystem.outtake()));
+
+        // // Manipulator
+        // m_operatorController.y().onTrue(new InstantCommand(() ->
+        // m_ManipulatorSubsystem.startShooter()));
+        // m_operatorController.y().onFalse(new InstantCommand(() ->
+        // m_ManipulatorSubsystem.stopShooter()));
+        // m_operatorController.b().onTrue(new InstantCommand(() ->
+        // m_ManipulatorSubsystem.intake()));
+        // // m_operatorController.b().onFalse(new InstantCommand(() ->
+        // // m_ManipulatorSubsystem.stopIntake()));
+        m_driveController.povUp().whileTrue(m_ArmSubsystem.runOnce(() -> m_ArmSubsystem.raise()));
+        m_driveController.povDown().whileTrue(m_ArmSubsystem.runOnce(() -> m_ArmSubsystem.lower()));
+        // m_operatorController.a().onTrue(new InstantCommand(() ->
+        // m_ArmSubsystem.setGoal(0.1)));
+        // m_operatorController.x()
+        // .onTrue(new InstantCommand(() ->
+        // m_ArmSubsystem.setGoal(Constants.BACKWARD_SOFT_STOP * 360)));
+        // m_operatorController.back().onTrue(new InstantCommand(() ->
+        // m_ManipulatorSubsystem.reverse()));
+        // m_operatorController.back().onFalse(new InstantCommand(() ->
+        // m_ManipulatorSubsystem.stopIntake()));
+        // m_operatorController.leftBumper().toggleOnTrue(new
+        // AlignToSpeakerCommand(m_DrivetrainSubsystem));
+        // m_operatorController.rightBumper()
+        // .toggleOnTrue(new ShootCommand(m_ManipulatorSubsystem, m_ArmSubsystem));
+        // m_operatorController.start().onTrue(new InstantCommand(() ->
+        // m_ManipulatorSubsystem.slowClimb()));
+        // m_operatorController.start().onFalse(new InstantCommand(() ->
+        // m_ManipulatorSubsystem.stopShooter()));
+        // m_operatorController.povLeft().onTrue(new InstantCommand(() ->
+        // m_ArmSubsystem.decreaseOffset()));
+        // m_operatorController.povRight().onTrue(new InstantCommand(() ->
+        // m_ArmSubsystem.increaseOffset()));
     }
 
     /**
@@ -244,13 +268,13 @@ public class RobotContainer {
 
     private void updateSpeeds() {
         if (slow) {
-            MaxSpeed = 0.9;
-            MaxAngularRate = Math.PI * .5;
+            MaxSpeed = 1;
+            MaxAngularRate = Math.PI * 1;
         } else if (roll) {
             MaxSpeed = 1.5;
-            MaxAngularRate = Math.PI * 0.8; // from 1
+            MaxAngularRate = Math.PI * 1; // from 1
         } else {
-            MaxSpeed = 4; // from 3
+            MaxSpeed = 3; // from 3
             MaxAngularRate = Math.PI * 1.5;
         }
         System.out.println(MaxSpeed);
