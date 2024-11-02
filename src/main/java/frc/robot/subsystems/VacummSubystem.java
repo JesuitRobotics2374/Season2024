@@ -19,7 +19,7 @@ public class VacummSubystem extends SubsystemBase {
     }
 
     public void intakePartial() {
-        vacumm.set(0.25);
+        vacumm.set(0.50);
     }
 
     public void stop() {

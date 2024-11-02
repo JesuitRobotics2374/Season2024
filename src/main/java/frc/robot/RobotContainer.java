@@ -171,10 +171,10 @@ public class RobotContainer {
         // m_driveController.a().onFalse(new InstantCommand(() ->
         // m_ClimberSubsystem.stopRightClimber()));
 
-        m_driveController.y().onTrue(m_VacummSubystem.runOnce(() -> m_VacummSubystem.intakeFull()));
-        m_driveController.b().onTrue(m_VacummSubystem.runOnce(() -> m_VacummSubystem.intakePartial()));
-        m_driveController.x().onTrue(m_VacummSubystem.runOnce(() -> m_VacummSubystem.stop()));
-        m_driveController.a().onTrue(m_VacummSubystem.runOnce(() -> m_VacummSubystem.outtake()));
+        m_operatorController.y().onTrue(m_VacummSubystem.runOnce(() -> m_VacummSubystem.intakeFull()));
+        m_operatorController.b().onTrue(m_VacummSubystem.runOnce(() -> m_VacummSubystem.intakePartial()));
+        m_operatorController.x().onTrue(m_VacummSubystem.runOnce(() -> m_VacummSubystem.stop()));
+        m_operatorController.a().onTrue(m_VacummSubystem.runOnce(() -> m_VacummSubystem.outtake()));
 
         // m_driveController.povDown().onTrue(new InstantCommand(() ->
         // m_VacummSubystem.outtake()));
@@ -188,8 +188,8 @@ public class RobotContainer {
         // m_ManipulatorSubsystem.intake()));
         // // m_operatorController.b().onFalse(new InstantCommand(() ->
         // // m_ManipulatorSubsystem.stopIntake()));
-        m_driveController.povUp().whileTrue(m_ArmSubsystem.runOnce(() -> m_ArmSubsystem.raise()));
-        m_driveController.povDown().whileTrue(m_ArmSubsystem.runOnce(() -> m_ArmSubsystem.lower()));
+        m_operatorController.povUp().whileTrue(m_ArmSubsystem.runOnce(() -> m_ArmSubsystem.raise()));
+        m_operatorController.povDown().whileTrue(m_ArmSubsystem.runOnce(() -> m_ArmSubsystem.lower()));
         // m_operatorController.a().onTrue(new InstantCommand(() ->
         // m_ArmSubsystem.setGoal(0.1)));
         // m_operatorController.x()
