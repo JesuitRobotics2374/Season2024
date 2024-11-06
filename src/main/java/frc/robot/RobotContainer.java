@@ -23,6 +23,7 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.AutoShootCommand;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.VisionSubsystem.DistanceAndAngle;
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
 import frc.robot.subsystems.DrivetrainSubsystem.TunerConstants;
 import frc.robot.util.AutonomousChooser;
@@ -35,6 +36,7 @@ public class RobotContainer {
     private double MaxSpeed = 6; // 6 meters per second desired top speed
     private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
     private final ChassisSubsystem m_ChassisSubsystem;
+    private final VisionSubsystem m_VisionSubsystem;
     private final CommandSwerveDrivetrain m_DrivetrainSubsystem = TunerConstants.DriveTrain;
     private final VacummSubystem m_VacummSubystem;
     private final ArmSubsystem m_ArmSubsystem;
@@ -59,6 +61,7 @@ public class RobotContainer {
     public RobotContainer() {
         m_ChassisSubsystem = new ChassisSubsystem();
         m_ArmSubsystem = new ArmSubsystem();
+        m_VisionSubsystem = new VisionSubsystem();
         m_VacummSubystem = new VacummSubystem();
         // m_ClimberSubsystem = new ClimberSubsystem();
         registerAutoCommands();
@@ -152,7 +155,8 @@ public class RobotContainer {
         m_driveController.leftBumper().onTrue(new InstantCommand(() -> toggleSlow()));
         m_driveController.rightBumper().onTrue(new InstantCommand(() -> toggleRoll()));
 
-        m_driveController.start().onTrue(m_DrivetrainSubsystem.runOnce(() -> m_DrivetrainSubsystem.alignToVision()));
+        // m_driveController.start().onTrue(m_DrivetrainSubsystem.runOnce(() ->
+        // m_DrivetrainSubsystem.alignToVision()));
 
         // m_driveController.y().onTrue(new InstantCommand(() ->
         // m_ClimberSubsystem.startLeftClimberUp()));
@@ -171,10 +175,14 @@ public class RobotContainer {
         // m_driveController.a().onFalse(new InstantCommand(() ->
         // m_ClimberSubsystem.stopRightClimber()));
 
-        m_driveController.y().onTrue(m_VacummSubystem.runOnce(() -> m_VacummSubystem.intakeFull()));
-        m_driveController.b().onTrue(m_VacummSubystem.runOnce(() -> m_VacummSubystem.intakePartial()));
-        m_driveController.x().onTrue(m_VacummSubystem.runOnce(() -> m_VacummSubystem.stop()));
-        m_driveController.a().onTrue(m_VacummSubystem.runOnce(() -> m_VacummSubystem.outtake()));
+        // m_driveController.y().onTrue(m_VacummSubystem.runOnce(() ->
+        // m_VacummSubystem.intakeFull()));
+        // m_driveController.b().onTrue(m_VacummSubystem.runOnce(() ->
+        // m_VacummSubystem.intakePartial()));
+        // m_driveController.x().onTrue(m_VacummSubystem.runOnce(() ->
+        // m_VacummSubystem.stop()));
+        // m_driveController.a().onTrue(m_VacummSubystem.runOnce(() ->
+        // m_VacummSubystem.outtake()));
 
         // m_driveController.povDown().onTrue(new InstantCommand(() ->
         // m_VacummSubystem.outtake()));
@@ -211,6 +219,31 @@ public class RobotContainer {
         // m_ArmSubsystem.decreaseOffset()));
         // m_operatorController.povRight().onTrue(new InstantCommand(() ->
         // m_ArmSubsystem.increaseOffset()));
+
+        m_driveController.a().onTrue(
+                new InstantCommand(() -> {
+                    DistanceAndAngle da = m_VisionSubsystem.getTagDistanceAndAngle(Constants.TEST_TARGET_TAG);
+                    System.out.println(da == null ? "N/A" : da.toString());
+                }));
+        m_driveController.b().onTrue(
+                m_VisionSubsystem.runOnce(() -> {
+                    System.out.println("started ICPD");
+                    m_VisionSubsystem.approachDynamically(m_DrivetrainSubsystem,
+                            Constants.TEST_TARGET_TAG);
+                }));
+        m_driveController.x().onTrue(
+                m_VisionSubsystem.runOnce(() -> {
+                    m_VisionSubsystem.alignDynamically(m_DrivetrainSubsystem, Constants.TEST_TARGET_TAG);
+                }));
+        m_driveController.y().onTrue(
+                m_VisionSubsystem.runOnce(() -> {
+                    m_VisionSubsystem.driveDynamically(m_DrivetrainSubsystem, Constants.TEST_TARGET_TAG);
+                }));
+        m_driveController.start().onTrue(
+                m_VisionSubsystem.runOnce(() -> {
+                    m_VisionSubsystem.grabMisc(Constants.TEST_TARGET_TAG);
+                }));
+
     }
 
     /**

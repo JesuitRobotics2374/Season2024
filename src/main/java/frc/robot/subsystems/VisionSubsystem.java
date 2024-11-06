@@ -1,35 +1,146 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.LimelightHelpers;
+import frc.robot.commands.AlignDynamic;
+import frc.robot.commands.ApproachTag;
+// import frc.robot.commands.ApproachTag;
+import frc.robot.commands.DriveDynamic;
+import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
 
 public class VisionSubsystem extends SubsystemBase {
-    private final NetworkTable visionTable;
-    private final NetworkTableEntry visionEntry;
 
+    private static VisionSubsystem instance;
+    // ShuffleboardTab tab = Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME);
+
+    private int offset = 5000;
+
+    DriveDynamic driveDynamic;
+
+    /** Creates a new VisionSubsystem. */
     public VisionSubsystem() {
-        // Get the default instance of NetworkTables
-        NetworkTableInstance ntInstance = NetworkTableInstance.getDefault();
 
-        // Get the "vision" table from NetworkTables
-        visionTable = ntInstance.getTable("Camera");
+        instance = this;
 
-        // Retrieve handles to specific entries
-        visionEntry = visionTable.getEntry("NotePose");
+        LimelightHelpers.setLEDMode_PipelineControl("");
+        LimelightHelpers.setLEDMode_ForceBlink("");
+
     }
 
-    public Translation2d getNearestNotePose() {
-        double noteDistance = this.visionEntry.getDoubleArray(new double[] { 0.0, 0.0 })[0];
-        double noteAngle = this.visionEntry.getDoubleArray(new double[] { 0.0, 0.0 })[1];
-        return new Translation2d(noteDistance, new Rotation2d(noteAngle*(Math.PI/180.0)));
+    public class DistanceAndAngle {
+        private final double distance;
+        private final double theta;
+
+        public DistanceAndAngle(double distance, double theta) {
+            this.distance = distance;
+            this.theta = theta;
+        }
+
+        public double getDistance() {
+            return distance;
+        }
+
+        public double getTheta() {
+            return theta;
+        }
+
+        public double getDistanceMeters() {
+            return distance / 39.37;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("Distance: %.2f inches, Angle: %.2f degrees", distance, theta);
+        }
     }
 
+    public boolean canSeeTag(int tag_id) {
+        int detectedTagId = (int) LimelightHelpers.getFiducialID("");
+        return (detectedTagId == tag_id);
+    }
+
+    public DistanceAndAngle getTagDistanceAndAngle(int tag_id) {
+
+        int detectedTagId = (int) LimelightHelpers.getFiducialID("");
+        if (detectedTagId == tag_id) {
+
+            double tagHeight = LimelightHelpers.getT2DArray("")[15];
+            double tagWidth = LimelightHelpers.getT2DArray("")[14];
+
+            double tx = LimelightHelpers.getTX(""); // Horizontal angle offset
+            System.out.println("TX: " + tx);
+            // double xRot = Math.acos(tagWidth / tagHeight);
+            // System.out.println("calc xrot: " + xRot * (180 / Math.PI));
+
+            // double ta = LimelightHelpers.getTA(""); // Tag screen coverage
+
+            double distance = offset / tagHeight; // inches
+
+            return new DistanceAndAngle(distance, tx);
+        }
+        return null;
+    }
+
+    public void raiseOffset() {
+        offset += 5;
+        System.out.println(offset);
+    }
+
+    public void lowerOffset() {
+        offset -= 5;
+        System.out.println(offset);
+    }
+
+    public void approachDynamically(CommandSwerveDrivetrain ds, int tag_id) {
+        DistanceAndAngle d = getTagDistanceAndAngle(tag_id);
+        System.out.println("THETA: " + d.getTheta());
+        // AlignDynamic align = new AlignDynamic(ds, d.getTheta());
+        ApproachTag approach = new ApproachTag(ds, this, tag_id);
+    }
+
+    public void alignDynamically(CommandSwerveDrivetrain ds, int tag_id) {
+        DistanceAndAngle d = getTagDistanceAndAngle(tag_id);
+        AlignDynamic align = new AlignDynamic(ds, d.getTheta());
+        align.schedule();
+    }
+
+    public void driveDynamically(CommandSwerveDrivetrain ds, int tag_id) {
+        DistanceAndAngle d = getTagDistanceAndAngle(tag_id);
+        DriveDynamic drive = new DriveDynamic(ds, this, tag_id);
+        drive.schedule();
+    }
+
+    public void grabMisc(int tag_id) {
+        int detectedTagId = (int) LimelightHelpers.getFiducialID("");
+        if (detectedTagId == tag_id) {
+
+            double tagHeight = LimelightHelpers.getT2DArray("")[15];
+            double tagWidth = LimelightHelpers.getT2DArray("")[14];
+            DistanceAndAngle d = getTagDistanceAndAngle(tag_id);
+
+            double f = (Math.PI / 2) - d.getTheta() - Math.acos(tagWidth / tagHeight);
+
+            System.out.println("resultant: " + f);
+        }
+    }
 
     @Override
     public void periodic() {
+        // This method will be called once per scheduler run
+    }
+
+    public void driveStatic(CommandSwerveDrivetrain m_DrivetrainSubsystem, int testTargetTag) {
+        // DriveDynamic drive = new DriveDynamic(m_DrivetrainSubsystem, 0.2);
+        // driveDynamic = drive;
+        // drive.schedule();
+    }
+
+    public DriveDynamic getDriveDynamic() {
+        return driveDynamic;
     }
 }
