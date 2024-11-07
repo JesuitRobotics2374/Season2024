@@ -37,6 +37,7 @@ public class VisionSubsystem extends SubsystemBase {
         private final double theta;
 
         public DistanceAndAngle(double distance, double theta) {
+
             this.distance = distance;
             this.theta = theta;
         }
@@ -83,7 +84,8 @@ public class VisionSubsystem extends SubsystemBase {
 
             return new DistanceAndAngle(distance, tx);
         }
-        return null;
+
+        return new DistanceAndAngle(-1.0, -1.0);
     }
 
     public void raiseOffset() {
@@ -98,21 +100,28 @@ public class VisionSubsystem extends SubsystemBase {
 
     public void approachDynamically(CommandSwerveDrivetrain ds, int tag_id) {
         DistanceAndAngle d = getTagDistanceAndAngle(tag_id);
-        System.out.println("THETA: " + d.getTheta());
-        // AlignDynamic align = new AlignDynamic(ds, d.getTheta());
-        ApproachTag approach = new ApproachTag(ds, this, tag_id);
+        if (d.getDistance() != -1.0 && d.getTheta() != -1.0) {
+            System.out.println("THETA: " + d.getTheta());
+            AlignDynamic align = new AlignDynamic(ds, d.getTheta());
+            ApproachTag approach = new ApproachTag(ds, this, tag_id);
+        }
     }
 
     public void alignDynamically(CommandSwerveDrivetrain ds, int tag_id) {
         DistanceAndAngle d = getTagDistanceAndAngle(tag_id);
-        AlignDynamic align = new AlignDynamic(ds, d.getTheta());
-        align.schedule();
+        if (d.getDistance() != -1.0 && d.getTheta() != -1.0) {
+            System.out.println("Theta " + d.getTheta());
+            AlignDynamic align = new AlignDynamic(ds, d.getTheta());
+            align.schedule();
+        }
     }
 
     public void driveDynamically(CommandSwerveDrivetrain ds, int tag_id) {
         DistanceAndAngle d = getTagDistanceAndAngle(tag_id);
-        DriveDynamic drive = new DriveDynamic(ds, this, tag_id);
-        drive.schedule();
+        if (d.getDistance() != -1.0 && d.getTheta() != -1.0 && d != null) {
+            DriveDynamic drive = new DriveDynamic(ds, this, tag_id);
+            drive.schedule();
+        }
     }
 
     public void grabMisc(int tag_id) {
