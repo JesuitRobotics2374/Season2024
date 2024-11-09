@@ -155,26 +155,6 @@ public class RobotContainer {
         m_driveController.leftBumper().onTrue(new InstantCommand(() -> toggleSlow()));
         m_driveController.rightBumper().onTrue(new InstantCommand(() -> toggleRoll()));
 
-        // m_driveController.start().onTrue(m_DrivetrainSubsystem.runOnce(() ->
-        // m_DrivetrainSubsystem.alignToVision()));
-
-        // m_driveController.y().onTrue(new InstantCommand(() ->
-        // m_ClimberSubsystem.startLeftClimberUp()));
-        // m_driveController.y().onFalse(new InstantCommand(() ->
-        // m_ClimberSubsystem.stopLeftClimber()));
-        // m_driveController.b().onTrue(new InstantCommand(() ->
-        // m_ClimberSubsystem.startLeftClimberDown()));
-        // m_driveController.b().onFalse(new InstantCommand(() ->
-        // m_ClimberSubsystem.stopLeftClimber()));
-        // m_driveController.x().onTrue(new InstantCommand(() ->
-        // m_ClimberSubsystem.startRightClimberUp()));
-        // m_driveController.x().onFalse(new InstantCommand(() ->
-        // m_ClimberSubsystem.stopRightClimber()));
-        // m_driveController.a().onTrue(new InstantCommand(() ->
-        // m_ClimberSubsystem.startRightClimberDown()));
-        // m_driveController.a().onFalse(new InstantCommand(() ->
-        // m_ClimberSubsystem.stopRightClimber()));
-
         // m_driveController.y().onTrue(m_VacummSubystem.runOnce(() ->
         // m_VacummSubystem.intakeFull()));
         // m_driveController.b().onTrue(m_VacummSubystem.runOnce(() ->
@@ -184,41 +164,8 @@ public class RobotContainer {
         // m_driveController.a().onTrue(m_VacummSubystem.runOnce(() ->
         // m_VacummSubystem.outtake()));
 
-        // m_driveController.povDown().onTrue(new InstantCommand(() ->
-        // m_VacummSubystem.outtake()));
-
-        // // Manipulator
-        // m_operatorController.y().onTrue(new InstantCommand(() ->
-        // m_ManipulatorSubsystem.startShooter()));
-        // m_operatorController.y().onFalse(new InstantCommand(() ->
-        // m_ManipulatorSubsystem.stopShooter()));
-        // m_operatorController.b().onTrue(new InstantCommand(() ->
-        // m_ManipulatorSubsystem.intake()));
-        // // m_operatorController.b().onFalse(new InstantCommand(() ->
-        // // m_ManipulatorSubsystem.stopIntake()));
         m_driveController.povUp().whileTrue(m_ArmSubsystem.runOnce(() -> m_ArmSubsystem.raise()));
         m_driveController.povDown().whileTrue(m_ArmSubsystem.runOnce(() -> m_ArmSubsystem.lower()));
-        // m_operatorController.a().onTrue(new InstantCommand(() ->
-        // m_ArmSubsystem.setGoal(0.1)));
-        // m_operatorController.x()
-        // .onTrue(new InstantCommand(() ->
-        // m_ArmSubsystem.setGoal(Constants.BACKWARD_SOFT_STOP * 360)));
-        // m_operatorController.back().onTrue(new InstantCommand(() ->
-        // m_ManipulatorSubsystem.reverse()));
-        // m_operatorController.back().onFalse(new InstantCommand(() ->
-        // m_ManipulatorSubsystem.stopIntake()));
-        // m_operatorController.leftBumper().toggleOnTrue(new
-        // AlignToSpeakerCommand(m_DrivetrainSubsystem));
-        // m_operatorController.rightBumper()
-        // .toggleOnTrue(new ShootCommand(m_ManipulatorSubsystem, m_ArmSubsystem));
-        // m_operatorController.start().onTrue(new InstantCommand(() ->
-        // m_ManipulatorSubsystem.slowClimb()));
-        // m_operatorController.start().onFalse(new InstantCommand(() ->
-        // m_ManipulatorSubsystem.stopShooter()));
-        // m_operatorController.povLeft().onTrue(new InstantCommand(() ->
-        // m_ArmSubsystem.decreaseOffset()));
-        // m_operatorController.povRight().onTrue(new InstantCommand(() ->
-        // m_ArmSubsystem.increaseOffset()));
 
         m_driveController.a().onTrue(
                 new InstantCommand(() -> {
