@@ -2,7 +2,7 @@ package frc.robot;
 
 public class Constants {
 
-    public static final int TEST_TARGET_TAG = 3;
+    public static final int TEST_TARGET_TAG = 6;
 
     public static final String CAN_BUS_NAME_CANIVORE = "FastFD";
     public static final String CAN_BUS_NAME_ROBORIO = "rio";
