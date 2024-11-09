@@ -69,21 +69,31 @@ public class AlignDynamic extends Command {
         // double rotationalRate = controller.calculate(currentAngleRadians);
 
         // Apply the rotational rate to the drivetrain
-        signum = (int) (targetAngleRadians / Math.abs(targetAngleRadians));
+        signum = (int) (relativeAngleRadians / Math.abs(relativeAngleRadians));
+
+        System.out.println("Targ Angle: " + targetAngleRadians);
+        System.out.println("Rel Angle: " + relativeAngleRadians);
+
         drivetrain.setControl(new SwerveRequest.RobotCentric().withRotationalRate(Math.PI / 3 * -signum));
+        System.out.println("Signum: " + signum);
+
     }
 
     @Override
     public boolean isFinished() {
-        System.out.println("C: " + (currentAngleRadians + Math.PI) * (180 / Math.PI));
-        System.out.println("T: " + (targetAngleRadians + Math.PI) * (180 / Math.PI));
+        // System.out.println("C: " + (currentAngleRadians + Math.PI) * (180 /
+        // Math.PI));
+        // System.out.println("T: " + (targetAngleRadians + Math.PI) * (180 / Math.PI));
+        System.out.println("C: " + (currentAngleRadians));
+        System.out.println("T: " + (targetAngleRadians));
+
         if (signum == -1) {
             if (currentAngleRadians <= targetAngleRadians) {
                 return true;
             }
             return false;
         } else {
-            if (currentAngleRadians >= targetAngleRadians) {
+            if (Math.abs(currentAngleRadians - targetAngleRadians) <= 0.1) {
                 return true;
             }
             return false;
@@ -92,7 +102,7 @@ public class AlignDynamic extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        System.out.println("we are done! :DDD");
+        System.out.println("we are done! :DDD =^w^=");
         // Stop the drivetrain when the command ends
         drivetrain.setControl(new SwerveRequest.SwerveDriveBrake());
         System.out.println("Command " + (interrupted ? "interrupted" : "completed") + ". Final robot heading: "
