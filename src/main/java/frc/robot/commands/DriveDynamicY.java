@@ -13,7 +13,7 @@ import frc.robot.Constants;
 /**
  * DriveDynamic - Moves the robot forward by a specified distance.
  */
-public class DriveDynamic extends Command {
+public class DriveDynamicY extends Command {
 
     private final CommandSwerveDrivetrain drivetrain;
     private final VisionSubsystem visionSubsystem;
@@ -38,7 +38,7 @@ public class DriveDynamic extends Command {
      * @param relativeDistanceMeters The desired distance to move forward (in
      *                               meters)
      */
-    public DriveDynamic(CommandSwerveDrivetrain drivetrain, VisionSubsystem visionSubsystem, int tag_id) {
+    public DriveDynamicY(CommandSwerveDrivetrain drivetrain, VisionSubsystem visionSubsystem, int tag_id) {
         this.drivetrain = drivetrain;
         this.visionSubsystem = visionSubsystem;
         this.tag_id = tag_id;
@@ -87,7 +87,7 @@ public class DriveDynamic extends Command {
         // Get the current robot position in meters
         currentPositionMeters = drivetrain.getState().Pose.getTranslation().getX();
 
-        drivetrain.setControl(new SwerveRequest.RobotCentric().withVelocityX(1.4));
+        drivetrain.setControl(new SwerveRequest.RobotCentric().withVelocityY(1.4));
 
         // return !visionSubsystem.canSeeTag(tag_id);
         double distance = visionSubsystem.getTagDistanceAndAngle(tag_id).getDistance();

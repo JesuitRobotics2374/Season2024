@@ -167,12 +167,14 @@ public class RobotContainer {
         m_driveController.povUp().whileTrue(m_ArmSubsystem.runOnce(() -> m_ArmSubsystem.raise()));
         m_driveController.povDown().whileTrue(m_ArmSubsystem.runOnce(() -> m_ArmSubsystem.lower()));
 
+        // m_driveController.a().onTrue(
+        // new InstantCommand(() -> {
+        // DistanceAndAngle da =
+        // m_VisionSubsystem.getTagDistanceAndAngle(Constants.TEST_TARGET_TAG);
+        // System.out.println(da == null ? "N/A" : da.toString());
+        // }));
+
         m_driveController.a().onTrue(
-                new InstantCommand(() -> {
-                    DistanceAndAngle da = m_VisionSubsystem.getTagDistanceAndAngle(Constants.TEST_TARGET_TAG);
-                    System.out.println(da == null ? "N/A" : da.toString());
-                }));
-        m_driveController.b().onTrue(
                 m_VisionSubsystem.runOnce(() -> {
                     System.out.println("started ICPD");
                     m_VisionSubsystem.approachDynamically(m_DrivetrainSubsystem,

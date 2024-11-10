@@ -67,4 +67,7 @@ public class Constants {
     // CLIMBER Subsystem
     public static final int LEFT_CLIMBER_MOTOR_ID = 8;
     public static final int RIGHT_CLIMBER_MOTOR_ID = 9;
+
+    // Alignment Constants
+    public static final double ALIGN_DISTANCE = 24;
 }
