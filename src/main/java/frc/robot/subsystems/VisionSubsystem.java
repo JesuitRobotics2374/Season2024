@@ -4,13 +4,16 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
 import frc.robot.commands.AlignDynamic;
 import frc.robot.commands.ApproachTag;
+import frc.robot.commands.DriveAndSeek;
 // import frc.robot.commands.ApproachTag;
 import frc.robot.commands.DriveDynamic;
+import frc.robot.commands.DriveDynamicY;
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
 
 public class VisionSubsystem extends SubsystemBase {
@@ -88,6 +91,14 @@ public class VisionSubsystem extends SubsystemBase {
         return new DistanceAndAngle(-1.0, -1.0);
     }
 
+    public Pose3d getTagPose3d(int tag_id) {
+        int detectedTagId = (int) LimelightHelpers.getFiducialID("");
+        if (detectedTagId == tag_id) {
+            return LimelightHelpers.getTargetPose3d_CameraSpace("");
+        }
+        return null;
+    }
+
     public void raiseOffset() {
         offset += 5;
         System.out.println(offset);
@@ -98,13 +109,15 @@ public class VisionSubsystem extends SubsystemBase {
         System.out.println(offset);
     }
 
-    public void approachDynamically(CommandSwerveDrivetrain ds, int tag_id) {
+    public void approachDynamically(CommandSwerveDrivetrain ds, int tag_id, VacummSubystem vac, ArmSubsystem arm) {
         DistanceAndAngle d = getTagDistanceAndAngle(tag_id);
-        if (d.getDistance() != -1.0 && d.getTheta() != -1.0) {
-            System.out.println("THETA: " + d.getTheta());
-            AlignDynamic align = new AlignDynamic(ds, d.getTheta());
-            ApproachTag approach = new ApproachTag(ds, this, tag_id);
-        }
+        // if (d.getDistance() != -1.0 && d.getTheta() != -1.0) {
+        // System.out.println("THETA: " + d.getTheta());
+        // AlignDynamic align = new AlignDynamic(ds, d.getTheta());
+        // ApproachTag approach = new ApproachTag(ds, this, tag_id);
+        // }
+        ApproachTag a = new ApproachTag(ds, instance, tag_id, vac, arm);
+        a.schedule();
     }
 
     public void alignDynamically(CommandSwerveDrivetrain ds, int tag_id) {
@@ -119,7 +132,15 @@ public class VisionSubsystem extends SubsystemBase {
     public void driveDynamically(CommandSwerveDrivetrain ds, int tag_id) {
         DistanceAndAngle d = getTagDistanceAndAngle(tag_id);
         if (d.getDistance() != -1.0 && d.getTheta() != -1.0 && d != null) {
-            DriveDynamic drive = new DriveDynamic(ds, this, tag_id);
+            DriveDynamic drive = new DriveDynamic(ds, this, tag_id, 1.4, 0);
+            drive.schedule();
+        }
+    }
+
+    public void panDynamically(CommandSwerveDrivetrain ds, int tag_id) {
+        DistanceAndAngle d = getTagDistanceAndAngle(tag_id);
+        if (d.getDistance() != -1.0 && d.getTheta() != -1.0 && d != null) {
+            DriveDynamicY drive = new DriveDynamicY(ds, this, tag_id, 1, 3);
             drive.schedule();
         }
     }

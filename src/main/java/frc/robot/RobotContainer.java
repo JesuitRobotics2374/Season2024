@@ -178,7 +178,7 @@ public class RobotContainer {
                 m_VisionSubsystem.runOnce(() -> {
                     System.out.println("started ICPD");
                     m_VisionSubsystem.approachDynamically(m_DrivetrainSubsystem,
-                            Constants.TEST_TARGET_TAG);
+                            Constants.TEST_TARGET_TAG, m_VacummSubystem, m_ArmSubsystem);
                 }));
         m_driveController.x().onTrue(
                 m_VisionSubsystem.runOnce(() -> {
@@ -188,10 +188,19 @@ public class RobotContainer {
                 m_VisionSubsystem.runOnce(() -> {
                     m_VisionSubsystem.driveDynamically(m_DrivetrainSubsystem, Constants.TEST_TARGET_TAG);
                 }));
+        m_driveController.b().onTrue(
+                m_VisionSubsystem.runOnce(() -> {
+                    m_VisionSubsystem.panDynamically(m_DrivetrainSubsystem, Constants.TEST_TARGET_TAG);
+                }));
         m_driveController.start().onTrue(
                 m_VisionSubsystem.runOnce(() -> {
                     m_VisionSubsystem.grabMisc(Constants.TEST_TARGET_TAG);
                 }));
+
+        m_operatorController.y().onTrue(m_VacummSubystem.runOnce(() -> m_VacummSubystem.intakeFull()));
+        m_operatorController.b().onTrue(m_VacummSubystem.runOnce(() -> m_VacummSubystem.intakePartial()));
+        m_operatorController.x().onTrue(m_VacummSubystem.runOnce(() -> m_VacummSubystem.stop()));
+        m_operatorController.a().onTrue(m_VacummSubystem.runOnce(() -> m_VacummSubystem.outtake()));
 
     }
 

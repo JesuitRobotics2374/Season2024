@@ -69,5 +69,5 @@ public class Constants {
     public static final int RIGHT_CLIMBER_MOTOR_ID = 9;
 
     // Alignment Constants
-    public static final double ALIGN_DISTANCE = 24;
+    public static final double ALIGN_DISTANCE = 1;
 }

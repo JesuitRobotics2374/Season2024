@@ -23,13 +23,11 @@ public class DriveDynamicY extends Command {
     private double relativeDistanceMeters; // Desired distance to move (in meters)
     private double targetPositionMeters; // Final target position for the robot
 
-    private double recalculationThreshold;
-
-    private double expected = 10;
-
-    private double fdist;
+    private double moveSpeed;
+    private double threshold;
 
     private boolean done;
+    private double fdist;
 
     /**
      * DriveDynamic Constructor
@@ -38,10 +36,13 @@ public class DriveDynamicY extends Command {
      * @param relativeDistanceMeters The desired distance to move forward (in
      *                               meters)
      */
-    public DriveDynamicY(CommandSwerveDrivetrain drivetrain, VisionSubsystem visionSubsystem, int tag_id) {
+    public DriveDynamicY(CommandSwerveDrivetrain drivetrain, VisionSubsystem visionSubsystem, int tag_id,
+            double speed, double threshold) {
         this.drivetrain = drivetrain;
         this.visionSubsystem = visionSubsystem;
         this.tag_id = tag_id;
+        this.moveSpeed = speed;
+        this.threshold = threshold;
 
         // this.relativeDistanceMeters =
         // visionSubsystem.getTagDistanceAndAngle(3).getDistanceMeters() - 0.1;
@@ -57,28 +58,6 @@ public class DriveDynamicY extends Command {
 
     @Override
     public void initialize() {
-        // // Get the current robot position in meters
-        // currentPositionMeters = drivetrain.getState().Pose.getTranslation().getX();
-
-        // // Calculate the target position by adding the relative distance to the
-        // current
-        // // position
-        // targetPositionMeters = currentPositionMeters + relativeDistanceMeters;
-
-        // recalculationThreshold = ((relativeDistanceMeters - currentPositionMeters) /
-        // 3)
-        // + currentPositionMeters;
-
-        // // // Set the goal in the controller
-        // // controller.setGoal(targetPositionMeters);
-
-        // System.out.println(
-        // "Moving forward " + relativeDistanceMeters + " meters. Target: " +
-        // targetPositionMeters + " meters.");
-
-        // System.out.println("Current: " + currentPositionMeters);
-        // System.out.println("ToRecalc: " + recalculationThreshold);
-
         done = false;
     }
 
@@ -87,13 +66,18 @@ public class DriveDynamicY extends Command {
         // Get the current robot position in meters
         currentPositionMeters = drivetrain.getState().Pose.getTranslation().getX();
 
-        drivetrain.setControl(new SwerveRequest.RobotCentric().withVelocityY(1.4));
+        double dist = visionSubsystem.getTagDistanceAndAngle(tag_id).getDistanceMeters();
+        double th = visionSubsystem.getTagDistanceAndAngle(tag_id).getTheta();
+        double signum = Math.abs(th) / th;
+
+        drivetrain.setControl(
+                new SwerveRequest.RobotCentric().withVelocityY(-moveSpeed * signum));
 
         // return !visionSubsystem.canSeeTag(tag_id);
-        double distance = visionSubsystem.getTagDistanceAndAngle(tag_id).getDistance();
-        System.out.println(distance);
-        if (distance <= Constants.ALIGN_DISTANCE || !visionSubsystem.canSeeTag(tag_id)) {
-            fdist = distance;
+
+        System.out.println(th);
+        if (Math.abs(th) <= threshold || !visionSubsystem.canSeeTag(tag_id)) {
+            fdist = th;
             done = true;
         }
     }
