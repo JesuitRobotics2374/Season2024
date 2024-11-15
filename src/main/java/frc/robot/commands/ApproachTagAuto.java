@@ -4,15 +4,18 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.auto.DriveAndSeek;
+import frc.robot.commands.auto.DriveDynamic;
+import frc.robot.commands.auto.DriveDynamicY;
+import frc.robot.commands.helpers.SubsystemAction;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.VacummSubystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
-import frc.robot.subsystems.VisionSubsystem.DistanceAndAngle;
 
-public class ApproachTag extends InstantCommand {
+public class ApproachTagAuto extends InstantCommand {
 
-    public ApproachTag(CommandSwerveDrivetrain drivetrain, VisionSubsystem visionSubsystem, int tag_id,
+    public ApproachTagAuto(CommandSwerveDrivetrain drivetrain, VisionSubsystem visionSubsystem, int tag_id,
             VacummSubystem vac, ArmSubsystem arm) {
 
         // DistanceAndAngle d = visionSubsystem.getTagDistanceAndAngle(tag_id);

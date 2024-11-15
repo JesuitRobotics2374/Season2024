@@ -8,12 +8,11 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
-import frc.robot.commands.AlignDynamic;
-import frc.robot.commands.ApproachTag;
-import frc.robot.commands.DriveAndSeek;
-// import frc.robot.commands.ApproachTag;
-import frc.robot.commands.DriveDynamic;
-import frc.robot.commands.DriveDynamicY;
+import frc.robot.commands.ApproachTagAuto;
+import frc.robot.commands.auto.DriveAndSeek;
+import frc.robot.commands.auto.DriveDynamic;
+import frc.robot.commands.auto.DriveDynamicY;
+import frc.robot.commands.unused.AlignDynamic;
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
 
 public class VisionSubsystem extends SubsystemBase {
@@ -116,7 +115,7 @@ public class VisionSubsystem extends SubsystemBase {
         // AlignDynamic align = new AlignDynamic(ds, d.getTheta());
         // ApproachTag approach = new ApproachTag(ds, this, tag_id);
         // }
-        ApproachTag a = new ApproachTag(ds, instance, tag_id, vac, arm);
+        ApproachTagAuto a = new ApproachTagAuto(ds, instance, tag_id, vac, arm);
         a.schedule();
     }
 

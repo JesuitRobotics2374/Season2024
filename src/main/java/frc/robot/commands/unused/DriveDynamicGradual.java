@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.unused;
 
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
@@ -13,7 +13,7 @@ import frc.robot.Constants;
 /**
  * DriveDynamic - Moves the robot forward by a specified distance.
  */
-public class DriveDynamicY extends Command {
+public class DriveDynamicGradual extends Command {
 
     private final CommandSwerveDrivetrain drivetrain;
     private final VisionSubsystem visionSubsystem;
@@ -23,11 +23,7 @@ public class DriveDynamicY extends Command {
     private double relativeDistanceMeters; // Desired distance to move (in meters)
     private double targetPositionMeters; // Final target position for the robot
 
-    private double moveSpeed;
-    private double threshold;
-
-    private boolean done;
-    private double fdist;
+    private double recalculationThreshold;
 
     /**
      * DriveDynamic Constructor
@@ -36,16 +32,12 @@ public class DriveDynamicY extends Command {
      * @param relativeDistanceMeters The desired distance to move forward (in
      *                               meters)
      */
-    public DriveDynamicY(CommandSwerveDrivetrain drivetrain, VisionSubsystem visionSubsystem, int tag_id,
-            double speed, double threshold) {
+    public DriveDynamicGradual(CommandSwerveDrivetrain drivetrain, VisionSubsystem visionSubsystem, int tag_id) {
         this.drivetrain = drivetrain;
         this.visionSubsystem = visionSubsystem;
         this.tag_id = tag_id;
-        this.moveSpeed = speed;
-        this.threshold = threshold;
 
-        // this.relativeDistanceMeters =
-        // visionSubsystem.getTagDistanceAndAngle(3).getDistanceMeters() - 0.1;
+        this.relativeDistanceMeters = visionSubsystem.getTagDistanceAndAngle(3).getDistanceMeters() - 0.1;
 
         // Initialize the ProfiledPIDController with PID constants and constraints
         // controller = new ProfiledPIDController(Constants.P_ARM_PID_P,
@@ -58,7 +50,24 @@ public class DriveDynamicY extends Command {
 
     @Override
     public void initialize() {
-        done = false;
+        // Get the current robot position in meters
+        currentPositionMeters = drivetrain.getState().Pose.getTranslation().getX();
+
+        // Calculate the target position by adding the relative distance to the current
+        // position
+        targetPositionMeters = currentPositionMeters + relativeDistanceMeters;
+
+        recalculationThreshold = ((relativeDistanceMeters - currentPositionMeters) / 3)
+                + currentPositionMeters;
+
+        // // Set the goal in the controller
+        // controller.setGoal(targetPositionMeters);
+
+        System.out.println(
+                "Moving forward " + relativeDistanceMeters + " meters. Target: " + targetPositionMeters + " meters.");
+
+        System.out.println("Current: " + currentPositionMeters);
+        System.out.println("ToRecalc: " + recalculationThreshold);
     }
 
     @Override
@@ -66,25 +75,26 @@ public class DriveDynamicY extends Command {
         // Get the current robot position in meters
         currentPositionMeters = drivetrain.getState().Pose.getTranslation().getX();
 
-        double dist = visionSubsystem.getTagDistanceAndAngle(tag_id).getDistanceMeters();
-        double th = visionSubsystem.getTagDistanceAndAngle(tag_id).getTheta();
-        double signum = Math.abs(th) / th;
+        drivetrain.setControl(new SwerveRequest.RobotCentric().withVelocityX(0.5));
 
-        drivetrain.setControl(
-                new SwerveRequest.RobotCentric().withVelocityY(-moveSpeed * signum));
+        // System.out.println("C: " + currentPositionMeters);
+        // System.out.println("T: " + recalculationThreshold);
+        // System.out.println("");
 
-        // return !visionSubsystem.canSeeTag(tag_id);
-
-        System.out.println(th);
-        if (Math.abs(th) <= threshold || !visionSubsystem.canSeeTag(tag_id)) {
-            fdist = th;
-            done = true;
+        if (currentPositionMeters <= recalculationThreshold) {
+            System.out.println("Distance Reassigned: " + relativeDistanceMeters);
+            this.relativeDistanceMeters = visionSubsystem.getTagDistanceAndAngle(3).getDistanceMeters() - 0.1;
+            recalculationThreshold = ((relativeDistanceMeters - currentPositionMeters) *
+                    (1 / 3)) + currentPositionMeters;
         }
     }
 
     @Override
     public boolean isFinished() {
-        return done;
+        if (currentPositionMeters >= targetPositionMeters) {
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -94,7 +104,8 @@ public class DriveDynamicY extends Command {
         drivetrain.setControl(new SwerveRequest.SwerveDriveBrake());
         System.out.println("Command " + (interrupted ? "interrupted" : "completed") + ". Final robot position: "
                 + drivetrain.getState().Pose.getTranslation().getX() + " meters.");
-        System.out.println("Final: " + visionSubsystem.getTagDistanceAndAngle(tag_id).getDistance());
+        System.out.println("Target: " + targetPositionMeters + " meters.");
+        System.out.println("Relative: " + relativeDistanceMeters + " meters.");
     }
 
     public double getGoal() {

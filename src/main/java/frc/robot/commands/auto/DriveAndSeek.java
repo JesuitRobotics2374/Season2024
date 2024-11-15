@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.auto;
 
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 

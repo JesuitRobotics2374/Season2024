@@ -44,7 +44,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
 import frc.robot.Robot;
-import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.unused.IntakeCommand;
 import frc.robot.subsystems.ChassisSubsystem;
 import frc.robot.subsystems.ManipulatorSubsystem;
 
