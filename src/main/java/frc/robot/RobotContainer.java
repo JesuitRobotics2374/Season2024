@@ -17,11 +17,20 @@ import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+<<<<<<< Updated upstream
 import frc.robot.commands.AlignToSpeakerCommand;
 import frc.robot.commands.BasicCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.AutoShootCommand;
+=======
+import frc.robot.commands.ApproachTagTeleop;
+import frc.robot.commands.unused.AlignToSpeakerCommand;
+import frc.robot.commands.unused.AutoShootCommand;
+import frc.robot.commands.unused.BasicCommand;
+import frc.robot.commands.unused.IntakeCommand;
+import frc.robot.commands.unused.ShootCommand;
+>>>>>>> Stashed changes
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
 import frc.robot.subsystems.DrivetrainSubsystem.TunerConstants;
@@ -39,6 +48,7 @@ public class RobotContainer {
     private final FalconVacummSubystem m_VacummSubystem;
     // private final VacummSubystem m_VacummSubystem;
     private final ArmSubsystem m_ArmSubsystem;
+    private final ApproachTagTeleop m_ApproachTagTeleop;
     // private final ClimberSubsystem m_ClimberSubsystem;
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
@@ -65,6 +75,7 @@ public class RobotContainer {
         // m_ClimberSubsystem = new ClimberSubsystem();
         registerAutoCommands();
         System.out.println("container created");
+        this.m_ApproachTagTeleop = null;
         autoChooser = AutoBuilder.buildAutoChooser();
         configureShuffleBoard();
         resetDrive();
@@ -153,7 +164,58 @@ public class RobotContainer {
         m_driveController.back().onTrue(m_DrivetrainSubsystem.runOnce(() -> m_DrivetrainSubsystem.seedFieldRelative()));
         m_driveController.leftBumper().onTrue(new InstantCommand(() -> toggleSlow()));
         m_driveController.rightBumper().onTrue(new InstantCommand(() -> toggleRoll()));
+<<<<<<< Updated upstream
         m_driveController.start().onTrue(m_DrivetrainSubsystem.runOnce(() -> m_DrivetrainSubsystem.alignToVision()));
+=======
+
+        // m_driveController.y().onTrue(m_VacummSubystem.runOnce(() ->
+        // m_VacummSubystem.intakeFull()));
+        // m_driveController.b().onTrue(m_VacummSubystem.runOnce(() ->
+        // m_VacummSubystem.intakePartial()));
+        // m_driveController.x().onTrue(m_VacummSubystem.runOnce(() ->
+        // m_VacummSubystem.stop()));
+        // m_driveController.a().onTrue(m_VacummSubystem.runOnce(() ->
+        // m_VacummSubystem.outtake()));
+
+        m_driveController.povUp().whileTrue(m_ArmSubsystem.runOnce(() -> m_ArmSubsystem.raise()));
+        m_driveController.povDown().whileTrue(m_ArmSubsystem.runOnce(() -> m_ArmSubsystem.lower()));
+
+        // m_driveController.a().onTrue(
+        // new InstantCommand(() -> {
+        // DistanceAndAngle da =
+        // m_VisionSubsystem.getTagDistanceAndAngle(Constants.TEST_TARGET_TAG);
+        // System.out.println(da == null ? "N/A" : da.toString());
+        // }));
+
+        m_driveController.a().onTrue(
+                m_VisionSubsystem.runOnce(() -> {
+                    System.out.println("started ICPD");
+                    // m_VisionSubsystem.approachDynamically(m_DrivetrainSubsystem,
+                    // Constants.TEST_TARGET_TAG, m_VacummSubystem, m_ArmSubsystem);
+                }));
+        m_driveController.x().onTrue(
+                m_VisionSubsystem.runOnce(() -> {
+                    m_VisionSubsystem.alignDynamically(m_DrivetrainSubsystem, Constants.TEST_TARGET_TAG);
+                }));
+        m_driveController.y().onTrue(
+                m_VisionSubsystem.runOnce(() -> {
+                    m_VisionSubsystem.driveDynamically(m_DrivetrainSubsystem, Constants.TEST_TARGET_TAG);
+                }));
+        // m_driveController.b().onTrue(
+        // m_VisionSubsystem.runOnce(() -> {
+        // m_VisionSubsystem.panDynamically(m_DrivetrainSubsystem,
+        // Constants.TEST_TARGET_TAG);
+        // }));
+        m_driveController.start().onTrue(
+                m_VisionSubsystem.runOnce(() -> {
+                    m_VisionSubsystem.grabMisc(Constants.TEST_TARGET_TAG);
+                }));
+        m_driveController.b().onTrue(
+                m_DrivetrainSubsystem.runOnce(() -> {
+                    m_DrivetrainSubsystem.ApproachTagTeleop(m_DrivetrainSubsystem, m_VisionSubsystem,
+                            Constants.TEST_TARGET_TAG, m_VacummSubystem, m_ArmSubsystem);
+                }));
+>>>>>>> Stashed changes
 
         m_operatorController.y().onTrue(m_VacummSubystem.runOnce(() -> m_VacummSubystem.intakeFull()));
         m_operatorController.b().onTrue(m_VacummSubystem.runOnce(() -> m_VacummSubystem.intakePartial()));

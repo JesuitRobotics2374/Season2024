@@ -1,6 +1,12 @@
 package frc.robot;
 
 public class Constants {
+<<<<<<< Updated upstream
+=======
+
+    public static final int TEST_TARGET_TAG = 7;
+
+>>>>>>> Stashed changes
     public static final String CAN_BUS_NAME_CANIVORE = "FastFD";
     public static final String CAN_BUS_NAME_ROBORIO = "rio";
     public static final String CAN_BUS_NAME_DRIVETRAIN = CAN_BUS_NAME_CANIVORE;
