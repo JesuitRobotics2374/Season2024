@@ -1,3 +1,4 @@
+
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -7,11 +8,11 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class FalconVacummSubystem extends SubsystemBase {
+public class FalconVacummSubsystem extends SubsystemBase {
 
     private TalonFX vacumm;
 
-    public FalconVacummSubystem() {
+    public FalconVacummSubsystem() {
         vacumm = new TalonFX(19);
         this.stop();
     }
@@ -21,7 +22,7 @@ public class FalconVacummSubystem extends SubsystemBase {
     }
 
     public void intakePartial() {
-        vacumm.set(0.30);
+        vacumm.set(0.08);
     }
 
     public void stop() {
@@ -29,6 +30,6 @@ public class FalconVacummSubystem extends SubsystemBase {
     }
 
     public void outtake() {
-        vacumm.set(-0.15);
+        vacumm.set(-0.08);
     }
 }

@@ -17,20 +17,7 @@ import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-<<<<<<< Updated upstream
-import frc.robot.commands.AlignToSpeakerCommand;
-import frc.robot.commands.BasicCommand;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.ShootCommand;
-import frc.robot.commands.AutoShootCommand;
-=======
 import frc.robot.commands.ApproachTagTeleop;
-import frc.robot.commands.unused.AlignToSpeakerCommand;
-import frc.robot.commands.unused.AutoShootCommand;
-import frc.robot.commands.unused.BasicCommand;
-import frc.robot.commands.unused.IntakeCommand;
-import frc.robot.commands.unused.ShootCommand;
->>>>>>> Stashed changes
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
 import frc.robot.subsystems.DrivetrainSubsystem.TunerConstants;
@@ -45,8 +32,9 @@ public class RobotContainer {
     private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
     private final ChassisSubsystem m_ChassisSubsystem;
     private final CommandSwerveDrivetrain m_DrivetrainSubsystem = TunerConstants.DriveTrain;
-    private final FalconVacummSubystem m_VacummSubystem;
+    private final VacummSubystem m_VacummSubystem;
     // private final VacummSubystem m_VacummSubystem;
+    private final VisionSubsystem m_VisionSubsystem;
     private final ArmSubsystem m_ArmSubsystem;
     private final ApproachTagTeleop m_ApproachTagTeleop;
     // private final ClimberSubsystem m_ClimberSubsystem;
@@ -71,7 +59,8 @@ public class RobotContainer {
         m_ChassisSubsystem = new ChassisSubsystem();
         m_ArmSubsystem = new ArmSubsystem();
         // m_VacummSubystem = new VacummSubystem();
-        m_VacummSubystem = new FalconVacummSubystem();
+        m_VacummSubystem = new VacummSubystem();
+        m_VisionSubsystem = new VisionSubsystem();
         // m_ClimberSubsystem = new ClimberSubsystem();
         registerAutoCommands();
         System.out.println("container created");
@@ -125,8 +114,6 @@ public class RobotContainer {
      * Register Auto Commands
      */
     public void registerAutoCommands() {
-        NamedCommands.registerCommand("Basic Command", new BasicCommand());
-        NamedCommands.registerCommand("Align to speaker", new AlignToSpeakerCommand(m_DrivetrainSubsystem));
         // NamedCommands.registerCommand("Shoot",
         // new AutoShootCommand(m_ManipulatorSubsystem, m_DrivetrainSubsystem,
         // m_ArmSubsystem));
@@ -137,8 +124,8 @@ public class RobotContainer {
                 new FunctionalCommand(() -> m_ArmSubsystem.setGoal(Constants.BACKWARD_SOFT_STOP * 360), () -> {
                 }, interrupted -> {
                 }, () -> m_ArmSubsystem.atGoal()).andThen(new WaitCommand(0.4)).withTimeout(2));
-        // NamedCommands.registerCommand("Shoot No Aim", new
-        // ShootCommand(m_ManipulatorSubsystem, m_ArmSubsystem));
+        NamedCommands.registerCommand("Shoot No Aim", new InstantCommand(() -> {
+        }));
     }
 
     /**
@@ -164,9 +151,7 @@ public class RobotContainer {
         m_driveController.back().onTrue(m_DrivetrainSubsystem.runOnce(() -> m_DrivetrainSubsystem.seedFieldRelative()));
         m_driveController.leftBumper().onTrue(new InstantCommand(() -> toggleSlow()));
         m_driveController.rightBumper().onTrue(new InstantCommand(() -> toggleRoll()));
-<<<<<<< Updated upstream
         m_driveController.start().onTrue(m_DrivetrainSubsystem.runOnce(() -> m_DrivetrainSubsystem.alignToVision()));
-=======
 
         // m_driveController.y().onTrue(m_VacummSubystem.runOnce(() ->
         // m_VacummSubystem.intakeFull()));
@@ -193,14 +178,17 @@ public class RobotContainer {
                     // m_VisionSubsystem.approachDynamically(m_DrivetrainSubsystem,
                     // Constants.TEST_TARGET_TAG, m_VacummSubystem, m_ArmSubsystem);
                 }));
-        m_driveController.x().onTrue(
-                m_VisionSubsystem.runOnce(() -> {
-                    m_VisionSubsystem.alignDynamically(m_DrivetrainSubsystem, Constants.TEST_TARGET_TAG);
-                }));
-        m_driveController.y().onTrue(
-                m_VisionSubsystem.runOnce(() -> {
-                    m_VisionSubsystem.driveDynamically(m_DrivetrainSubsystem, Constants.TEST_TARGET_TAG);
-                }));
+        // m_driveController.x().onTrue(
+        // m_VisionSubsystem.runOnce(() -> {
+        // m_VisionSubsystem.alignDynamically(m_DrivetrainSubsystem,
+        // Constants.TEST_TARGET_TAG);
+        // }));
+        // m_driveController.y().onTrue(
+        // m_VisionSubsystem.runOnce(() -> {
+        // m_VisionSubsystem.driveDynamically(m_DrivetrainSubsystem,
+        // Constants.TEST_TARGET_TAG);
+        // }));
+
         // m_driveController.b().onTrue(
         // m_VisionSubsystem.runOnce(() -> {
         // m_VisionSubsystem.panDynamically(m_DrivetrainSubsystem,
@@ -212,10 +200,9 @@ public class RobotContainer {
                 }));
         m_driveController.b().onTrue(
                 m_DrivetrainSubsystem.runOnce(() -> {
-                    m_DrivetrainSubsystem.ApproachTagTeleop(m_DrivetrainSubsystem, m_VisionSubsystem,
+                    m_VisionSubsystem.approachTeleop(m_DrivetrainSubsystem,
                             Constants.TEST_TARGET_TAG, m_VacummSubystem, m_ArmSubsystem);
                 }));
->>>>>>> Stashed changes
 
         m_operatorController.y().onTrue(m_VacummSubystem.runOnce(() -> m_VacummSubystem.intakeFull()));
         m_operatorController.b().onTrue(m_VacummSubystem.runOnce(() -> m_VacummSubystem.intakePartial()));
