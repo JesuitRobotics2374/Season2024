@@ -45,7 +45,7 @@ public class TeleopMoveY extends Command {
 
     @Override
     public boolean isFinished() {
-        return distanceFromTagAlign < 0.3;
+        return Math.abs(distanceFromTagAlign) < 0.3;
     }
 
     @Override
