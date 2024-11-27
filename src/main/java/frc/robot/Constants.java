@@ -2,7 +2,7 @@ package frc.robot;
 
 public class Constants {
 
-    public static final int TEST_TARGET_TAG = 7;
+    public static final int TEST_TARGET_TAG = 8;
 
     public static final String CAN_BUS_NAME_CANIVORE = "FastFD";
     public static final String CAN_BUS_NAME_ROBORIO = "rio";
@@ -67,4 +67,25 @@ public class Constants {
     // CLIMBER Subsystem
     public static final int LEFT_CLIMBER_MOTOR_ID = 8;
     public static final int RIGHT_CLIMBER_MOTOR_ID = 9;
+
+    // Auto Static Groups
+
+    public static final double ALL_GROUPS_ROTATION = -90;
+
+    public static final int[] A_GROUP_MEMBERS = { 1, 2, 3 };
+    public static final double A_GROUP_X = 0;
+    public static final double A_GROUP_Y = 0;
+
+    public static final int[] B_GROUP_MEMBERS = { 4, 5, 6 };
+    public static final double B_GROUP_X = 0;
+    public static final double B_GROUP_Y = 0;
+
+    public static final int[] C_GROUP_MEMBERS = { 7, 8, 9 };
+    public static final double C_GROUP_X = 7.00;
+    public static final double C_GROUP_Y = 4.75;
+
+    public static final int[] D_GROUP_MEMBERS = { 10, 11, 12 };
+    public static final double D_GROUP_X = 0;
+    public static final double D_GROUP_Y = 0;
+
 }

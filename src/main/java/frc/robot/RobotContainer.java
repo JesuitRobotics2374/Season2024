@@ -174,9 +174,9 @@ public class RobotContainer {
 
         m_driveController.a().onTrue(
                 m_VisionSubsystem.runOnce(() -> {
-                    System.out.println("started ICPD");
-                    // m_VisionSubsystem.approachDynamically(m_DrivetrainSubsystem,
-                    // Constants.TEST_TARGET_TAG, m_VacummSubystem, m_ArmSubsystem);
+                    System.out.println("started test case");
+                    m_VisionSubsystem.doStaticAlign(m_DrivetrainSubsystem,
+                            Constants.TEST_TARGET_TAG);
                 }));
         // m_driveController.x().onTrue(
         // m_VisionSubsystem.runOnce(() -> {

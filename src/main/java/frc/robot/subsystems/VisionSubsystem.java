@@ -13,6 +13,7 @@ import frc.robot.commands.ApproachTagTeleop;
 import frc.robot.commands.auto.DriveAndSeek;
 import frc.robot.commands.auto.DriveDynamic;
 import frc.robot.commands.auto.DriveDynamicY;
+import frc.robot.commands.auto.OriginToStatic;
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
 
 public class VisionSubsystem extends SubsystemBase {
@@ -132,6 +133,12 @@ public class VisionSubsystem extends SubsystemBase {
             DriveDynamic drive = new DriveDynamic(ds, this, tag_id, 1.4, 0);
             drive.schedule();
         }
+    }
+
+    public void doStaticAlign(CommandSwerveDrivetrain ds, int tag_id) {
+        // DistanceAndAngle d = getTagDistanceAndAngle(tag_id);
+        OriginToStatic drive = new OriginToStatic(ds, this, tag_id);
+        drive.schedule();
     }
 
     public void panDynamically(CommandSwerveDrivetrain ds, int tag_id) {
