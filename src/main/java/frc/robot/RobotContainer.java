@@ -199,7 +199,7 @@ public class RobotContainer {
                     m_VisionSubsystem.grabMisc(Constants.TEST_TARGET_TAG);
                 }));
         m_driveController.b().onTrue(
-                m_DrivetrainSubsystem.runOnce(() -> {
+                m_VisionSubsystem.runOnce(() -> {
                     m_VisionSubsystem.approachTeleop(m_DrivetrainSubsystem,
                             Constants.TEST_TARGET_TAG, m_VacummSubystem, m_ArmSubsystem);
                 }));

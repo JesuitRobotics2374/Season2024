@@ -31,21 +31,26 @@ public class TeleopMoveY extends Command {
 
     @Override
     public void initialize() {
-        distanceFromTagAlign = visionSubsystem.getTagPose3d(tag_id).getY();
-        if (distanceFromTagAlign > 0) {
-            moveSpeed *= -1;
-        }
+        if (visionSubsystem.canSeeTag(tag_id)) {
+            distanceFromTagAlign = visionSubsystem.getTagPose3d(tag_id).getY();
+            if (distanceFromTagAlign > 0) {
+                moveSpeed *= -1;
+            }
+        } else
+            cancel(); // Check if this works
     }
 
     @Override
     public void execute() {
-        distanceFromTagAlign = visionSubsystem.getTagPose3d(tag_id).getY();
+        if (visionSubsystem.canSeeTag(tag_id)) {
+            distanceFromTagAlign = visionSubsystem.getTagPose3d(tag_id).getY();
+        }
         drivetrain.setControl(new SwerveRequest.RobotCentric().withVelocityY(moveSpeed));
     }
 
     @Override
     public boolean isFinished() {
-        return Math.abs(distanceFromTagAlign) < 0.3;
+        return Math.abs(distanceFromTagAlign) < 0.5;
     }
 
     @Override

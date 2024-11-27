@@ -25,16 +25,21 @@ public class TeleopRotate extends Command {
 
     @Override
     public void initialize() {
-        tagAlignAngle = visionSubsystem.getTagDistanceAndAngle(tag_id).getTheta();
-        if (tagAlignAngle < 0) {
-            turnSpeed *= -1;
-        }
+        if (visionSubsystem.canSeeTag(tag_id)) {
+            tagAlignAngle = visionSubsystem.getTagDistanceAndAngle(tag_id).getTheta();
+            if (tagAlignAngle < 0) {
+                turnSpeed *= -1;
+            }
+        } else
+            cancel(); // Check if this works
     }
 
     @Override
     public void execute() {
-        tagAlignAngle = visionSubsystem.getTagDistanceAndAngle(tag_id).getTheta(); // in degrees
-        drivetrain.setControl(new SwerveRequest.RobotCentric().withRotationalRate(turnSpeed));
+        if (visionSubsystem.canSeeTag(tag_id)) {
+            tagAlignAngle = visionSubsystem.getTagDistanceAndAngle(tag_id).getTheta(); // in degrees
+            drivetrain.setControl(new SwerveRequest.RobotCentric().withRotationalRate(turnSpeed));
+        }
     }
 
     @Override

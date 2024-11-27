@@ -31,13 +31,17 @@ public class TeleopMoveX extends Command {
 
     @Override
     public void initialize() {
-        distanceFromTag = visionSubsystem.getTagPose3d(tag_id).getX();
-
+        if (visionSubsystem.canSeeTag(tag_id)) {
+            distanceFromTag = visionSubsystem.getTagPose3d(tag_id).getX();
+        } else
+            cancel(); // Check if this works
     }
 
     @Override
     public void execute() {
-        distanceFromTag = visionSubsystem.getTagPose3d(tag_id).getX();
+        if (visionSubsystem.canSeeTag(tag_id)) {
+            distanceFromTag = visionSubsystem.getTagPose3d(tag_id).getX();
+        }
         drivetrain.setControl(new SwerveRequest.RobotCentric().withVelocityX(moveSpeed));
     }
 
