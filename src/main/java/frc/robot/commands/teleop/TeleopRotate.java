@@ -13,7 +13,7 @@ public class TeleopRotate extends Command {
     private final VisionSubsystem visionSubsystem;
     private final int tag_id;
     private double tagAlignAngle; // in degrees
-    private double turnSpeed = 0.5; // change this later, possibly make dynamic or keep constant, in RADIANS / SEC
+    private double turnSpeed = 1; // change this later, possibly make dynamic or keep constant, in RADIANS / SEC
 
     public TeleopRotate(CommandSwerveDrivetrain drivetrain, VisionSubsystem visionSubsystem, int tag_id) {
         this.drivetrain = drivetrain;
@@ -27,7 +27,7 @@ public class TeleopRotate extends Command {
     public void initialize() {
         if (visionSubsystem.canSeeTag(tag_id)) {
             tagAlignAngle = visionSubsystem.getTagDistanceAndAngle(tag_id).getTheta();
-            if (tagAlignAngle < 0) {
+            if (tagAlignAngle > 0) {
                 turnSpeed *= -1;
             }
         } else
@@ -44,7 +44,7 @@ public class TeleopRotate extends Command {
 
     @Override
     public boolean isFinished() {
-        return tagAlignAngle > -5.7 && tagAlignAngle < 5.7; // 0.1 radians in degrees
+        return tagAlignAngle > -7 && tagAlignAngle < 7; // in degrees
     }
 
     @Override

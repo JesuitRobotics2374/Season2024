@@ -29,7 +29,7 @@ public class ApproachTagTeleop extends InstantCommand {
 
         SequentialCommandGroup outtakeSequence = new SequentialCommandGroup(outtake, timer, stop);
 
-        SequentialCommandGroup approach = new ParallelCommandGroup(rotate, moveY, moveX).andThen(outtakeSequence);
+        ParallelCommandGroup approach = new ParallelCommandGroup(/* rotate/* , moveY /* , */moveX); /*.andThen(outtakeSequence);*/
 
         approach.schedule();
         // outtakeSequence.schedule();
