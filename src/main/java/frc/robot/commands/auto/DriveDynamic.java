@@ -6,9 +6,11 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj2.command.Command;
+
+import frc.robot.Constants;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
-import frc.robot.Constants;
+
 
 /**
  * DriveDynamic - Moves the robot forward by a specified distance.
@@ -91,16 +93,20 @@ public class DriveDynamic extends Command {
     @Override
     public void execute() {
         // Get the current robot position in meters
+
         double gap = 0; /// TODO: Move this magic number to constants.java and name
         // it something proper
         currentPositionMeters = drivetrain.getState().Pose.getTranslation().getX();
 
         drivetrain.setControl(new SwerveRequest.RobotCentric().withVelocityX(-speed));
 
+
         // return !visionSubsystem.canSeeTag(tag_id);
         double distance = visionSubsystem.getTagDistanceAndAngle(tag_id).getDistance();
         System.out.println(distance);
+
         if (distance <= providedDistance + gap || !visionSubsystem.canSeeTag(tag_id)) {
+
             fdist = distance;
             done = true;
         }

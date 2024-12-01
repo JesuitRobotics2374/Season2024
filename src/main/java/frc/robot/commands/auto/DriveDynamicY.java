@@ -6,9 +6,10 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj2.command.Command;
+
+import frc.robot.Constants;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
-import frc.robot.Constants;
 
 /**
  * DriveDynamic - Moves the robot forward by a specified distance.
@@ -71,7 +72,9 @@ public class DriveDynamicY extends Command {
         double signum = Math.abs(th) / th;
 
         drivetrain.setControl(
+
                 new SwerveRequest.RobotCentric().withVelocityY(moveSpeed * signum));
+
 
         // return !visionSubsystem.canSeeTag(tag_id);
 

@@ -9,10 +9,13 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
 import frc.robot.commands.ApproachTagAuto;
+
+import frc.robot.commands.ApproachTagTeleop;
 import frc.robot.commands.auto.DriveAndSeek;
 import frc.robot.commands.auto.DriveDynamic;
 import frc.robot.commands.auto.DriveDynamicY;
-import frc.robot.commands.unused.AlignDynamic;
+import frc.robot.commands.auto.OriginToStatic;
+
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
 
 public class VisionSubsystem extends SubsystemBase {
@@ -20,7 +23,6 @@ public class VisionSubsystem extends SubsystemBase {
     private static VisionSubsystem instance;
     // ShuffleboardTab tab = Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME);
 
-    // private int offset = 8000;
     private int offset = 5000;
 
     DriveDynamic driveDynamic;
@@ -32,6 +34,7 @@ public class VisionSubsystem extends SubsystemBase {
 
         LimelightHelpers.setLEDMode_PipelineControl("");
         LimelightHelpers.setLEDMode_ForceBlink("");
+
 
     }
 
@@ -85,8 +88,6 @@ public class VisionSubsystem extends SubsystemBase {
 
             double distance = offset / tagHeight; // inches
 
-            System.out.print("Vision Distance: " + distance);
-
             return new DistanceAndAngle(distance, tx);
         }
 
@@ -122,14 +123,13 @@ public class VisionSubsystem extends SubsystemBase {
         a.schedule();
     }
 
-    public void alignDynamically(CommandSwerveDrivetrain ds, int tag_id) {
-        DistanceAndAngle d = getTagDistanceAndAngle(tag_id);
-        if (d.getDistance() != -1.0 && d.getTheta() != -1.0) {
-            System.out.println("Theta " + d.getTheta());
-            AlignDynamic align = new AlignDynamic(ds, d.getTheta());
-            align.schedule();
-        }
+    public void approachTeleop(CommandSwerveDrivetrain m_DrivetrainSubsystem,
+            int testTargetTag, VacummSubystem m_VacummSubystem, ArmSubsystem m_ArmSubsystem) {
+        ApproachTagTeleop a = new ApproachTagTeleop(m_DrivetrainSubsystem, instance, testTargetTag, m_VacummSubystem,
+                m_ArmSubsystem);
+        a.schedule();
     }
+
 
     public void driveDynamically(CommandSwerveDrivetrain ds, int tag_id) {
         DistanceAndAngle d = getTagDistanceAndAngle(tag_id);
@@ -138,6 +138,13 @@ public class VisionSubsystem extends SubsystemBase {
             drive.schedule();
         }
     }
+
+    public void doStaticAlign(CommandSwerveDrivetrain ds, int tag_id) {
+        // DistanceAndAngle d = getTagDistanceAndAngle(tag_id);
+        OriginToStatic drive = new OriginToStatic(ds, this, tag_id);
+        drive.schedule();
+    }
+
 
     public void panDynamically(CommandSwerveDrivetrain ds, int tag_id) {
         DistanceAndAngle d = getTagDistanceAndAngle(tag_id);
