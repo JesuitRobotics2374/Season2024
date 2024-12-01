@@ -71,7 +71,7 @@ public class DriveDynamicY extends Command {
         double signum = Math.abs(th) / th;
 
         drivetrain.setControl(
-                new SwerveRequest.RobotCentric().withVelocityY(-moveSpeed * signum));
+                new SwerveRequest.RobotCentric().withVelocityY(moveSpeed * signum));
 
         // return !visionSubsystem.canSeeTag(tag_id);
 

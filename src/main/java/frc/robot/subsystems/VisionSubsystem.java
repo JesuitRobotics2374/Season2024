@@ -20,6 +20,7 @@ public class VisionSubsystem extends SubsystemBase {
     private static VisionSubsystem instance;
     // ShuffleboardTab tab = Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME);
 
+    // private int offset = 8000;
     private int offset = 5000;
 
     DriveDynamic driveDynamic;
@@ -83,6 +84,8 @@ public class VisionSubsystem extends SubsystemBase {
             // double ta = LimelightHelpers.getTA(""); // Tag screen coverage
 
             double distance = offset / tagHeight; // inches
+
+            System.out.print("Vision Distance: " + distance);
 
             return new DistanceAndAngle(distance, tx);
         }
