@@ -68,6 +68,7 @@ public class Constants {
     public static final int LEFT_CLIMBER_MOTOR_ID = 8;
     public static final int RIGHT_CLIMBER_MOTOR_ID = 9;
 
+
     // Auto Static Groups
 
     public static final double ALL_GROUPS_ROTATION = -90;
@@ -93,5 +94,6 @@ public class Constants {
     public static final int VAC_1_ID = 54;
     public static final int VAC_2_ID = 55;
     public static final int VAC_3_ID = 56;
+
 
 }

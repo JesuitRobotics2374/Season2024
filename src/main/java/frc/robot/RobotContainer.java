@@ -17,8 +17,10 @@ import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+
 import frc.robot.commands.ApproachTagTeleop;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.VisionSubsystem.DistanceAndAngle;
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
 import frc.robot.subsystems.DrivetrainSubsystem.TunerConstants;
 import frc.robot.util.AutonomousChooser;
@@ -31,6 +33,7 @@ public class RobotContainer {
     private double MaxSpeed = 6; // 6 meters per second desired top speed
     private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
     private final ChassisSubsystem m_ChassisSubsystem;
+    private final VisionSubsystem m_VisionSubsystem;
     private final CommandSwerveDrivetrain m_DrivetrainSubsystem = TunerConstants.DriveTrain;
 
     private final VacuumMaster m_VacuumMaster;
@@ -63,6 +66,7 @@ public class RobotContainer {
     public RobotContainer() {
         m_ChassisSubsystem = new ChassisSubsystem();
         m_ArmSubsystem = new ArmSubsystem();
+
         // m_VacummSubystem = new VacummSubystem();
 
         m_VacummSubystem1 = new VacummSubystem(Constants.VAC_1_ID);
@@ -72,6 +76,7 @@ public class RobotContainer {
                 m_VacummSubystem3);
 
         m_VisionSubsystem = new VisionSubsystem();
+
         // m_ClimberSubsystem = new ClimberSubsystem();
         registerAutoCommands();
         System.out.println("container created");
@@ -169,21 +174,26 @@ public class RobotContainer {
         m_driveController.back().onTrue(m_DrivetrainSubsystem.runOnce(() -> m_DrivetrainSubsystem.seedFieldRelative()));
         m_driveController.leftBumper().onTrue(new InstantCommand(() -> toggleSlow()));
         m_driveController.rightBumper().onTrue(new InstantCommand(() -> toggleRoll()));
+
         m_driveController.start().onTrue(m_DrivetrainSubsystem.runOnce(() -> m_DrivetrainSubsystem.alignToVision()));
+
 
         m_driveController.povUp().whileTrue(m_ArmSubsystem.runOnce(() -> m_ArmSubsystem.raise()));
         m_driveController.povDown().whileTrue(m_ArmSubsystem.runOnce(() -> m_ArmSubsystem.lower()));
+
 
         m_driveController.a().onTrue(
                 m_VisionSubsystem.runOnce(() -> {
                     System.out.println("started test case");
                     m_VisionSubsystem.doStaticAlign(m_DrivetrainSubsystem,
                             Constants.TEST_TARGET_TAG);
+
                 }));
         m_driveController.start().onTrue(
                 m_VisionSubsystem.runOnce(() -> {
                     m_VisionSubsystem.grabMisc(Constants.TEST_TARGET_TAG);
                 }));
+
         // m_driveController.b().onTrue(
         // m_VisionSubsystem.runOnce(() -> {
         // m_VisionSubsystem.approachTeleop(m_DrivetrainSubsystem,
@@ -209,6 +219,7 @@ public class RobotContainer {
 
         m_operatorController.rightBumper().whileTrue(m_ArmSubsystem.runOnce(() -> m_ArmSubsystem.raise()));
         m_operatorController.leftBumper().whileTrue(m_ArmSubsystem.runOnce(() -> m_ArmSubsystem.lower()));
+
 
     }
 
