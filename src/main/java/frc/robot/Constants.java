@@ -88,4 +88,10 @@ public class Constants {
     public static final double D_GROUP_X = 0;
     public static final double D_GROUP_Y = 0;
 
+    // Vacuum Subsystem
+
+    public static final int VAC_1_ID = 54;
+    public static final int VAC_2_ID = 55;
+    public static final int VAC_3_ID = 56;
+
 }

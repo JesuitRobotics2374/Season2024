@@ -76,6 +76,8 @@ public class OriginToStatic extends Command {
             throw new IllegalArgumentException("Invalid tag_id: " + tag_id);
         }
         System.out.println("x: " + static_x);
+        System.out.println("y: " + static_y);
+        System.out.println("r: " + static_r);
 
         // this.relativeDistanceMeters =
         // visionSubsystem.getTagDistanceAndAngle(3).getDistanceMeters() - 0.1;
