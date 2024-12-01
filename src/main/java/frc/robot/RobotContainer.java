@@ -33,10 +33,10 @@ public class RobotContainer {
     private final ChassisSubsystem m_ChassisSubsystem;
     private final CommandSwerveDrivetrain m_DrivetrainSubsystem = TunerConstants.DriveTrain;
 
-    // private final VacuumMaster m_VacuumMaster;
+    private final VacuumMaster m_VacuumMaster;
     private final VacummSubystem m_VacummSubystem1;
-    // private final VacummSubystem m_VacummSubystem2;
-    // private final VacummSubystem m_VacummSubystem3;
+    private final VacummSubystem m_VacummSubystem2;
+    private final VacummSubystem m_VacummSubystem3;
 
     // private final VacummSubystem m_VacummSubystem;
     private final VisionSubsystem m_VisionSubsystem;
@@ -66,10 +66,10 @@ public class RobotContainer {
         // m_VacummSubystem = new VacummSubystem();
 
         m_VacummSubystem1 = new VacummSubystem(Constants.VAC_1_ID);
-        // m_VacummSubystem2 = new VacummSubystem(Constants.VAC_2_ID);
-        // m_VacummSubystem3 = new VacummSubystem(Constants.VAC_3_ID);
-        // m_VacuumMaster = new VacuumMaster(m_VacummSubystem1, m_VacummSubystem2,
-        // m_VacummSubystem3);
+        m_VacummSubystem2 = new VacummSubystem(Constants.VAC_2_ID);
+        m_VacummSubystem3 = new VacummSubystem(Constants.VAC_3_ID);
+        m_VacuumMaster = new VacuumMaster(m_VacummSubystem1, m_VacummSubystem2,
+                m_VacummSubystem3);
 
         m_VisionSubsystem = new VisionSubsystem();
         // m_ClimberSubsystem = new ClimberSubsystem();
@@ -153,10 +153,10 @@ public class RobotContainer {
         tab.add("Auto Chooser", autoChooser);
 
         // Vac
-        // tab.addInteger("Active Vacuum", () -> m_VacuumMaster.getTargetVacAsInt());
+        tab.addInteger("Active Vacuum", () -> m_VacuumMaster.getTargetVacAsInt());
         tab.addString("Vac 1 Status", () -> m_VacummSubystem1.getState());
-        // tab.addString("Vac 2 Status", () -> m_VacummSubystem2.getState());
-        // tab.addString("Vac 3 Status", () -> m_VacummSubystem3.getState());
+        tab.addString("Vac 2 Status", () -> m_VacummSubystem2.getState());
+        tab.addString("Vac 3 Status", () -> m_VacummSubystem3.getState());
     }
 
     /**
@@ -192,24 +192,20 @@ public class RobotContainer {
 
         // OPERATOR CONTROLLER
 
-        m_operatorController.y().onTrue(m_VacummSubystem1.runOnce(() -> m_VacummSubystem1.intakeFull()));
-        m_operatorController.x().onTrue(m_VacummSubystem1.runOnce(() -> m_VacummSubystem1.stop()));
+        // m_operatorController.y().onTrue(m_VacummSubystem1.runOnce(() ->
+        // m_VacummSubystem1.intakeFull()));
+        // m_operatorController.x().onTrue(m_VacummSubystem1.runOnce(() ->
+        // m_VacummSubystem1.stop()));
 
-        // m_operatorController.y().onTrue(m_VacuumMaster.runOnce(() ->
-        // m_VacuumMaster.intakeFull()));
-        // m_operatorController.b().onTrue(m_VacuumMaster.runOnce(() ->
-        // m_VacuumMaster.intakePartial()));
-        // m_operatorController.x().onTrue(m_VacuumMaster.runOnce(() ->
-        // m_VacuumMaster.stop()));
-        // m_operatorController.a().onTrue(m_VacuumMaster.runOnce(() ->
-        // m_VacuumMaster.outtake()));
+        m_operatorController.y().onTrue(m_VacuumMaster.runOnce(() -> m_VacuumMaster.intakeFull()));
+        m_operatorController.b().onTrue(m_VacuumMaster.runOnce(() -> m_VacuumMaster.intakePartial()));
+        m_operatorController.x().onTrue(m_VacuumMaster.runOnce(() -> m_VacuumMaster.stop()));
+        m_operatorController.a().onTrue(m_VacuumMaster.runOnce(() -> m_VacuumMaster.outtake()));
 
-        // m_operatorController.povLeft().onTrue(m_VacuumMaster.runOnce(() ->
-        // m_VacuumMaster.setTargetVac(1)));
-        // m_operatorController.povUp().onTrue(m_VacuumMaster.runOnce(() ->
-        // m_VacuumMaster.setTargetVac(2)));
-        // m_operatorController.povRight().onTrue(m_VacuumMaster.runOnce(() ->
-        // m_VacuumMaster.setTargetVac(3)));
+        m_operatorController.povLeft().onTrue(m_VacuumMaster.runOnce(() -> m_VacuumMaster.setTargetVac(3)));
+        m_operatorController.povUp().onTrue(m_VacuumMaster.runOnce(() -> m_VacuumMaster.setTargetVac(2)));
+        m_operatorController.povRight().onTrue(m_VacuumMaster.runOnce(() -> m_VacuumMaster.setTargetVac(1)));
+        // make one that does all 3 pls :) (on down POV) thx
 
         m_operatorController.rightBumper().whileTrue(m_ArmSubsystem.runOnce(() -> m_ArmSubsystem.raise()));
         m_operatorController.leftBumper().whileTrue(m_ArmSubsystem.runOnce(() -> m_ArmSubsystem.lower()));
