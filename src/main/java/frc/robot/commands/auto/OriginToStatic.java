@@ -105,6 +105,8 @@ public class OriginToStatic extends Command {
         System.out.println("Goal: X " + static_x + " Y " + static_y);
         System.out.println(" Now: X " + robotPosition.getX() + " Y " + robotPosition.getY());
 
+        // TODO: Check for rotation and translation completenes separately
+
         if (distanceToTarget < 0.3 && Math.abs(currentRotation - static_r) < 5.0) {
             // // Assuming 0.3 meters and 5 degrees
             // if (distanceToTarget < 0.3) { // && Math.abs(currentRotation - static_r) <
