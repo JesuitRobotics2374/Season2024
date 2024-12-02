@@ -33,7 +33,7 @@ public class RobotContainer {
     private double MaxSpeed = 6; // 6 meters per second desired top speed
     private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
     private final ChassisSubsystem m_ChassisSubsystem;
-    private final VisionSubsystem m_VisionSubsystem;
+    // private final VisionSubsystem m_VisionSubsystem;
     private final CommandSwerveDrivetrain m_DrivetrainSubsystem = TunerConstants.DriveTrain;
 
     private final VacuumMaster m_VacuumMaster;
@@ -93,15 +93,15 @@ public class RobotContainer {
     public void resetDrive() {
         m_DrivetrainSubsystem.setDefaultCommand( // Drivetrain will execute this command periodically
                 m_DrivetrainSubsystem.applyRequest(
-                        () -> drive.withVelocityX(-square(deadband(m_driveController.getLeftY(), 0.1)) * MaxSpeed) // Drive
+                        () -> drive.withVelocityX(square(deadband(m_driveController.getLeftY(), 0.1)) * MaxSpeed) // Drive
                                 // forward
                                 // with
                                 // negative Y (forward)
-                                .withVelocityY(-square(deadband(m_driveController.getLeftX(), 0.1)) * MaxSpeed) // Drive
-                                                                                                                // left
-                                                                                                                // with
-                                                                                                                // negative
-                                                                                                                // X
+                                .withVelocityY(square(deadband(m_driveController.getLeftX(), 0.1)) * MaxSpeed) // Drive
+                                                                                                               // left
+                                                                                                               // with
+                                                                                                               // negative
+                                                                                                               // X
                                 // (left)
                                 .withRotationalRate(
                                         -square(clampAdd(deadband(m_driveController.getRightX(), 0.1),
@@ -177,10 +177,8 @@ public class RobotContainer {
 
         m_driveController.start().onTrue(m_DrivetrainSubsystem.runOnce(() -> m_DrivetrainSubsystem.alignToVision()));
 
-
         m_driveController.povUp().whileTrue(m_ArmSubsystem.runOnce(() -> m_ArmSubsystem.raise()));
         m_driveController.povDown().whileTrue(m_ArmSubsystem.runOnce(() -> m_ArmSubsystem.lower()));
-
 
         m_driveController.a().onTrue(
                 m_VisionSubsystem.runOnce(() -> {
@@ -219,7 +217,6 @@ public class RobotContainer {
 
         m_operatorController.rightBumper().whileTrue(m_ArmSubsystem.runOnce(() -> m_ArmSubsystem.raise()));
         m_operatorController.leftBumper().whileTrue(m_ArmSubsystem.runOnce(() -> m_ArmSubsystem.lower()));
-
 
     }
 
