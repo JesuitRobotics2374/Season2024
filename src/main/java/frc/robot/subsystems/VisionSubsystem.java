@@ -9,11 +9,13 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
 import frc.robot.commands.ApproachTagAuto;
+
 import frc.robot.commands.ApproachTagTeleop;
 import frc.robot.commands.auto.DriveAndSeek;
 import frc.robot.commands.auto.DriveDynamic;
 import frc.robot.commands.auto.DriveDynamicY;
 import frc.robot.commands.auto.OriginToStatic;
+
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
 
 public class VisionSubsystem extends SubsystemBase {
@@ -32,6 +34,7 @@ public class VisionSubsystem extends SubsystemBase {
 
         LimelightHelpers.setLEDMode_PipelineControl("");
         LimelightHelpers.setLEDMode_ForceBlink("");
+
 
     }
 
@@ -127,6 +130,7 @@ public class VisionSubsystem extends SubsystemBase {
         a.schedule();
     }
 
+
     public void driveDynamically(CommandSwerveDrivetrain ds, int tag_id) {
         DistanceAndAngle d = getTagDistanceAndAngle(tag_id);
         if (d.getDistance() != -1.0 && d.getTheta() != -1.0 && d != null) {
@@ -140,6 +144,7 @@ public class VisionSubsystem extends SubsystemBase {
         OriginToStatic drive = new OriginToStatic(ds, this, tag_id);
         drive.schedule();
     }
+
 
     public void panDynamically(CommandSwerveDrivetrain ds, int tag_id) {
         DistanceAndAngle d = getTagDistanceAndAngle(tag_id);

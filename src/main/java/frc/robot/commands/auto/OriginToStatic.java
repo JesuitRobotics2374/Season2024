@@ -76,6 +76,8 @@ public class OriginToStatic extends Command {
             throw new IllegalArgumentException("Invalid tag_id: " + tag_id);
         }
         System.out.println("x: " + static_x);
+        System.out.println("y: " + static_y);
+        System.out.println("r: " + static_r);
 
         // this.relativeDistanceMeters =
         // visionSubsystem.getTagDistanceAndAngle(3).getDistanceMeters() - 0.1;
@@ -100,8 +102,17 @@ public class OriginToStatic extends Command {
         double currentRotation = drivetrain.getState().Pose.getRotation().getDegrees();
         double distanceToTarget = robotPosition.getDistance(new Translation2d(static_x, static_y));
 
-        if (distanceToTarget < 0.3 && Math.abs(currentRotation - static_r) < 5.0) { // Assuming 0.3 meters and 5 degrees
-                                                                                    // as the tolerance
+        System.out.println("Goal: X " + static_x + " Y " + static_y);
+        System.out.println(" Now: X " + robotPosition.getX() + " Y " + robotPosition.getY());
+
+        // TODO: Check for rotation and translation completenes separately
+
+        if (distanceToTarget < 0.3 && Math.abs(currentRotation - static_r) < 5.0) {
+            // // Assuming 0.3 meters and 5 degrees
+            // if (distanceToTarget < 0.3) { // && Math.abs(currentRotation - static_r) <
+            // 5.0) { // Assuming 0.3 meters and 5
+            // degrees
+            // as the tolerance
             done = true;
             System.out.println("Done static");
         } else {
@@ -119,7 +130,7 @@ public class OriginToStatic extends Command {
             double rotationalRate = rotationError * 0.01; // Scale to desired rotational speed
 
             // Move the robot to the static position using field centric control
-            drivetrain.setControl(new SwerveRequest.FieldCentric().withVelocityX(velocityX).withVelocityY(velocityY)
+            drivetrain.setControl(new SwerveRequest.FieldCentric().withVelocityX(-velocityX).withVelocityY(-velocityY)
                     .withRotationalRate(rotationalRate));
         }
     }
