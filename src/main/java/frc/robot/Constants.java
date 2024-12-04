@@ -81,8 +81,8 @@ public class Constants {
     public static final double B_GROUP_Y = 0;
 
     public static final int[] C_GROUP_MEMBERS = { 7, 8, 9 };
-    public static final double C_GROUP_X = 7.00 / 3; // Meters?
-    public static final double C_GROUP_Y = 4.75 / 3;
+    public static final double C_GROUP_X = 6.55;
+    public static final double C_GROUP_Y = 2.85;
 
     public static final int[] D_GROUP_MEMBERS = { 10, 11, 12 };
     public static final double D_GROUP_X = 0;

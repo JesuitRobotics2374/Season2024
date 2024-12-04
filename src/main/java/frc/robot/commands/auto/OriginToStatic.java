@@ -29,7 +29,10 @@ public class OriginToStatic extends Command {
     private double static_y;
     private double static_r;
 
-    private boolean done;
+    private boolean doneMoving;
+    private boolean doneRotating;
+
+    private int debugCount = 0;
 
     // Method to check if an array contains a specific integer
     private static boolean contains(int[] array, int target) {
@@ -93,51 +96,79 @@ public class OriginToStatic extends Command {
 
     @Override
     public void initialize() {
-        done = false;
+        doneMoving = false;
+        doneRotating = false;
     }
 
     @Override
     public void execute() {
+
+        // debugCount++;
+
+        // if (debugCount < 60) {
+        // return;
+        // }
+
+        // debugCount = 0;
+
         Translation2d robotPosition = drivetrain.getState().Pose.getTranslation();
         double currentRotation = drivetrain.getState().Pose.getRotation().getDegrees();
         double distanceToTarget = robotPosition.getDistance(new Translation2d(static_x, static_y));
 
-        System.out.println("Goal: X " + static_x + " Y " + static_y);
-        System.out.println(" Now: X " + robotPosition.getX() + " Y " + robotPosition.getY());
+        // System.out.println("Goal: X " + static_x + " Y " + static_y);
+        // System.out.println(" Now: X " + robotPosition.getX() + " Y " +
+        // robotPosition.getY());
+        System.out.println(
+                "Rotation: " + currentRotation + " Goal: " + static_r + " Diff: " + (currentRotation - static_r));
+        System.out.println(doneMoving + " " + doneRotating);
 
         // TODO: Check for rotation and translation completenes separately
 
-        if (distanceToTarget < 0.3 && Math.abs(currentRotation - static_r) < 5.0) {
-            // // Assuming 0.3 meters and 5 degrees
-            // if (distanceToTarget < 0.3) { // && Math.abs(currentRotation - static_r) <
-            // 5.0) { // Assuming 0.3 meters and 5
-            // degrees
-            // as the tolerance
-            done = true;
-            System.out.println("Done static");
-        } else {
+        if (distanceToTarget < 0.3) {
+            doneMoving = true;
+            System.out.println("Done moving.");
+        }
+        if (Math.abs(currentRotation - static_r) < 5.0) {
+            doneRotating = true;
+            System.out.println("Done rotating.");
+        }
+
+        double velocityX = 0;
+        double velocityY = 0;
+        double rotationalRate = 0;
+
+        if (!doneMoving) {
             // Calculate the direction to the target
             double deltaX = static_x - robotPosition.getX();
             double deltaY = static_y - robotPosition.getY();
 
             // Normalize the velocities
             double magnitude = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-            double velocityX = (deltaX / magnitude) * 0.5; // Scale to desired speed
-            double velocityY = (deltaY / magnitude) * 0.5; // Scale to desired speed
+            velocityX = (deltaX / magnitude) * 0.5; // Scale to desired speed
+            velocityY = (deltaY / magnitude) * 0.5; // Scale to desired speed
 
+            // System.out.println(" VEL: X " + velocityX + " Y " + velocityY);
+        }
+
+        if (!doneRotating) {
             // Calculate the rotational rate
             double rotationError = static_r - currentRotation;
-            double rotationalRate = rotationError * 0.01; // Scale to desired rotational speed
-
-            // Move the robot to the static position using field centric control
-            drivetrain.setControl(new SwerveRequest.FieldCentric().withVelocityX(-velocityX).withVelocityY(-velocityY)
-                    .withRotationalRate(rotationalRate));
+            rotationalRate = rotationError * 0.025; // Scale to desired rotational speed
         }
+
+        System.out.println("RR: " + rotationalRate);
+
+        if (!(doneMoving && doneRotating)) {
+            drivetrain.setControl(
+                    new SwerveRequest.FieldCentric().withVelocityX(velocityY).withVelocityY(-velocityX)
+                            .withRotationalRate(-rotationalRate));
+        }
+
     }
 
     @Override
     public boolean isFinished() {
-        return done;
+        return doneMoving && doneRotating;
     }
 
     @Override

@@ -185,8 +185,15 @@ public class RobotContainer {
                     System.out.println("started test case");
                     m_VisionSubsystem.doStaticAlign(m_DrivetrainSubsystem,
                             Constants.TEST_TARGET_TAG);
-
                 }));
+
+        m_driveController.b().onTrue(
+                m_VisionSubsystem.runOnce(() -> {
+                    System.out.println("started finder case");
+                    m_VisionSubsystem.approachDynamically(m_DrivetrainSubsystem, Constants.TEST_TARGET_TAG,
+                            m_VacummSubystem1, m_ArmSubsystem);
+                }));
+
         m_driveController.start().onTrue(
                 m_VisionSubsystem.runOnce(() -> {
                     m_VisionSubsystem.grabMisc(Constants.TEST_TARGET_TAG);
