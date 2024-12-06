@@ -20,7 +20,6 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         // drivetrain
-        SmartDashboard.putNumber("Apriltag Number", 1);
         enableLiveWindowInTest(true);
         addPeriodic(() -> {
             var ally = DriverStation.getAlliance();

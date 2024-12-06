@@ -63,13 +63,16 @@ public class VacuumMaster extends SubsystemBase {
         targetVac.outtake();
     }
 
-    public int getTargetVacAsInt() {
+    public String getTargetVacAsString() {
+        if (allVacs) {
+            return "ALL VACUUMS";
+        } else
         if (targetVac == vac1) {
-            return 1;
+            return "Black";
         } else if (targetVac == vac2) {
-            return 2;
+            return "Green";
         } else {
-            return 3;
+            return "White";
         }
     }
 

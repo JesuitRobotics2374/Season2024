@@ -22,7 +22,6 @@ public class ArmSubsystem extends SubsystemBase {
     TalonFX leftMotor = new TalonFX(Constants.LEFT_ARM_MOTOR_ID);
     TalonFX rightMotor = new TalonFX(Constants.RIGHT_ARM_MOTOR_ID);
     CANcoder encoder = new CANcoder(Constants.ARM_ENCODER_ID, Constants.CAN_BUS_NAME_CANIVORE);
-    ShuffleboardTab tab = Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME);
     double goal;
     double speed;
     double manualOffset = 4;
@@ -31,7 +30,6 @@ public class ArmSubsystem extends SubsystemBase {
 
     public ArmSubsystem() {
         instance = this;
-        tab.add("PID Controller", armController);
         leftMotor.setNeutralMode(NeutralModeValue.Brake);
         rightMotor.setNeutralMode(NeutralModeValue.Brake);
         leftMotor.setInverted(false);
@@ -43,10 +41,14 @@ public class ArmSubsystem extends SubsystemBase {
         armController.setTolerance(0.02, 0.02);
         goal = encoder.getAbsolutePosition().getValueAsDouble();
         armController.setGoal(goal);
-        tab.addDouble("Setpoint", () -> armController.getSetpoint().position);
-        tab.addDouble("Point", () -> encoder.getAbsolutePosition().getValueAsDouble());
-        tab.addDouble("Motor Power", () -> speed);
-        tab.addDouble("Offset", () -> manualOffset);
+    }
+
+    public ProfiledPIDController getController() {
+        return armController;
+    }
+
+    public CANcoder getEncoder() {
+        return encoder;
     }
 
     @Override

@@ -79,7 +79,6 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         if (Utils.isSimulation()) {
             startSimThread();
         }
-        tab.add(field).withPosition(0, 3).withSize(5, 3);
         instance = this;
     }
 
@@ -89,8 +88,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         if (Utils.isSimulation()) {
             startSimThread();
         }
-        tab.add(field).withPosition(0, 3).withSize(5, 3);
-        tab.addDouble("Pigeon", () -> (getState().Pose.getRotation().getDegrees()));
+        // tab.addDouble("Pigeon", () -> (getState().Pose.getRotation().getDegrees()));
         Matrix<N3, N1> matrix = new Matrix<>(Nat.N3(), Nat.N1());
         matrix.set(0, 0, 4);
         matrix.set(1, 0, 4);
@@ -289,5 +287,9 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         // Prevent the path from being flipped if the coordinates are already correct
         path.preventFlipping = true;
         return true;
+    }
+
+    public Field2d getField() {
+        return field;
     }
 }

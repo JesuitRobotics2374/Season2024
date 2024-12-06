@@ -12,7 +12,9 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -30,6 +32,9 @@ import frc.robot.util.AutonomousChooser;
  */
 
 public class RobotContainer {
+
+    private final SendableChooser<Command> commandChooser = new SendableChooser<>();
+
     private double MaxSpeed = 6; // 6 meters per second desired top speed
     private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
     private final ChassisSubsystem m_ChassisSubsystem;
@@ -60,10 +65,13 @@ public class RobotContainer {
     private boolean slow = false;
     private boolean roll = false;
 
+    private int SELECTED_AUTO_TAG = -1;
+
     /**
      * The robot container. Need I say more?
      */
     public RobotContainer() {
+
         m_ChassisSubsystem = new ChassisSubsystem();
         m_ArmSubsystem = new ArmSubsystem();
 
@@ -85,6 +93,32 @@ public class RobotContainer {
         configureShuffleBoard();
         resetDrive();
         configureButtonBindings();
+
+        commandChooser.addOption("Tag 1", new InstantCommand(() -> setAutoTag(1)));
+        commandChooser.addOption("Tag 2", new InstantCommand(() -> setAutoTag(2)));
+        commandChooser.addOption("Tag 3", new InstantCommand(() -> setAutoTag(3)));
+        commandChooser.addOption("Tag 4", new InstantCommand(() -> setAutoTag(4)));
+        commandChooser.addOption("Tag 5", new InstantCommand(() -> setAutoTag(5)));
+        commandChooser.addOption("Tag 6", new InstantCommand(() -> setAutoTag(6)));
+        commandChooser.addOption("Tag 7", new InstantCommand(() -> setAutoTag(7)));
+        commandChooser.addOption("Tag 8", new InstantCommand(() -> setAutoTag(8)));
+        commandChooser.addOption("Tag 9", new InstantCommand(() -> setAutoTag(9)));
+        commandChooser.addOption("Tag 10", new InstantCommand(() -> setAutoTag(10)));
+        commandChooser.addOption("Tag 11", new InstantCommand(() -> setAutoTag(11)));
+        commandChooser.addOption("Tag 12", new InstantCommand(() -> setAutoTag(12)));
+
+    }
+
+    private void setAutoTag(int tag) {
+        SELECTED_AUTO_TAG = tag;
+    }
+
+    void runSelectedCommand(boolean run) {
+        if (run) {
+            commandChooser.getSelected().schedule();
+        } else {
+            commandChooser.getSelected().cancel();
+        }
     }
 
     /**
@@ -147,21 +181,32 @@ public class RobotContainer {
      * Set up the Shuffleboard
      */
     public void configureShuffleBoard() {
+
         ShuffleboardTab tab = Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME);
-        tab.addBoolean("SLOW", () -> isSlow()).withPosition(1, 1);
-        tab.addBoolean("ROLL", () -> isRoll()).withPosition(2, 1);
-        // tab.addBoolean("Note?", () -> m_ManipulatorSubsystem.noteSensor.getRange() <=
-        // 150);
-        tab.addDouble("X", () -> m_DrivetrainSubsystem.getState().Pose.getX());
-        tab.addDouble("Y", () -> m_DrivetrainSubsystem.getState().Pose.getY());
-        tab.addDouble("R", () -> m_DrivetrainSubsystem.getState().Pose.getRotation().getDegrees());
-        tab.add("Auto Chooser", autoChooser);
+
+        // Field
+        tab.add(m_DrivetrainSubsystem.getField()).withPosition(2, 1).withSize(5, 3);
+
+        // Modes
+        tab.addBoolean("Slow Mode", () -> isSlow()).withPosition(2, 0).withSize(2, 1);
+        tab.addBoolean("Roll Mode", () -> isRoll()).withPosition(5, 0).withSize(2, 1);
+        
+        // Robot
+        tab.addDouble("Robot X", () -> m_DrivetrainSubsystem.getState().Pose.getX()).withPosition(0, 0).withSize(1, 1);
+        tab.addDouble("Robot Y", () -> m_DrivetrainSubsystem.getState().Pose.getY()).withPosition(0, 1).withSize(1, 1);
+        tab.addDouble("Robot R", () -> m_DrivetrainSubsystem.getState().Pose.getRotation().getDegrees()).withPosition(0, 2).withSize(1, 1);
+
+        // Arm
+        tab.addDouble("Arm Goal", () -> m_ArmSubsystem.getController().getSetpoint().position).withPosition(1, 0).withSize(1, 1);
+        tab.addDouble("Arm Actual", () -> m_ArmSubsystem.getEncoder().getAbsolutePosition().getValueAsDouble()).withPosition(1, 1).withSize(1, 1);
 
         // Vac
-        tab.addInteger("Active Vacuum", () -> m_VacuumMaster.getTargetVacAsInt());
-        tab.addString("Vac 1 Status", () -> m_VacummSubystem1.getState());
-        tab.addString("Vac 2 Status", () -> m_VacummSubystem2.getState());
-        tab.addString("Vac 3 Status", () -> m_VacummSubystem3.getState());
+        tab.addString("Active Vacuum", () -> m_VacuumMaster.getTargetVacAsString()).withPosition(7, 0).withSize(1, 1);
+        tab.addString("Vac 1 Status", () -> m_VacummSubystem1.getState()).withPosition(7, 1).withSize(1, 1);
+        tab.addString("Vac 2 Status", () -> m_VacummSubystem2.getState()).withPosition(7, 2).withSize(1, 1);
+        tab.addString("Vac 3 Status", () -> m_VacummSubystem3.getState()).withPosition(7, 3).withSize(1, 1);
+
+        tab.add("Auto Tag", commandChooser).withPosition(4, 0).withSize(1, 1);
     }
 
     /**
@@ -184,14 +229,14 @@ public class RobotContainer {
                 m_VisionSubsystem.runOnce(() -> {
                     System.out.println("started test case");
                     m_VisionSubsystem.doStaticAlign(m_DrivetrainSubsystem,
-                            Constants.TEST_TARGET_TAG);
+                            SELECTED_AUTO_TAG);
                 }));
 
         m_driveController.b().onTrue(
                 m_VisionSubsystem.runOnce(() -> {
                     System.out.println("started finder case");
                     m_VisionSubsystem.approachDynamically(m_DrivetrainSubsystem,
-                            Constants.TEST_TARGET_TAG,
+                            SELECTED_AUTO_TAG,
                             m_VacummSubystem1, m_ArmSubsystem);
                 }));
 
@@ -214,13 +259,13 @@ public class RobotContainer {
 
         m_driveController.start().onTrue(
                 m_VisionSubsystem.runOnce(() -> {
-                    m_VisionSubsystem.grabMisc(Constants.TEST_TARGET_TAG);
+                    m_VisionSubsystem.grabMisc(SELECTED_AUTO_TAG);
                 }));
 
         // m_driveController.b().onTrue(
         // m_VisionSubsystem.runOnce(() -> {
         // m_VisionSubsystem.approachTeleop(m_DrivetrainSubsystem,
-        // Constants.TEST_TARGET_TAG, m_VacummSubystem2, m_ArmSubsystem);
+        // SELECTED_AUTO_TAG, m_VacummSubystem2, m_ArmSubsystem);
         // }));
 
         // OPERATOR CONTROLLER
