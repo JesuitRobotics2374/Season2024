@@ -2,6 +2,7 @@ package frc.robot.commands.auto;
 
 import java.util.Arrays;
 
+import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -16,6 +17,9 @@ import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
  * DriveDynamic - Moves the robot forward by a specified distance.
  */
 public class OriginToStatic extends Command {
+
+    private final SwerveRequest.FieldCentric driveRequest = new SwerveRequest.FieldCentric()
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
     private final CommandSwerveDrivetrain drivetrain;
     private final VisionSubsystem visionSubsystem;
@@ -115,9 +119,9 @@ public class OriginToStatic extends Command {
         double currentRotation = drivetrain.getState().Pose.getRotation().getDegrees();
         double distanceToTarget = robotPosition.getDistance(new Translation2d(static_x, static_y));
 
-        // System.out.println("Goal: X " + static_x + " Y " + static_y);
-        // System.out.println(" Now: X " + robotPosition.getX() + " Y " +
-        // robotPosition.getY());
+        System.out.println("Goal: X " + static_x + " Y " + static_y);
+        System.out.println(" Now: X " + robotPosition.getX() + " Y " +
+                robotPosition.getY());
         System.out.println(
                 "Rotation: " + currentRotation + " Goal: " + static_r + " Diff: " + (currentRotation - static_r));
         System.out.println(doneMoving + " " + doneRotating);
@@ -128,7 +132,7 @@ public class OriginToStatic extends Command {
             doneMoving = true;
             System.out.println("Done moving.");
         }
-        if (Math.abs(currentRotation - static_r) < 5.0) {
+        if (Math.abs(currentRotation - static_r) < 1.0) {
             doneRotating = true;
             System.out.println("Done rotating.");
         }
@@ -147,21 +151,28 @@ public class OriginToStatic extends Command {
             velocityX = (deltaX / magnitude) * 0.5; // Scale to desired speed
             velocityY = (deltaY / magnitude) * 0.5; // Scale to desired speed
 
-            // System.out.println(" VEL: X " + velocityX + " Y " + velocityY);
+            System.out.println(" VEL: X " + velocityX + " Y " + velocityY);
         }
 
         if (!doneRotating) {
             // Calculate the rotational rate
             double rotationError = static_r - currentRotation;
-            rotationalRate = rotationError * 0.025; // Scale to desired rotational speed
+            double RESign = rotationError / Math.abs(rotationError);
+            rotationalRate = rotationError * 0.025 + (RESign * 0.8); // Scale to desired rotational speed and add a
+                                                                     // constant speed to prevent dipping under
+                                                                     // deadband
         }
 
         System.out.println("RR: " + rotationalRate);
 
-        if (!(doneMoving && doneRotating)) {
+        if (!doneMoving) {
             drivetrain.setControl(
-                    new SwerveRequest.FieldCentric().withVelocityX(velocityY).withVelocityY(-velocityX)
+                    driveRequest.withVelocityX(-velocityY).withVelocityY(velocityX)
                             .withRotationalRate(-rotationalRate));
+        } else if (!doneRotating) {
+            System.out.println("Sending Rotate: " + -rotationalRate);
+            drivetrain.setControl(
+                    driveRequest.withRotationalRate(-rotationalRate));
         }
 
     }

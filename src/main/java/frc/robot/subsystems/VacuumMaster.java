@@ -13,26 +13,53 @@ public class VacuumMaster extends SubsystemBase {
 
     private VacummSubystem targetVac;
 
+    private boolean allVacs;
+
     public VacuumMaster(VacummSubystem vac1, VacummSubystem vac2, VacummSubystem vac3) {
         this.vac1 = vac1;
         this.vac2 = vac2;
         this.vac3 = vac3;
         targetVac = vac1;
+        allVacs = false;
     }
 
     public void intakeFull() {
+        if (allVacs) {
+            vac1.intakeFull();
+            vac2.intakeFull();
+            vac3.intakeFull();
+            return;
+        }
         targetVac.intakeFull();
     }
 
     public void intakePartial() {
+        if (allVacs) {
+            vac1.intakePartial();
+            vac2.intakePartial();
+            vac3.intakePartial();
+            return;
+        }
         targetVac.intakePartial();
     }
 
     public void stop() {
+        if (allVacs) {
+            vac1.stop();
+            vac2.stop();
+            vac3.stop();
+            return;
+        }
         targetVac.stop();
     }
 
     public void outtake() {
+        if (allVacs) {
+            vac1.outtake();
+            vac2.outtake();
+            vac3.outtake();
+            return;
+        }
         targetVac.outtake();
     }
 
@@ -57,13 +84,20 @@ public class VacuumMaster extends SubsystemBase {
     public void setTargetVac(int vac) {
         if (vac == 1) {
             targetVac = vac1;
+            allVacs = false;
         } else if (vac == 2) {
             targetVac = vac2;
+            allVacs = false;
         } else if (vac == 3) {
             targetVac = vac3;
+            allVacs = false;
         } else {
             throw new IllegalArgumentException("VacuumMaster.setTargetVac requires an integer between 1 and 3");
         }
+    }
+
+    public void targetAll() {
+        allVacs = true;
     }
 
 }

@@ -68,19 +68,19 @@ public class DriveDynamicY extends Command {
         currentPositionMeters = drivetrain.getState().Pose.getTranslation().getX();
 
         double dist = visionSubsystem.getTagDistanceAndAngle(tag_id).getDistanceMeters();
-        double th = visionSubsystem.getTagDistanceAndAngle(tag_id).getTheta();
-        double signum = Math.abs(th) / th;
+        // double th = visionSubsystem.getTagDistanceAndAngle(tag_id).getTheta();
+        double offsetY = visionSubsystem.getTagPose3d(tag_id).getX();
+        double signum = Math.abs(offsetY) / offsetY;
 
         drivetrain.setControl(
 
-                new SwerveRequest.RobotCentric().withVelocityY(moveSpeed * signum));
-
+                new SwerveRequest.RobotCentric().withVelocityY(moveSpeed * -signum));
 
         // return !visionSubsystem.canSeeTag(tag_id);
 
-        System.out.println(th);
-        if (Math.abs(th) <= threshold || !visionSubsystem.canSeeTag(tag_id)) {
-            fdist = th;
+        System.out.println(offsetY);
+        if (Math.abs(offsetY) <= threshold || !visionSubsystem.canSeeTag(tag_id)) {
+            // fdist = th;
             done = true;
         }
     }

@@ -35,7 +35,6 @@ public class VisionSubsystem extends SubsystemBase {
         LimelightHelpers.setLEDMode_PipelineControl("");
         LimelightHelpers.setLEDMode_ForceBlink("");
 
-
     }
 
     public class DistanceAndAngle {
@@ -130,7 +129,6 @@ public class VisionSubsystem extends SubsystemBase {
         a.schedule();
     }
 
-
     public void driveDynamically(CommandSwerveDrivetrain ds, int tag_id) {
         DistanceAndAngle d = getTagDistanceAndAngle(tag_id);
         if (d.getDistance() != -1.0 && d.getTheta() != -1.0 && d != null) {
@@ -139,17 +137,22 @@ public class VisionSubsystem extends SubsystemBase {
         }
     }
 
+    public void driveAndSeek(CommandSwerveDrivetrain ds, int tag_id) {
+        DistanceAndAngle d = getTagDistanceAndAngle(tag_id);
+        DriveAndSeek drive = new DriveAndSeek(ds, this, tag_id);
+        drive.schedule();
+    }
+
     public void doStaticAlign(CommandSwerveDrivetrain ds, int tag_id) {
         // DistanceAndAngle d = getTagDistanceAndAngle(tag_id);
         OriginToStatic drive = new OriginToStatic(ds, this, tag_id);
         drive.schedule();
     }
 
-
     public void panDynamically(CommandSwerveDrivetrain ds, int tag_id) {
         DistanceAndAngle d = getTagDistanceAndAngle(tag_id);
         if (d.getDistance() != -1.0 && d.getTheta() != -1.0 && d != null) {
-            DriveDynamicY drive = new DriveDynamicY(ds, this, tag_id, 1, 3);
+            DriveDynamicY drive = new DriveDynamicY(ds, this, tag_id, 1, 0.15);
             drive.schedule();
         }
     }

@@ -11,7 +11,6 @@ import frc.robot.Constants;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem.CommandSwerveDrivetrain;
 
-
 /**
  * DriveDynamic - Moves the robot forward by a specified distance.
  */
@@ -98,11 +97,12 @@ public class DriveDynamic extends Command {
         // it something proper
         currentPositionMeters = drivetrain.getState().Pose.getTranslation().getX();
 
-        drivetrain.setControl(new SwerveRequest.RobotCentric().withVelocityX(-speed));
-
+        drivetrain.setControl(new SwerveRequest.RobotCentric().withVelocityX(speed));
 
         // return !visionSubsystem.canSeeTag(tag_id);
-        double distance = visionSubsystem.getTagDistanceAndAngle(tag_id).getDistance();
+        double z = visionSubsystem.getTagPose3d(tag_id).getZ();
+        double x = visionSubsystem.getTagPose3d(tag_id).getX();
+        double distance = Math.sqrt(x * x + z * z);
         System.out.println(distance);
 
         if (distance <= providedDistance + gap || !visionSubsystem.canSeeTag(tag_id)) {

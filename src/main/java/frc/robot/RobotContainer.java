@@ -190,9 +190,27 @@ public class RobotContainer {
         m_driveController.b().onTrue(
                 m_VisionSubsystem.runOnce(() -> {
                     System.out.println("started finder case");
-                    m_VisionSubsystem.approachDynamically(m_DrivetrainSubsystem, Constants.TEST_TARGET_TAG,
+                    m_VisionSubsystem.approachDynamically(m_DrivetrainSubsystem,
+                            Constants.TEST_TARGET_TAG,
                             m_VacummSubystem1, m_ArmSubsystem);
                 }));
+
+        // m_driveController.y().onTrue(
+        // m_VisionSubsystem.runOnce(() -> {
+        // System.out.println("SEEKING");
+        // m_VisionSubsystem.driveAndSeek(m_DrivetrainSubsystem, 8);
+        // }));
+
+        // m_driveController.b().onTrue(
+        // m_VisionSubsystem.runOnce(() -> {
+        // System.out.println("PAN");
+        // m_VisionSubsystem.panDynamically(m_DrivetrainSubsystem, 8);
+        // }));
+        // m_driveController.a().onTrue(
+        // m_VisionSubsystem.runOnce(() -> {
+        // System.out.println("DRIVE");
+        // m_VisionSubsystem.driveDynamically(m_DrivetrainSubsystem, 8);
+        // }));
 
         m_driveController.start().onTrue(
                 m_VisionSubsystem.runOnce(() -> {
@@ -221,6 +239,8 @@ public class RobotContainer {
         m_operatorController.povUp().onTrue(m_VacuumMaster.runOnce(() -> m_VacuumMaster.setTargetVac(2)));
         m_operatorController.povRight().onTrue(m_VacuumMaster.runOnce(() -> m_VacuumMaster.setTargetVac(1)));
         // make one that does all 3 pls :) (on down POV) thx
+        // gotcha :)
+        m_operatorController.povDown().onTrue(m_VacuumMaster.runOnce(() -> m_VacuumMaster.targetAll()));
 
         m_operatorController.rightBumper().whileTrue(m_ArmSubsystem.runOnce(() -> m_ArmSubsystem.raise()));
         m_operatorController.leftBumper().whileTrue(m_ArmSubsystem.runOnce(() -> m_ArmSubsystem.lower()));
