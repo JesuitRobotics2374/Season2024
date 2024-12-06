@@ -21,6 +21,10 @@ public class ApproachTagAuto extends InstantCommand {
 
         // DistanceAndAngle d = visionSubsystem.getTagDistanceAndAngle(tag_id);
 
+        Command blind = new BackUntilCanSeeTag(drivetrain, visionSubsystem);
+        Command align = new InstantCommand(() -> {
+            drivetrain.alignToVision();
+        });
         Command intake = new SubsystemAction(vac, arm, "intake");
         Command staticNav = new OriginToStatic(drivetrain, visionSubsystem, tag_id);
         Command seek = new DriveAndSeek(drivetrain, visionSubsystem, tag_id);
@@ -33,9 +37,8 @@ public class ApproachTagAuto extends InstantCommand {
         Command timer = new WaitCommand(0.6);
         Command stop = new SubsystemAction(vac, arm, "stop");
 
-        SequentialCommandGroup approach = new SequentialCommandGroup(intake, staticNav, seek, squareUp, drive,
-                squareUpClose,
-                lower, driveClose, outtake, timer, stop);
+        SequentialCommandGroup approach = new SequentialCommandGroup(blind, align, intake, staticNav, seek, 
+        squareUp, drive, squareUpClose, lower, driveClose, outtake, timer, stop);
 
         approach.schedule();
 
